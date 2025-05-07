@@ -45,6 +45,18 @@ public class RenderWindow
         GUI.Box(rect, v, MainStyle);
     }
 
+    private void ErrorHandle(Action action)
+    {
+        try
+        {
+            action?.Invoke();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error in GUI: {e.Message}");
+        }
+    }
+
     public Vector2 MeasureString(string v)
         => MainStyle.CalcSize(new GUIContent(v));
 
@@ -57,7 +69,7 @@ public class RenderWindow
         rect = MakeRelative(rect);
 
         if (GUI.Button(rect, v, MainStyle))
-            action?.Invoke();
+            ErrorHandle(() => action?.Invoke());
     }
 
     public void Toggle(Vector2 pos, string v, bool state, Action<bool> action)
@@ -66,8 +78,8 @@ public class RenderWindow
         Vector2 size = MeasureString(v);
         Rect rect = new Rect(pos.x, pos.y, size.x + (padding * 2), size.y + (padding * 2));
         rect = MakeRelative(rect);
-        if (GUI.Button(rect, v, state ? MainStyle : InvertStyle))
-            action?.Invoke(!state);
+        if (GUI.Button(rect, v, state ? InvertStyle : MainStyle))
+            ErrorHandle(() => action?.Invoke(!state));
     }
 
     private int currentTab = 0;
@@ -90,7 +102,7 @@ public class RenderWindow
 
         Location = new Rect(Location.x, Location.y + TabHeight, Location.width, Location.height - TabHeight);
 
-        drawActions[currentTab].Invoke();
+        ErrorHandle(() => drawActions[currentTab].Invoke());
 
         Location = oldLoc;
     }

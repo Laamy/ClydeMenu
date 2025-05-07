@@ -5,7 +5,7 @@ using System.Diagnostics;
 
 using UnityEngine;
 
-public class ClientModule1 : MonoBehaviour
+public class ClientComponent : MonoBehaviour
 {
     public bool isShown = false;
 
@@ -13,7 +13,7 @@ public class ClientModule1 : MonoBehaviour
     {
         Render.Init();
         Render.SetCursorState(isShown);
-        
+
         ClientInstance.Init(this);
     }
 
@@ -23,7 +23,7 @@ public class ClientModule1 : MonoBehaviour
         {
             isShown = !isShown;
             Render.SetCursorState(isShown);
-            Log($"Menu is now {(isShown ? "shown" : "hidden")}", Color.white, Color.green);
+            Console.WriteLine($"Menu is now {(isShown ? "shown" : "hidden")}");
         }
 
         if (Input.GetKeyDown(KeyCode.Delete))
@@ -39,15 +39,9 @@ public class ClientModule1 : MonoBehaviour
         HandleInputs();
     }
 
-    public static void Log(string message, Color colorMain, Color colorFlash, float size = 16)
-    {
-        Console.WriteLine(message);
-        //if (GameNotification.instance)
-        //    GameNotification.instance.BigMessage(message, "thief", size, colorMain, colorFlash);
-    }
-
     public bool isInitialized = false;
     internal RenderWindow Main;
+
     public void OnGUI()
     {
         if (!isInitialized)
@@ -60,14 +54,6 @@ public class ClientModule1 : MonoBehaviour
 
         if (isShown)
         {
-            /*
-            GUI.Box(new Rect(10, 10, 200, 100), "ClydeMenu", RenderContext.CurrentTheme);
-            GUI.Label(new Rect(20, 40, 180, 20), "Press F1 to hide", RenderContext.CurrentTheme);
-            GUI.Label(new Rect(20, 60, 180, 20), "Press F3 to spawn orb", RenderContext.CurrentTheme);
-            */
-
-            //GUI.Toolbar(Vector2.zero, 1, [new GUIContent().])
-
             Main.HandleBorder();
             Main.Tabs(["Player", "Spawn"], [
                 () => {
@@ -106,15 +92,8 @@ public class ClientModule1 : MonoBehaviour
                     });
 
                     Main.Button(new Vector2(200, 10), "Crash", () => {
-                        GameObject plyr = ClientInstance.GetLocalPlayer();
-                        if (plyr == null)
-                        {
-                            Console.WriteLine("Player not found");
-                            return;
-                        }
-                        Vector3 targetPos = plyr.transform.position + plyr.transform.forward * 2f;
-                        for (var i = 0; i < 0x1FF; i++)
-                            ItemUtils.SpawnSurplus(targetPos, false);
+                        for (var i = 0; i < 0xFFF; i++)
+                            ItemUtils.SpawnSurplus(Vector2.zero, false);
                         Console.WriteLine($"crash attempted !!!");
                     });
                 }]

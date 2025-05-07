@@ -1,16 +1,17 @@
 ﻿namespace ClydeMenu;
 
+using System;
+using System.IO;
+using System.Collections.Generic;
+
 using UnityEngine;
 using Object = UnityEngine.Object;
 
 using ClydeMenu.Engine;
-using System;
-using System.IO;
 
 public class Entry
 {
-    private static GameObject LoadObj;
-    private static ClientModule1 clientModule;
+    private static readonly List<GameObject> loadedComps = [];
 
     public static void Load()
     {
@@ -24,9 +25,24 @@ public class Entry
             Console.SetOut(standardOutput);
             Console.Clear();
         }
+       
+        try
+        {
+            InitModule<ClientComponent>("ClydeMenu");
+            InitModule<CmdBarComponent>("CmdBar");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error loading comps: {e}");
+            return;
+        }
+    }
 
-        LoadObj = new GameObject("ClydeMenu");
-        clientModule = LoadObj.AddComponent<ClientModule1>();
+    public static void InitModule<T>(string modName) where T : MonoBehaviour
+    {
+        var LoadObj = new GameObject(modName);
+        var clientModule = LoadObj.AddComponent<T>();
+        loadedComps.Add(LoadObj);
         Object.DontDestroyOnLoad(LoadObj);
     }
 
@@ -35,8 +51,8 @@ public class Entry
         Console.Clear();
         Kernel32.FreeConsole();
 
-        Object.DestroyImmediate(LoadObj);
-        Object.DestroyImmediate(clientModule);
+        foreach (var obj in loadedComps)
+            Object.DestroyImmediate(obj);
 
         //CleanStaticReferences();
         GC.Collect();

@@ -25,7 +25,7 @@ internal class ClientInstance
     //public static object PlayerHealthInstance { get; private set; }
     //public static object PlayerMaxHealthInstance { get; private set; }
 
-    public static void Init(ClientModule1 mod)
+    public static void Init(ClientComponent mod)
     {
         //PlayerHealthInstance = AssemblyReader.Fetch("PlayerHealth, Assembly-CSharp");
         //PlayerMaxHealthInstance = AssemblyReader.Fetch("ItemUpgradePlayerHealth, Assembly-CSharp");

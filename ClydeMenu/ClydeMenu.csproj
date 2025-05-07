@@ -36,7 +36,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Engine\ClientInstance.cs" />
-    <Compile Include="Engine\ClientModule1.cs" />
+    <Compile Include="Engine\ClientComponent.cs" />
+    <Compile Include="Engine\CmdBarComponent.cs" />
+    <Compile Include="Engine\Commands\BaseCommand.cs" />
+    <Compile Include="Engine\Commands\CmdCommand.cs" />
+    <Compile Include="Engine\Commands\CmdHandler.cs" />
+    <Compile Include="Engine\Commands\ExitCommand.cs" />
+    <Compile Include="Engine\Commands\SpawnCommand.cs" />
     <Compile Include="Engine\Storage.cs" />
     <Compile Include="Engine\Utils\ItemUtils.cs" />
     <Compile Include="Engine\Utils\NetworkUtils.cs" />

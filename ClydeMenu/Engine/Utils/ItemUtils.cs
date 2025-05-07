@@ -35,10 +35,7 @@ internal class ItemUtils : MonoBehaviourPunCallbacks
                 return;
             }
 
-            localItem.SetActive(true);
-            foreach (var renderer in localItem.GetComponentsInChildren<Renderer>(true))
-                renderer.enabled = true;
-            localItem.layer = LayerMask.NameToLayer("Default");
+            SetActive(localItem);
             return;
         }
     }
@@ -55,7 +52,7 @@ internal class ItemUtils : MonoBehaviourPunCallbacks
                 return;
             }
 
-            SetActive(localItem);
+            SetActive(localItem, active);
             return;
         }
 
@@ -114,12 +111,13 @@ internal class ItemUtils : MonoBehaviourPunCallbacks
         else DestroyImmediate(item);
     }
 
-    private static void SetActive(GameObject item)
+    private static void SetActive(GameObject item, bool active = true)
     {
-        item.SetActive(true);
+        item.SetActive(active);
         foreach (var renderer in item.GetComponentsInChildren<Renderer>(true))
-            renderer.enabled = true;
-        item.layer = LayerMask.NameToLayer("Default");
+            renderer.enabled = active;
+        if (active)
+            item.layer = LayerMask.NameToLayer("Default");
     }
 
     // debug utils

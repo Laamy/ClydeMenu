@@ -1,0 +1,104 @@
+﻿namespace ClydeMenu.Engine;
+
+using System;
+
+using UnityEngine;
+
+using ClydeMenu.Engine.Commands;
+using System.Collections.Generic;
+
+public class CmdBarComponent : MonoBehaviour
+{
+    public bool isCmdBar = false;
+
+    public void Start()
+    {
+
+    }
+
+    public void HandleInputs()
+    {
+        // cmdbar
+        if (Input.GetKeyDown(KeyCode.Semicolon))
+        {
+            isCmdBar = !isCmdBar;
+            Console.WriteLine($"CmdBar is now {(isCmdBar ? "shown" : "hidden")}");
+        }
+    }
+
+    public void Update()
+    {
+        HandleInputs();
+    }
+
+    public bool isInitialized = false;
+
+    public void OnGUI()
+    {
+        if (!isInitialized)
+        {
+            Start();
+            isInitialized = true;
+        }
+
+        if (!isCmdBar)
+            return;
+
+        GUI.SetNextControlName("CmdBarField");
+
+        Rect textbox = new Rect(
+            (Screen.width / 2) - (Screen.width / 2),
+            Screen.height - 60,
+            Screen.width,
+            60
+        );
+        Storage.CmdBarInput = GUI.TextField(textbox, Storage.CmdBarInput, Render.CurrentTheme);
+
+        if (Storage.CmdBarJustShown)
+        {
+            Storage.CmdBarJustShown = false;
+            GUI.FocusControl("CmdBarField");
+        }
+
+        void CloseCmdbar()
+        {
+            Storage.CmdBarHistory.Insert(0, Storage.CmdBarInput);
+            Storage.CmdBarHistoryIndex = -1;
+            Storage.CmdBarInput = string.Empty;
+            isCmdBar = false;
+        }
+
+        if (Event.current.rawType == EventType.Used)
+        {
+            switch (Event.current.keyCode)
+            {
+                case KeyCode.Return:
+                    CmdHandler.Handle(Storage.CmdBarInput);
+                    CloseCmdbar();
+                    break;
+                case KeyCode.Escape:
+                    CloseCmdbar();
+                    break;
+
+                case KeyCode.UpArrow:
+                    Storage.CmdBarHistoryIndex = Mathf.Clamp(Storage.CmdBarHistoryIndex + 1, -1, Storage.CmdBarHistory.Count - 1);
+                    if (Storage.CmdBarHistoryIndex != -1)
+                    {
+                        Storage.CmdBarInput = Storage.CmdBarHistory[Storage.CmdBarHistoryIndex];
+                        Storage.CmdBarJustShown = true;
+                    }
+                    break;
+                case KeyCode.DownArrow:
+                    Storage.CmdBarHistoryIndex = Mathf.Clamp(Storage.CmdBarHistoryIndex - 1, -1, Storage.CmdBarHistory.Count - 1);
+                    if (Storage.CmdBarHistoryIndex != -1)
+                    {
+                        Storage.CmdBarInput = Storage.CmdBarHistory[Storage.CmdBarHistoryIndex];
+                        Storage.CmdBarJustShown = true;
+                    }
+                    else Storage.CmdBarInput = string.Empty;
+                    break;
+            }
+        }
+        else Storage.CmdBarJustShown = true;
+    }
+}
