@@ -73,8 +73,15 @@ public class CmdBarComponent : MonoBehaviour
             switch (Event.current.keyCode)
             {
                 case KeyCode.Return:
-                    CmdHandler.Handle(Storage.CmdBarInput);
-                    CloseCmdbar();
+                    try {
+                        CmdHandler.Handle(Storage.CmdBarInput);
+                        CloseCmdbar();
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine($"Error in CmdBar event polling: {e.Message}");
+                        CloseCmdbar();
+                    }
                     break;
                 case KeyCode.Escape:
                     CloseCmdbar();

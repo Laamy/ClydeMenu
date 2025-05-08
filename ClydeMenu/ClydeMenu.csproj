@@ -35,7 +35,7 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Engine\ClientInstance.cs" />
+    <Compile Include="Engine\Utils\ClientInstance.cs" />
     <Compile Include="Engine\ClientComponent.cs" />
     <Compile Include="Engine\CmdBarComponent.cs" />
     <Compile Include="Engine\Commands\BaseCommand.cs" />
@@ -46,7 +46,7 @@
     <Compile Include="Engine\Storage.cs" />
     <Compile Include="Engine\Utils\ItemUtils.cs" />
     <Compile Include="Engine\Utils\NetworkUtils.cs" />
-    <Compile Include="Engine\Render.cs" />
+    <Compile Include="Engine\Utils\Render.cs" />
     <Compile Include="Engine\Utils\TextureUtils.cs" />
     <Compile Include="Entry.cs" />
     <Compile Include="Kernel32.cs" />
@@ -395,8 +395,6 @@
       <HintPath>dlls\websocket-sharp.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Engine\Structs\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

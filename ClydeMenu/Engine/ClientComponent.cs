@@ -26,8 +26,9 @@ public class ClientComponent : MonoBehaviour
             Console.WriteLine($"Menu is now {(isShown ? "shown" : "hidden")}");
         }
 
-        if (Input.GetKeyDown(KeyCode.Delete))
-            Process.GetCurrentProcess().Kill();
+        // im gonna get so mad if i press this 1 more fucking time
+        //if (Input.GetKeyDown(KeyCode.Delete))
+        //    Process.GetCurrentProcess().Kill();
 
         if (Input.GetKeyDown(KeyCode.F12))
             Entry.Unload();//bro
