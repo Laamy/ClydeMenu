@@ -79,8 +79,7 @@ internal class ClientInstance
 
             return healthField.GetValue(instance);
         }
-    }
-
+    } 
     public static void SetHealth(int health, int maxHealth)
     {
         var healthInstance = PlayerHealthInstance;

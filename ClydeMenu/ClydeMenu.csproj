@@ -35,6 +35,10 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Engine\Commands\KickCommand.cs" />
+    <Compile Include="Engine\Commands\MessageSpoofCommand.cs" />
+    <Compile Include="Engine\Commands\StableSpawnCommand.cs" />
+    <Compile Include="Engine\OnJoinCrasher.cs" />
     <Compile Include="Engine\Utils\ClientInstance.cs" />
     <Compile Include="Engine\ClientComponent.cs" />
     <Compile Include="Engine\CmdBarComponent.cs" />

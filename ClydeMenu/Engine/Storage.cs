@@ -35,4 +35,9 @@ internal class Storage
         get;
         internal set;
     }
+    public static bool AntiKick
+    {
+        get;
+        internal set;
+    } = false;
 }

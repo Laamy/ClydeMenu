@@ -5,7 +5,6 @@ using System;
 using UnityEngine;
 
 using ClydeMenu.Engine.Commands;
-using System.Collections.Generic;
 
 public class CmdBarComponent : MonoBehaviour
 {
@@ -13,7 +12,7 @@ public class CmdBarComponent : MonoBehaviour
 
     public void Start()
     {
-
+        Console.WriteLine("CmdBar initialized");
     }
 
     public void HandleInputs()
@@ -23,6 +22,9 @@ public class CmdBarComponent : MonoBehaviour
         {
             isCmdBar = !isCmdBar;
             Console.WriteLine($"CmdBar is now {(isCmdBar ? "shown" : "hidden")}");
+
+            // SemiFunc.InputDisableMovement();
+            //_ = isCmdBar ? SemiFunc.InputDisableMovement() : SemiFunc.input();
         }
     }
 

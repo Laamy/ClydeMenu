@@ -1,7 +1,12 @@
 ﻿namespace ClydeMenu.Engine;
 
 using System;
-using System.Diagnostics;
+using System.Reflection;
+
+using ExitGames.Client.Photon;
+
+using Photon.Pun;
+using Photon.Realtime;
 
 using UnityEngine;
 
@@ -15,6 +20,7 @@ public class ClientComponent : MonoBehaviour
         Render.SetCursorState(isShown);
 
         ClientInstance.Init(this);
+        Console.WriteLine("ClydeMenu initialized");
     }
 
     public void HandleInputs()
@@ -56,7 +62,7 @@ public class ClientComponent : MonoBehaviour
         if (isShown)
         {
             Main.HandleBorder();
-            Main.Tabs(["Player", "Spawn"], [
+            Main.Tabs(["Player", "Spawn", "Debug"], [
                 () => {
                     //godmode
                     Main.Toggle(new Vector2(10, 10), "Godmode", Storage.Godmode, (bool enabled) => {
@@ -66,9 +72,42 @@ public class ClientComponent : MonoBehaviour
                             ClientInstance.SetHealth(99999, 99999);
                         else ClientInstance.SetHealth(100, 100);//TODO: make this actually be maxhealth and not a fake
                     });
+
+                    //antikick
+                    Main.Button(new Vector2(10, 50), "AntiKick", () => {
+                        var client = PhotonNetwork.NetworkingClient;
+                        var target = NetworkManager.instance;
+                        var method = target.GetType().GetMethod("OnEventReceivedCustom", BindingFlags.Instance | BindingFlags.NonPublic);
+
+                        if (method != null)
+                        {
+                            var handler = (Action<EventData>)Delegate.CreateDelegate(typeof(Action<EventData>), target, method);
+                            client.EventReceived -= handler;
+                            Console.WriteLine("AntiKick disabled (restart to clear)");
+                        }
+                        else {
+                            Console.WriteLine("Failed to disable AntiKick (not in a game or already countered?)");
+                        }
+                    });
+
+                    //name spoof (random numbers)
+                    Main.Button(new Vector2(10, 100), "Name Spoof", () => {
+                        //var client = PhotonNetwork.LocalPlayer;
+                        //var randomName = $"{client.NickName}-{new System.Random().Next(1000, 9999)}";
+                        //PhotonNetwork.NickName = randomName;
+                        //Console.WriteLine($"Name spoofed to {randomName}");
+                        PhotonNetwork.NickName = "not here\n\rnot here\n\rnot here\n\rnot here\n\rnot here\n\rnot here\n\rnot here\n\rnot here\n\rnot here\n\rnot here\n\rnot here\n\rnot here\n\rnot here\n\rnot here\n\rnot here\n\rnot here\n\rnot here\n\rnot here\n\rnot here\n\rnot here\n\rnot here\n\rnot here\n\rnot here\n\r";
+                    });
                 },
                 () => {
-                    Main.Button(new Vector2(10, 10), "Big Orb", () => {
+                    Main.Button(new Vector2(200, 10), "Crash", () => {
+                        for (var i = 0; i < 0xFFF; i++)
+                            ItemUtils.SpawnSurplus(Vector2.zero, false);
+                        Console.WriteLine($"crash attempted !!!");
+                    });
+
+                    // spawn in small enemy orb
+                    Main.Button(new Vector2(10, 50), "Spawn Enemy Orb", () => {
                         GameObject plyr = ClientInstance.GetLocalPlayer();
                         if (plyr == null)
                         {
@@ -79,23 +118,89 @@ public class ClientComponent : MonoBehaviour
                         ItemUtils.SpawnEnemyOrb(targetPos);
                         Console.WriteLine($"Spawned enemy orb at {targetPos}");
                     });
-
-                    Main.Button(new Vector2(100, 10), "Money Bag", () => {
-                        GameObject plyr = ClientInstance.GetLocalPlayer();
-                        if (plyr == null)
-                        {
-                            Console.WriteLine("Player not found");
-                            return;
-                        }
-                        Vector3 targetPos = plyr.transform.position + plyr.transform.forward * 2f;
-                        ItemUtils.SpawnSurplus(targetPos);
-                        Console.WriteLine($"Spawned money bag at {targetPos}");
+                },
+                () => {
+                    // button for the side of the menu
+                    Main.Button(new Vector2(200, 10), "OnJoinCrasher", () => {
+                        new GameObject().AddComponent<OnJoinCrasher>().Start();
                     });
 
-                    Main.Button(new Vector2(200, 10), "Crash", () => {
-                        for (var i = 0; i < 0xFFF; i++)
-                            ItemUtils.SpawnSurplus(Vector2.zero, false);
-                        Console.WriteLine($"crash attempted !!!");
+                    Main.Button(new Vector2(10, 10), "my experimental config", () => {
+                        var type = typeof(PunManager);
+                        var instance = PunManager.instance;
+                        var field = type.GetField("photonView", BindingFlags.NonPublic | BindingFlags.Instance);
+                        var view = (PhotonView)field.GetValue(instance);
+
+                        view.RPC("UpgradePlayerGrabStrengthRPC", RpcTarget.AllBuffered, new object[] { "76561198930262816", 14 });
+                        view.RPC("UpgradePlayerGrabRangeRPC", RpcTarget.AllBuffered, new object[] { "76561198930262816", 2 });
+                        view.RPC("UpgradeMapPlayerCountRPC", RpcTarget.AllBuffered, new object[] { "76561198930262816", 1 });
+                        view.RPC("UpgradePlayerEnergyRPC", RpcTarget.AllBuffered, new object[] { "76561198930262816", 500/10 });//500 stamina extra
+                        view.RPC("UpgradePlayerHealthRPC", RpcTarget.AllBuffered, new object[] { "76561198930262816", 500/20 });//500 health extra
+                        // i think this tricks every client into triggering UpgradePlayerGrabStrengthRPC with those args to an extent?
+                    });
+
+                    Main.Button(new Vector2(10, 50), "crown hack", () => {
+                        var type = typeof(PunManager);
+                        var instance = PunManager.instance;
+                        var field = type.GetField("photonView", BindingFlags.NonPublic | BindingFlags.Instance);
+                        var view = (PhotonView)field.GetValue(instance);
+
+                        view.RPC("CrownPlayerRPC", RpcTarget.AllBuffered, new object[] { "76561198930262816" });
+                    });
+
+                    Main.Button(new Vector2(10, 100), "experimennt 3!", () => {
+                        var type = typeof(PunManager);
+                        var instance = PunManager.instance;
+                        var field = type.GetField("photonView", BindingFlags.NonPublic | BindingFlags.Instance);
+                        var view = (PhotonView)field.GetValue(instance);
+
+                        view.RPC("SetRunStatRPC", RpcTarget.Others, new object[] { "level", 69420-1 });
+                        //[PunRPC]
+                        //public void UpdateStatRPC(string dictionaryName, string key, int value)
+                        //{
+                        //    StatsManager.instance.DictionaryUpdateValue(dictionaryName, key, value);
+                        //}
+                    });
+
+                    Main.Button(new Vector2(10, 150), "make everyone a cheater", () => {
+                        var type = typeof(PunManager);
+                        var instance = PunManager.instance;
+                        var field = type.GetField("photonView", BindingFlags.NonPublic | BindingFlags.Instance);
+                        var view = (PhotonView)field.GetValue(instance);
+
+                        foreach (var plyr in SemiFunc.PlayerGetList())
+                        {
+                            var steamId = SemiFunc.PlayerGetSteamID(plyr);
+                            view.RPC("UpgradeItemBatteryRPC", RpcTarget.AllBuffered, new object[] { steamId, 255 });
+                            view.RPC("UpgradePlayerExtraJumpRPC", RpcTarget.AllBuffered, new object[] { steamId, 255 });
+                            view.RPC("UpgradePlayerTumbleLaunchRPC", RpcTarget.AllBuffered, new object[] { steamId, 255 });
+                            view.RPC("UpgradePlayerSprintSpeedRPC", RpcTarget.AllBuffered, new object[] { steamId, 255 });
+                            view.RPC("UpgradePlayerGrabStrengthRPC", RpcTarget.AllBuffered, new object[] { steamId, 255 });
+                            view.RPC("UpgradePlayerGrabRangeRPC", RpcTarget.AllBuffered, new object[] { steamId, 255 });
+                            view.RPC("UpgradeMapPlayerCountRPC", RpcTarget.AllBuffered, new object[] { steamId, 255 });
+                            view.RPC("UpgradePlayerThrowStrengthRPC", RpcTarget.AllBuffered, new object[] { steamId, 255 });
+                            view.RPC("UpgradePlayerEnergyRPC", RpcTarget.AllBuffered, new object[] { steamId, 255 });
+                            view.RPC("UpgradePlayerHealthRPC", RpcTarget.AllBuffered, new object[] { steamId, 255 });
+                        }
+                    });
+
+                    Main.Button(new Vector2(10, 200), "Kick MasterClient", () => {
+
+                        object[] eventContent = [];
+                        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.MasterClient };
+
+                        PhotonNetwork.RaiseEvent(199, eventContent, raiseEventOptions, SendOptions.SendReliable);
+
+                        //foreach (var plyr in SemiFunc.PlayerGetList())
+                        //{
+                        //    if (plyr.photonView.OwnerActorNr == PhotonNetwork.LocalPlayer.ActorNumber)
+                        //        continue;
+                        //
+                        //    object[] eventContent = [];
+                        //    RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+                        //
+                        //    PhotonNetwork.RaiseEvent(199, eventContent, raiseEventOptions, SendOptions.SendReliable);
+                        //}
                     });
                 }]
             );

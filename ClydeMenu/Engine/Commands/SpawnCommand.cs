@@ -30,3 +30,29 @@ public class SpawnCommand : BaseCommand
         ItemUtils.SpawnItem(infront, item.FirstOrDefault().prefab);
     }
 }
+
+/*
+Main.Button(new Vector2(10, 10), "Big Orb", () => {
+    GameObject plyr = ClientInstance.GetLocalPlayer();
+    if (plyr == null)
+    {
+        Console.WriteLine("Player not found");
+        return;
+    }
+    Vector3 targetPos = plyr.transform.position + plyr.transform.forward * 2f;
+    ItemUtils.SpawnEnemyOrb(targetPos);
+    Console.WriteLine($"Spawned enemy orb at {targetPos}");
+});
+
+Main.Button(new Vector2(100, 10), "Money Bag", () => {
+    GameObject plyr = ClientInstance.GetLocalPlayer();
+    if (plyr == null)
+    {
+        Console.WriteLine("Player not found");
+        return;
+    }
+    Vector3 targetPos = plyr.transform.position + plyr.transform.forward * 2f;
+    ItemUtils.SpawnSurplus(targetPos);
+    Console.WriteLine($"Spawned money bag at {targetPos}");
+});
+*/

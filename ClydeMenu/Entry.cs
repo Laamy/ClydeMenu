@@ -8,6 +8,8 @@ using UnityEngine;
 using Object = UnityEngine.Object;
 
 using ClydeMenu.Engine;
+using System.Diagnostics;
+using Debug = UnityEngine.Debug;
 
 public class Entry
 {
@@ -25,7 +27,11 @@ public class Entry
             Console.SetOut(standardOutput);
             Console.Clear();
         }
-       
+
+        Console.WriteLine("ClydeMenu injected successfully");
+
+        Application.logMessageReceived += (logString, stackTrace, type) => Console.WriteLine($"(LOG) - [{type}] {logString}");
+
         try
         {
             InitModule<ClientComponent>("ClydeMenu");

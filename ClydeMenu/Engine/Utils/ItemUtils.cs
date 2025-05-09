@@ -106,6 +106,11 @@ internal class ItemUtils : MonoBehaviourPunCallbacks
 
         view.ObservedComponents = [transform, body];
         view.Synchronization = ViewSynchronization.ReliableDeltaCompressed;
+        view.ViewID = PhotonNetwork.AllocateViewID(PhotonNetwork.MasterClient.ActorNumber);
+
+        // more failed attempts grr...
+        //view.RPC("DiscoverRPC", RpcTarget.All, []);
+        //view.RPC("DollarValueSetRPC", RpcTarget.Others, [1000000]);
 
         if (active) SetActive(item);
         else DestroyImmediate(item);

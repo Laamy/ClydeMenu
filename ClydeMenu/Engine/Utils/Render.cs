@@ -168,6 +168,8 @@ public class RenderWindow
         }
     }
 
+    internal void Toggle(Vector2 vector2, string v, object antiKick, Action<bool> value) => throw new NotImplementedException();
+
     #endregion
 }
 
