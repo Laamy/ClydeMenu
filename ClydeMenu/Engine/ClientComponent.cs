@@ -16,6 +16,8 @@ public class ClientComponent : MonoBehaviour
 
     public void Start()
     {
+        NameSpoofer.InitSpoofer();
+
         Render.Init();
         Render.SetCursorState(isShown);
 
@@ -89,14 +91,33 @@ public class ClientComponent : MonoBehaviour
                             Console.WriteLine("Failed to disable AntiKick (not in a game or already countered?)");
                         }
                     });
+                    string[] firstNames = new string[] {
+                        "Aiden", "Brielle", "Caleb", "Delilah", "Ethan", "Fiona", "Gavin", "Hazel",
+                        "Isaac", "Jasmine", "Kai", "Luna", "Miles", "Nora", "Owen", "Penelope",
+                        "Quentin", "Ruby", "Silas", "Tessa", "Uriel", "Violet", "Wyatt", "Ximena",
+                        "Yusuf", "Zara", "Alina", "Brayden", "Cora", "Dante", "Elise", "Felix",
+                        "Gianna", "Holden", "Isla", "Jaxon", "Keira", "Leo", "Mila", "Nolan",
+                        "Olive", "Parker", "Quinn", "Riley", "Sage", "Theo", "Una", "Vivian",
+                        "Wesley", "Xander", "Yara", "Zion"
+                    };
+
+                    string[] lastNames = new string[] {
+                        "Anderson", "Bennett", "Carter", "Dawson", "Ellis", "Fisher", "Garcia", "Hughes",
+                        "Iverson", "Jacobs", "Keller", "Lawson", "Martinez", "Nelson", "Owens", "Patel",
+                        "Quincy", "Reed", "Santos", "Turner", "Upton", "Vargas", "Walker", "Xu",
+                        "Young", "Zimmerman", "Archer", "Baker", "Chavez", "Diaz", "Evans", "Ford",
+                        "Gibson", "Hall", "Ingram", "Jennings", "Knight", "Lee", "Morris", "Nguyen",
+                        "Ortiz", "Price", "Quintero", "Robinson", "Smith", "Taylor", "Underwood", "Valdez",
+                        "White", "Xiong", "Yates", "Zuniga"
+                    };
 
                     //name spoof (random numbers)
                     Main.Button(new Vector2(10, 100), "Name Spoof", () => {
-                        //var client = PhotonNetwork.LocalPlayer;
-                        //var randomName = $"{client.NickName}-{new System.Random().Next(1000, 9999)}";
-                        //PhotonNetwork.NickName = randomName;
-                        //Console.WriteLine($"Name spoofed to {randomName}");
-                        PhotonNetwork.NickName = "not here\n\rnot here\n\rnot here\n\rnot here\n\rnot here\n\rnot here\n\rnot here\n\rnot here\n\rnot here\n\rnot here\n\rnot here\n\rnot here\n\rnot here\n\rnot here\n\rnot here\n\rnot here\n\rnot here\n\rnot here\n\rnot here\n\rnot here\n\rnot here\n\rnot here\n\rnot here\n\r";
+                        var rng = new System.Random();
+                        string randomName = firstNames[rng.Next(firstNames.Length)] + lastNames[rng.Next(lastNames.Length)];
+
+                        Console.WriteLine($"Name Spoofed to {randomName}");
+                        PhotonNetwork.NickName = randomName;
                     });
                 },
                 () => {
@@ -120,11 +141,6 @@ public class ClientComponent : MonoBehaviour
                     });
                 },
                 () => {
-                    // button for the side of the menu
-                    Main.Button(new Vector2(200, 10), "OnJoinCrasher", () => {
-                        new GameObject().AddComponent<OnJoinCrasher>().Start();
-                    });
-
                     Main.Button(new Vector2(10, 10), "my experimental config", () => {
                         var type = typeof(PunManager);
                         var instance = PunManager.instance;

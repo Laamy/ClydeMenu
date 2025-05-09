@@ -14,6 +14,14 @@ public class KickCommand : BaseCommand
 
     public override void Execute(string[] args)
     {
+        if (args[0] == "all")
+        {
+            var options = new RaiseEventOptions();
+            options.Receivers = ReceiverGroup.All;
+            PhotonNetwork.RaiseEvent(199, null, options, SendOptions.SendReliable);
+            return;
+        }
+
         foreach (var plyr in SemiFunc.PlayerGetList())
         {
             var plyrName = SemiFunc.PlayerGetName(plyr);
