@@ -8,7 +8,7 @@ namespace ClydeMenu.Engine;
 
 internal class NameSpoofer : MonoBehaviourPunCallbacks
 {
-    public static void randomName()
+    public static void RandomizeName()
     {
         string[] firstNames = new string[] {
                         "Aiden", "Brielle", "Caleb", "Delilah", "Ethan", "Fiona", "Gavin", "Hazel",
@@ -35,15 +35,5 @@ internal class NameSpoofer : MonoBehaviourPunCallbacks
 
         Console.WriteLine($"Name Spoofed to {randomName}");
         PhotonNetwork.NickName = randomName;
-    }
-
-    public void _Start()
-    {
-
-    }
-
-    public static void InitSpoofer()
-    {
-        new GameObject("NameSpoofer").AddComponent<NameSpoofer>()._Start();
     }
 }

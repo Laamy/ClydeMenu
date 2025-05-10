@@ -24,6 +24,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <LangVersion>latest</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -33,24 +34,30 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <LangVersion>latest</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Engine\Commands\KickCommand.cs" />
-    <Compile Include="Engine\Commands\MessageSpoofCommand.cs" />
-    <Compile Include="Engine\Commands\StableSpawnCommand.cs" />
+    <Compile Include="Engine\Command\Commands\GiveUpgradeCommand.cs" />
+    <Compile Include="Engine\Command\Commands\KickCommand.cs" />
+    <Compile Include="Engine\Command\Commands\MessageSpoofCommand.cs" />
+    <Compile Include="Engine\Command\Commands\StableSpawnCommand.cs" />
+    <Compile Include="Engine\GameEvents.cs" />
+    <Compile Include="Engine\Menu\BaseMenu.cs" />
+    <Compile Include="Engine\Components\MenuSceneComponent.cs" />
+    <Compile Include="Engine\Menu\Menus\DebugMenu.cs" />
     <Compile Include="Engine\NameSpoofer.cs" />
-    <Compile Include="Engine\Utils\ClientInstance.cs" />
-    <Compile Include="Engine\ClientComponent.cs" />
-    <Compile Include="Engine\CmdBarComponent.cs" />
-    <Compile Include="Engine\Commands\BaseCommand.cs" />
-    <Compile Include="Engine\Commands\CmdCommand.cs" />
-    <Compile Include="Engine\Commands\CmdHandler.cs" />
-    <Compile Include="Engine\Commands\ExitCommand.cs" />
-    <Compile Include="Engine\Commands\SpawnCommand.cs" />
+    <Compile Include="Engine\Settings\Settings.cs" />
+    <Compile Include="Engine\ClientInstance.cs" />
+    <Compile Include="Engine\Components\ClientComponent.cs" />
+    <Compile Include="Engine\Components\CmdBarComponent.cs" />
+    <Compile Include="Engine\Command\BaseCommand.cs" />
+    <Compile Include="Engine\Command\Commands\CmdCommand.cs" />
+    <Compile Include="Engine\Command\CmdHandler.cs" />
+    <Compile Include="Engine\Command\Commands\ExitCommand.cs" />
+    <Compile Include="Engine\Command\Commands\SpawnCommand.cs" />
     <Compile Include="Engine\Storage.cs" />
     <Compile Include="Engine\Utils\ItemUtils.cs" />
-    <Compile Include="Engine\Utils\NetworkUtils.cs" />
-    <Compile Include="Engine\Utils\Render.cs" />
+    <Compile Include="Engine\Utils\RenderUtils.cs" />
     <Compile Include="Engine\Utils\TextureUtils.cs" />
     <Compile Include="Entry.cs" />
     <Compile Include="Kernel32.cs" />
@@ -398,6 +405,9 @@
     <Reference Include="websocket-sharp">
       <HintPath>dlls\websocket-sharp.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

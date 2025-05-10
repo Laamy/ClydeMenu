@@ -54,7 +54,7 @@ public class CmdBarComponent : MonoBehaviour
             Screen.width,
             60
         );
-        Storage.CmdBarInput = GUI.TextField(textbox, Storage.CmdBarInput, Render.CurrentTheme);
+        Storage.CmdBarInput = GUI.TextField(textbox, Storage.CmdBarInput, RenderUtils.CurrentTheme);
 
         if (Storage.CmdBarJustShown)
         {

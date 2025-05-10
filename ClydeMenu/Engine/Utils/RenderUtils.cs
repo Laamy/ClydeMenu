@@ -173,7 +173,7 @@ public class RenderWindow
     #endregion
 }
 
-public class Render
+public class RenderUtils
 {
     public static GUIStyle CurrentTheme;
 
@@ -193,6 +193,8 @@ public class Render
 
     public static void SetCursorState(bool visible)
     {
+        Console.WriteLine($"Setting cursor state to {visible}");
+
         // gotta fix the cursor bruh
         Type type = typeof(InputManager);
         FieldInfo info = type.GetField("disableAimingTimer", BindingFlags.NonPublic | BindingFlags.Instance);

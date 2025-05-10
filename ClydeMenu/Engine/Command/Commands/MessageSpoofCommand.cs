@@ -21,9 +21,7 @@ public class MessageSpoofCommand : BaseCommand
             if (!plyrName.ToLower().Contains(args[0].ToLower()))
                 continue;
 
-            var type = typeof(PlayerAvatar);
-            var field = type.GetField("photonView", BindingFlags.NonPublic | BindingFlags.Instance);
-            var view = (PhotonView)field.GetValue(plyr);
+            var view = ClientInstance.GetPhotonView(plyr);
 
             view.RPC("ChatMessageSendRPC", RpcTarget.All,
             [
