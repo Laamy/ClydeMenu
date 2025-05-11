@@ -11,6 +11,7 @@ internal class GameEvents
 
     public static event Action? OnLobbyLeft;
     public static event Action? OnBanned;
+    public static event Action? OnKicked;
 
     public static void Init()
     {
@@ -48,5 +49,8 @@ internal class GameEvents
 
         if (logString.Contains("Msg: \"Ban\""))
             OnBanned?.Invoke();
+
+        if (logString.Contains("You were kicked by the server."))
+            OnKicked?.Invoke();
     }
 }

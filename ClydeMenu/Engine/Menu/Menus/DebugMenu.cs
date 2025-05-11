@@ -45,7 +45,7 @@ public class DebugMenu : BaseMenu
                 DebugStorage.Main.Button(new Vector2(10, 50), "AntiKick", () => {
                     var client = PhotonNetwork.NetworkingClient;
                     var target = NetworkManager.instance;
-                    var method = target.GetType().GetMethod("OnEventReceivedCustom", BindingFlags.Instance | BindingFlags.NonPublic);
+                    var method = ClientInstance.FetchMethod<NetworkManager>("OnEventReceivedCustom");
 
                     if (method != null)
                     {

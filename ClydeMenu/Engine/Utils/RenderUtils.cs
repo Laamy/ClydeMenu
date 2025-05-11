@@ -1,11 +1,11 @@
 ﻿namespace ClydeMenu.Engine;
 
 using System;
-using System.Reflection;
 
 using UnityEngine;
 
 using ClydeMenu.Engine.Utils;
+using Unity.VisualScripting;
 
 public class RenderWindow
 {
@@ -191,37 +191,108 @@ public class RenderUtils
         };
     }
 
+    public static void DrawRect(Vector2 pos, Vector2 size, Color color)
+    {
+        GUI.color = color;
+        GUI.DrawTexture(new Rect(pos.x, pos.y, size.x, size.y), Texture2D.whiteTexture);
+    }
+
+    public static Vector2 StringSize(string text, Color color, float size = 16)
+    {
+        GUIStyle style = new GUIStyle();
+        style.fontSize = (int)size;
+        style.normal.textColor = color;
+
+        return style.CalcSize(new GUIContent(text));
+    }
+
+    public static void DrawString(Vector2 pos, string text, Color color, float size = 16)
+    {
+        GUI.color = color;
+        GUIStyle style = new GUIStyle();
+        style.fontSize = (int)size;
+        style.normal.textColor = color;
+
+        GUI.Label(new Rect(pos.x, pos.y, 1000, 1000), text, style);
+    }
+
+    public static void DrawLine(Vector2 start, Vector2 end, Color color, float width = 1)
+    {
+        var distance = Vector2.Distance(start, end);
+        var angle = Math.Atan2(end.y - start.y, end.x - start.x) * Mathf.Rad2Deg;
+
+        GUI.color = color;
+        var orig = GUI.matrix;
+        GUIUtility.RotateAroundPivot((float)angle, start);
+        GUI.DrawTexture(new Rect(start.x, start.y, distance, width), Texture2D.whiteTexture);
+        GUI.matrix = orig;
+    }
+
+    public static void DrawLine(Vector3 start, Vector3 end, Color color, float width = 1)
+    {
+        Vector2 pos1 = Camera.main.WorldToScreenPoint(start);
+        Vector2 pos2 = Camera.main.WorldToScreenPoint(end);
+        DrawLine(pos1, pos2, color, width);
+    }
+
+    private static int[,] cubeEdges = {
+        {0,1},{1,2},{2,3},{3,0},
+        {4,5},{5,6},{6,7},{7,4},
+        {0,4},{1,5},{2,6},{3,7}
+    };
+
+    public static void DrawAABB(Bounds bounds, Color colour, int maxDis = 1000)
+    {
+        Vector3 min = bounds.min, max = bounds.max;
+        Vector3[] vertices = {
+            new(min.x, min.y, min.z), new(max.x, min.y, min.z),
+            new(max.x, min.y, max.z), new(min.x, min.y, max.z),
+            new(min.x, max.y, min.z), new(max.x, max.y, min.z),
+            new(max.x, max.y, max.z), new(min.x, max.y, max.z)
+        };
+
+        float scaleX = (float)Screen.width / Camera.main.pixelWidth;
+        float scaleY = (float)Screen.height / Camera.main.pixelHeight;
+
+        bool visible = false;
+        Vector2[] sVertices = new Vector2[8];
+        for (int i = 0; i < 8; i++)
+        {
+            Vector3 p = Camera.main.WorldToScreenPoint(vertices[i]);
+            if (p.z > 0 && p.z < maxDis) visible = true;
+            sVertices[i] = new(p.x * scaleX, Screen.height - (p.y * scaleY));
+        }
+
+        if (!visible)
+            return;
+
+        for (int i = 0; i < 12; i++)
+        {
+            Vector2 start = sVertices[cubeEdges[i, 0]];
+            Vector2 end = sVertices[cubeEdges[i, 1]];
+
+            if ((start.x >= 0 && start.x <= Screen.width && start.y >= 0 && start.y <= Screen.height) ||
+                (end.x >= 0 && end.x <= Screen.width && end.y >= 0 && end.y <= Screen.height))
+                DrawLine(start, end, colour);//grrr....
+        }
+    }
+
     public static void SetCursorState(bool visible)
     {
         Console.WriteLine($"Setting cursor state to {visible}");
 
         // gotta fix the cursor bruh
-        Type type = typeof(InputManager);
-        FieldInfo info = type.GetField("disableAimingTimer", BindingFlags.NonPublic | BindingFlags.Instance);
+        var info = ClientInstance.FetchField<InputManager>("disableAimingTimer");
         if (info == null)
-        {
-            Console.WriteLine("Failed to find disableAimingTimer field");
             return;
-        }
 
-        float curValue = (float)info.GetValue(InputManager.instance);
-        
         if (visible)
-        {
-            if (curValue < 2f || curValue > 10f)
-            {
-                float clampValue = Mathf.Clamp(curValue, 2f, 10f);
-                info.SetValue(InputManager.instance, clampValue);
-            }
-        }
+            info.SetValue(InputManager.instance, 5f);
         if (Cursor.visible == visible)
             return;
 
         Cursor.visible = visible;
         Cursor.lockState = visible ? CursorLockMode.None : CursorLockMode.Locked;
-
-        if (!visible)
-            info.SetValue(InputManager.instance, 0f);
     }
 
     public static RenderWindow Window(string v, Rect rect) => new(rect, v, CurrentTheme);

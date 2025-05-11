@@ -5,6 +5,12 @@ using System;
 using UnityEngine;
 
 using ClydeMenu.Engine.Menu;
+using Unity.VisualScripting;
+using ClydeMenu.Engine.Components.Visuals;
+using Photon.Realtime;
+using UnityEngine.UI;
+using Object = UnityEngine.Object;
+using UnityEngine.UIElements;
 
 public class ClientComponent : MonoBehaviour
 {
@@ -48,5 +54,24 @@ public class ClientComponent : MonoBehaviour
             Start();
             isInitialized = true;
         }
+
+        var localPlayer = ClientInstance.GetLocalPlayer();
+        if (localPlayer == null)
+        {
+            Console.WriteLine("Local player not found");
+            return;
+        }
+
+        var players = SemiFunc.PlayerGetList();
+        if (players == null || players.Count == 0)
+            return;
+        
+        foreach (var player in players)
+        {
+            if (player.gameObject == localPlayer)
+                continue;
+
+            RenderUtils.DrawAABB(ClientInstance.GetActiveColliderBounds(player.gameObject), Color.blue);
+        }
     }
-}
+} 

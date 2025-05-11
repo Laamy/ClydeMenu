@@ -70,6 +70,9 @@ internal class MenuSceneComponent : MonoBehaviour
 
     public void Update()
     {
+        if (baseMenus.Count != 0)
+            RenderUtils.SetCursorState(true);
+
         for (int i = baseMenus.Count - 1; i >= 0; i--)
         {
             BaseMenu menu = baseMenus[i];
@@ -77,6 +80,10 @@ internal class MenuSceneComponent : MonoBehaviour
             if (menu.ShouldBlockInput)
                 break;
         }
+    }
+
+    public void FixedUpdate()
+    {
     }
 
     public void OnGUI()
@@ -95,8 +102,6 @@ internal class MenuSceneComponent : MonoBehaviour
 
         if (baseMenus.Count != 0)
         {
-            Console.WriteLine($"Focused Menu: {FocusedMenu?.GetType().Name}");
-
             var curEvent = Event.current;
             Vector2 mousePos = curEvent.mousePosition;
 
@@ -106,7 +111,6 @@ internal class MenuSceneComponent : MonoBehaviour
             GUI.DrawTexture(new Rect(mousePos.x - size - 2, mousePos.y - size - 2, size * 2 + 4, size * 2 + 4), Texture2D.whiteTexture);
             GUI.color = Color.white;
             GUI.DrawTexture(new Rect(mousePos.x - size, mousePos.y - size, size * 2, size * 2), Texture2D.whiteTexture);
-
         }
     }
 }

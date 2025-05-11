@@ -9,6 +9,9 @@ using Object = UnityEngine.Object;
 
 using ClydeMenu.Engine;
 using ClydeMenu.Engine.Menu;
+using ClydeMenu.Engine.Commands;
+using System.Reflection;
+using System.Text;
 
 public class Entry
 {
@@ -28,7 +31,8 @@ public class Entry
         }
 
         GameEvents.Init();
-
+        ModuleHandler.Init();
+        
         try
         {
             InitModule<MenuSceneComponent>("MenuScene"); // menu stack stuff for other components to use
