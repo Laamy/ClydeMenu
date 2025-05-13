@@ -68,7 +68,7 @@ public class MainMenu : BaseMenu
                 Storage.CHEAT_ESP_Player = DrawBoolean("Player ESP", Storage.CHEAT_ESP_Player);
                 Storage.CHEAT_ESP_Enemy = DrawBoolean("Enemy ESP", Storage.CHEAT_ESP_Enemy);
                 Storage.CHEAT_ESP_Valuable = DrawBoolean("Valuable ESP", Storage.CHEAT_ESP_Valuable);
-                Storage.CHEAT_ESP_Extraction = DrawBoolean("Extraction ESP", Storage.CHEAT_ESP_Extraction);
+                Storage.CHEAT_NETWORK_MassCrasher = DrawBoolean("Extraction ESP", Storage.CHEAT_NETWORK_MassCrasher);
             },
             () => {
                 DrawSettingLabel("Network");
@@ -84,6 +84,45 @@ public class MainMenu : BaseMenu
                         options.TargetActors = new[] { plyrActorId };
                         PhotonNetwork.RaiseEvent(199, null, options, SendOptions.SendReliable);
                         Console.WriteLine($"Kicked player {plyr.name} from the server.");
+                    }
+                    catch (Exception ex)
+                    {
+                         Console.WriteLine($"Error in MainMenu {ex.Message}");
+                    }
+                }
+
+                if (DrawButton("Kill Player"))
+                {
+                    try
+                    {
+                        var plyr = SemiFunc.PlayerGetList()[Storage.CHEAT_PLAYERSELECT];
+                        ClientInstance.KillPlayer(plyr);
+                    }
+                    catch (Exception ex)
+                    {
+                         Console.WriteLine($"Error in MainMenu {ex.Message}");
+                    }
+                }
+
+                if (DrawButton("Revive Player"))
+                {
+                    try
+                    {
+                        var plyr = SemiFunc.PlayerGetList()[Storage.CHEAT_PLAYERSELECT];
+                        ClientInstance.RevivePlayer(plyr);
+                    }
+                    catch (Exception ex)
+                    {
+                         Console.WriteLine($"Error in MainMenu {ex.Message}");
+                    }
+                }
+
+                if (DrawButton("Heal Player (+100)"))
+                {
+                    try
+                    {
+                        var plyr = SemiFunc.PlayerGetList()[Storage.CHEAT_PLAYERSELECT];
+                        ClientInstance.HealPlayer(plyr, 100);
                     }
                     catch (Exception ex)
                     {
@@ -107,21 +146,15 @@ public class MainMenu : BaseMenu
                     }
                 }
 
-                DrawSettingLabel("Server stuff");
-
-                if (DrawButton("Crash server"))
+                if (DrawButton("Make Cheater"))
                 {
-                    for (var i = 0; i < 0xFFF; i++)
-                        ItemUtils.SpawnSurplus(Vector2.zero, false);
-                }
-
-                if (DrawButton("Everyones a cheater (Upgrades)"))
-                {
-                    var view = ClientInstance.GetPhotonView(PunManager.instance);
-
-                    foreach (var plyr in SemiFunc.PlayerGetList())
+                    try
                     {
+                        var plyr = SemiFunc.PlayerGetList()[Storage.CHEAT_PLAYERSELECT];
+
                         var steamId = SemiFunc.PlayerGetSteamID(plyr);
+                        var view = ClientInstance.GetPhotonView(PunManager.instance);
+
                         view.RPC("UpgradeItemBatteryRPC", RpcTarget.AllBuffered, [steamId, 255]);
                         view.RPC("UpgradePlayerExtraJumpRPC", RpcTarget.AllBuffered, [steamId, 255]);
                         view.RPC("UpgradePlayerTumbleLaunchRPC", RpcTarget.AllBuffered, [steamId, 255]);
@@ -132,12 +165,48 @@ public class MainMenu : BaseMenu
                         view.RPC("UpgradePlayerThrowStrengthRPC", RpcTarget.AllBuffered, [steamId, 255]);
                         view.RPC("UpgradePlayerEnergyRPC", RpcTarget.AllBuffered, [steamId, 255]);
                         view.RPC("UpgradePlayerHealthRPC", RpcTarget.AllBuffered, [steamId, 255]);
+
+                        Console.WriteLine($"Gave all upgrades to player {plyr.name}.");
+                    }
+                    catch (Exception ex)
+                    {
+                         Console.WriteLine($"Error in MainMenu {ex.Message}");
                     }
                 }
+
+                DrawSettingLabel("Server stuff");
+
+                if (DrawButton("Crash server"))
+                {
+                    for (var i = 0; i < 0xFFF; i++)
+                        ItemUtils.SpawnSurplus(Vector2.zero, false);
+                }
+
+                Storage.CHEAT_NETWORK_MassCrasher = DrawBoolean("MassCrasher (KickAll on join)", Storage.CHEAT_NETWORK_MassCrasher);
+
+                //if (DrawButton("Everyones a cheater (Upgrades)"))
+                //{
+                //    var view = ClientInstance.GetPhotonView(PunManager.instance);
+                //
+                //    foreach (var plyr in SemiFunc.PlayerGetList())
+                //    {
+                //        var steamId = SemiFunc.PlayerGetSteamID(plyr);
+                //        view.RPC("UpgradeItemBatteryRPC", RpcTarget.AllBuffered, [steamId, 255]);
+                //        view.RPC("UpgradePlayerExtraJumpRPC", RpcTarget.AllBuffered, [steamId, 255]);
+                //        view.RPC("UpgradePlayerTumbleLaunchRPC", RpcTarget.AllBuffered, [steamId, 255]);
+                //        view.RPC("UpgradePlayerSprintSpeedRPC", RpcTarget.AllBuffered, [steamId, 255]);
+                //        view.RPC("UpgradePlayerGrabStrengthRPC", RpcTarget.AllBuffered, [steamId, 255]);
+                //        view.RPC("UpgradePlayerGrabRangeRPC", RpcTarget.AllBuffered, [steamId, 255]);
+                //        view.RPC("UpgradeMapPlayerCountRPC", RpcTarget.AllBuffered, [steamId, 255]);
+                //        view.RPC("UpgradePlayerThrowStrengthRPC", RpcTarget.AllBuffered, [steamId, 255]);
+                //        view.RPC("UpgradePlayerEnergyRPC", RpcTarget.AllBuffered, [steamId, 255]);
+                //        view.RPC("UpgradePlayerHealthRPC", RpcTarget.AllBuffered, [steamId, 255]);
+                //    }
+                //}
             },
             () => {
                 DrawSettingLabel("Player");
-                Storage.CHEAT_PLAYER_Namespoof = DrawBoolean("NameSpoof", Storage.CHEAT_PLAYER_Namespoof);
+                Storage.CHEAT_PLAYER_AccountSpoofer = DrawBoolean("AccountSpoofer", Storage.CHEAT_PLAYER_AccountSpoofer);
             },
             () => {
                 DrawSettingLabel("Misc");

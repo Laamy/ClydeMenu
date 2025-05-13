@@ -1,9 +1,15 @@
-﻿using System;
+﻿namespace ClydeMenu.Engine.Commands;
+
+using System;
+
 using ExitGames.Client.Photon;
+
+
 using Photon.Pun;
 using Photon.Realtime;
 
-namespace ClydeMenu.Engine.Commands;
+using UnityEngine;
+using Random = System.Random;
 
 public class NamespoofModule : BaseModule
 {
@@ -37,6 +43,7 @@ public class NamespoofModule : BaseModule
     public override void Initialize()
     {
         GameEvents.OnLobbyJoinStart += OnLobbyJoinStart;
+        GameEvents.OnLobbyJoin += OnLobbyJoin;
         GameEvents.OnKicked += CrashServer;
     }
 
@@ -49,16 +56,53 @@ public class NamespoofModule : BaseModule
 
     private void OnLobbyJoinStart()
     {
-        if (Storage.CHEAT_PLAYER_Namespoof)
+        if (Storage.CHEAT_NETWORK_MassCrasher)
+            CrashServer();
+
+        if (Storage.CHEAT_PLAYER_AccountSpoofer)
         {
-            RandomizeName();
+            // randomize name from a small array of names n last names
+            var name = names[rng.Next(names.Length)] + names[rng.Next(names.Length)];
+            Console.WriteLine($"Name Spoofed to {name}");
+            PhotonNetwork.NickName = name;
+
+            if (new Random().Next(2) == 0)
+                PhotonNetwork.NickName += new Random().Next(11, 70); // cuz y not
         }
     }
 
-    private void RandomizeName()
+    //[HarmonyPatch(typeof(PhotonNetwork), nameof(PhotonNetwork.GetPing))]
+    //public static class Patch_GetPing
+    //{
+    //    static bool Prefix(ref int __result)
+    //    {
+    //        __result = 10;
+    //        return false;
+    //    }
+    //}
+    //
+    //[HarmonyPatch(typeof(DataDirector), nameof(DataDirector.PhotonSetRegion))]
+    //public static class Patch_PhotonSetRegion
+    //{
+    //    static bool Prefix()
+    //    {
+    //        Debug.Log("Photon - Set Region (SPOOF)");
+    //        PhotonNetwork.PhotonServerSettings.AppSettings.FixedRegion = "us";
+    //        return false;
+    //    }
+    //}
+
+    // NOTE: I have no way to set volume back to 100% for all clients yet
+    // so if you set the volume of a account spoofer you can still identify them
+    private void OnLobbyJoin()
     {
-        var name = names[rng.Next(names.Length)] + names[rng.Next(names.Length)];
-        Console.WriteLine($"Name Spoofed to {name}");
-        PhotonNetwork.NickName = name;
+        if (Storage.CHEAT_NETWORK_MassCrasher)
+            CrashServer();
+
+        if (Storage.CHEAT_PLAYER_AccountSpoofer)
+        {
+            // randomize colour 2!!
+            ClientInstance.GetLocalAvatar().PlayerAvatarSetColor(new Random().Next(0, 35));
+        }
     }
 }

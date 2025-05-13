@@ -76,7 +76,7 @@ public class ClientComponent : MonoBehaviour
                     RenderUtils.DrawAABB(ClientInstance.GetActiveColliderBounds(valuable.gameObject), Color.yellow);
             }
 
-            if (Storage.CHEAT_ESP_Extraction)
+            if (Storage.CHEAT_NETWORK_MassCrasher)
             {
                 foreach (var extract in ClientInstance.GetExtractionPoints())
                     RenderUtils.DrawAABB(ClientInstance.GetActiveColliderBounds(extract.gameObject), Color.cyan);

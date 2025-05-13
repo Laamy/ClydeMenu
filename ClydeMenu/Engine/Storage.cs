@@ -77,12 +77,12 @@ internal class Storage
         get;
         internal set;
     } = true;
-    public static bool CHEAT_ESP_Extraction
+    public static bool CHEAT_NETWORK_MassCrasher
     {
         get;
         internal set;
     } = false;
-    public static bool CHEAT_PLAYER_Namespoof
+    public static bool CHEAT_PLAYER_AccountSpoofer
     {
         get;
         internal set;

@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Diagnostics;
+using static PlayerHealth;
 
 internal static class AssemblyReader
 {
@@ -130,6 +131,18 @@ internal class ClientInstance
     internal static FieldInfo FetchField<T>(string v)
         => typeof(T).GetField(v, BindingFlags.NonPublic | BindingFlags.Instance);
 
+    internal static T FetchFieldValue<T, B>(string v, B cls)
+    {
+        var field = FetchField<T>(v);
+        return (T)field.GetValue(cls);
+    }
+
+    internal static void SetFieldValue<T, B>(string v, B cls, T newValue)
+    {
+        var field = FetchField<T>(v);
+        field.SetValue(cls, newValue);
+    }
+
     internal static MethodInfo FetchMethod<T>(string v)
         => typeof(T).GetMethod(v, BindingFlags.NonPublic | BindingFlags.Instance);
 
@@ -168,5 +181,34 @@ internal class ClientInstance
 
         resultBounds.Expand(0.1f);
         return resultBounds;
+    }
+
+    internal static void SpoofMsg(PlayerAvatar avatar, string msg) => avatar.ChatMessageSend(msg, false);
+    internal static void RevivePlayer(PlayerAvatar avatar) => avatar.Revive(true);
+    internal static void HealPlayer(PlayerAvatar avatar, int amount)
+    {
+        var _this = avatar.playerHealth;
+
+        var health = FetchFieldValue<int, PlayerHealth>("health", _this);
+        var maxHealth = FetchFieldValue<int, PlayerHealth>("maxHealth", _this);
+
+        SetFieldValue("health", _this, Mathf.Clamp(health + amount, 0, maxHealth));
+        health = FetchFieldValue<int, PlayerHealth>("health", _this);
+
+        StatsManager.instance.SetPlayerHealth(SemiFunc.PlayerGetSteamID(avatar), health, false);
+        if (GameManager.Multiplayer())
+        {
+            GetPhotonView(_this).RPC("UpdateHealthRPC", RpcTarget.Others, new object[]
+            {
+                health,
+                maxHealth,
+                false
+            });
+        }
+    }
+    internal static void KillPlayer(PlayerAvatar avatar)
+    {
+        avatar.playerHealth.Death();
+        avatar.PlayerDeath(-1);
     }
 }

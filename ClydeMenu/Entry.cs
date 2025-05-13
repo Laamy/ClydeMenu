@@ -12,6 +12,7 @@ using ClydeMenu.Engine.Menu;
 using ClydeMenu.Engine.Commands;
 using System.Reflection;
 using System.Text;
+//using HarmonyLib;
 
 public class Entry
 {
@@ -29,6 +30,8 @@ public class Entry
             Console.SetOut(standardOutput);
             Console.Clear();
         }
+
+        //new Harmony("com.clyde.mods").PatchAll();
 
         GameEvents.Init();
         ModuleHandler.Init();
