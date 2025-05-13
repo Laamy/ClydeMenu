@@ -127,10 +127,13 @@ public class RenderWindow
 
     private Vector2 oldMouse;
     private bool isDragging = false;
-    public void HandleBorder()
+    public void HandleBorder(bool events = true)
     {
         GUI.Box(Location, "", MainStyle);
         GUI.Box(new Rect(Location.x, Location.y, Location.width, TitlebarHeight), "", MainStyle);// unity does some dogshit clipping
+
+        if (!events)
+            return;
 
         // handle mouse dragging
         var curEvent = Event.current;
@@ -197,11 +200,10 @@ public class RenderUtils
         GUI.DrawTexture(new Rect(pos.x, pos.y, size.x, size.y), Texture2D.whiteTexture);
     }
 
-    public static Vector2 StringSize(string text, Color color, float size = 16)
+    public static Vector2 StringSize(string text, float size = 16)
     {
         GUIStyle style = new GUIStyle();
         style.fontSize = (int)size;
-        style.normal.textColor = color;
 
         return style.CalcSize(new GUIContent(text));
     }
@@ -273,21 +275,20 @@ public class RenderUtils
 
             if ((start.x >= 0 && start.x <= Screen.width && start.y >= 0 && start.y <= Screen.height) ||
                 (end.x >= 0 && end.x <= Screen.width && end.y >= 0 && end.y <= Screen.height))
-                DrawLine(start, end, colour);//grrr....
+                DrawLine(start, end, colour, 3);//grrr....
         }
     }
 
     public static void SetCursorState(bool visible)
     {
-        Console.WriteLine($"Setting cursor state to {visible}");
-
+        //Console.WriteLine($"Setting cursor state to {visible}");
         // gotta fix the cursor bruh
         var info = ClientInstance.FetchField<InputManager>("disableAimingTimer");
         if (info == null)
             return;
 
         if (visible)
-            info.SetValue(InputManager.instance, 5f);
+            info.SetValue(InputManager.instance, 0.1f);
         if (Cursor.visible == visible)
             return;
 

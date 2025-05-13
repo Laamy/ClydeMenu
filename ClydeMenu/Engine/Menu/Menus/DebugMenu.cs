@@ -29,7 +29,7 @@ public class DebugMenu : BaseMenu
             DebugStorage.Main = RenderUtils.Window("ClydeMenu", new Rect(10, 10, 600, 600));
         }
 
-        DebugStorage.Main.HandleBorder();
+        DebugStorage.Main.HandleBorder();//DebugStorage.Main.HandleBorder(InFocus);
         DebugStorage.Main.Tabs(["Player", "Spawn", "Debug"], [
             () => {
                 //godmode

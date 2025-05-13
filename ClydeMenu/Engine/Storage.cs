@@ -46,6 +46,42 @@ internal class Storage
         get;
         internal set;
     }
+    public static bool Example_Boolean
+    {
+        get;
+        internal set;
+    }
+    public static float Example_Slider70
+    {
+        get;
+        internal set;
+    } = 0.7f;
+    public static int Example_SelectionBox
+    {
+        get;
+        internal set;
+    } = 1;
+    public static bool CHEAT_ESP_Player
+    {
+        get;
+        internal set;
+    } = true;
+    public static bool CHEAT_ESP_Enemy
+    {
+        get;
+        internal set;
+    } = true;
+    public static bool CHEAT_ESP_Valuable
+    {
+        get;
+        internal set;
+    } = true;
+    public static bool CHEAT_ESP_Extraction
+    {
+        get;
+        internal set;
+    } = false;
+
     public static class Network
     {
         public static bool CanSendPackets

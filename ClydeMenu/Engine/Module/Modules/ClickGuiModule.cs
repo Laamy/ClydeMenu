@@ -1,10 +1,8 @@
-﻿using System;
-using System.Reflection;
-using System.Text;
-using Photon.Pun;
-using UnityEngine;
+﻿namespace ClydeMenu.Engine.Commands;
 
-namespace ClydeMenu.Engine.Commands;
+using System;
+
+using UnityEngine;
 
 public class ClickGuiModule : BaseModule
 {
@@ -13,9 +11,5 @@ public class ClickGuiModule : BaseModule
     public override void Initialize()
     {
 
-    }
-
-    public override void OnRender()
-    {
     }
 }

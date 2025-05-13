@@ -6,31 +6,38 @@ using System.Linq;
 
 public class ModuleHandler
 {
-    public static List<BaseModule> Commands = [];
+    public static List<BaseModule> Modules = [];
     public static Dictionary<string, List<BaseModule>> Categories = new();
 
     public static void Init()
     {
-        var commandTypes = AppDomain.CurrentDomain.GetAssemblies()
-            .SelectMany(assembly => assembly.GetTypes())
-            .Where(type => type.IsSubclassOf(typeof(BaseModule)) && !type.IsAbstract);
-
-        foreach (var commandType in commandTypes)
+        try
         {
-            var command = (BaseModule)Activator.CreateInstance(commandType);
-            Commands.Add(command);
-            Console.WriteLine($"Module '{command.Name}' initialized.");
-        }
+            var moduleType = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(assembly => assembly.GetTypes())
+                .Where(type => type.IsSubclassOf(typeof(BaseModule)) && !type.IsAbstract);
 
-        foreach (var command in Commands)
+            foreach (var moduleT in moduleType)
+            {
+                var module = (BaseModule)Activator.CreateInstance(moduleT);
+                Modules.Add(module);
+                Console.WriteLine($"Module '{module.Name}' initialized.");
+            }
+
+            foreach (var module in Modules)
+            {
+                if (!Categories.ContainsKey(module.Category))
+                    Categories[module.Category] = [];
+
+                Categories[module.Category].Add(module);
+            }
+
+            foreach (var module in Modules)
+                module.Initialize();
+        }
+        catch (Exception e)
         {
-            if (!Categories.ContainsKey(command.Category))
-                Categories[command.Category] = [];
-
-            Categories[command.Category].Add(command);
+            Console.WriteLine($"Error initializing modules: {e}");
         }
-
-        foreach (var module in Commands)
-            module.Initialize();
     }
 }

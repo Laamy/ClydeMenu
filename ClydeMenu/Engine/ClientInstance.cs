@@ -9,6 +9,9 @@ using Object = UnityEngine.Object;
 using Photon.Pun;
 using System.Media;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Diagnostics;
 
 internal static class AssemblyReader
 {
@@ -42,28 +45,72 @@ internal class ClientInstance
     public static void SetHealth(int health, int maxHealth)
         => PlayerController.playerAvatarScript.playerHealth.UpdateHealthRPC(health, maxHealth, true);
 
-    private static GameObject _localPlayer;
+    // ???????? why is this so fucking buggy bruh
+    public static List<EnemyParent> GetEnemyList()
+    {
+        if (EnemyDirector.instance == null)
+            return [];
+
+        var enemies = EnemyDirector.instance.enemiesSpawned;
+        if (enemies == null || enemies.Count == 0)
+            return [];
+
+        return enemies;
+    }
+
+    public static List<GameObject> GetExtractionPoints()
+    {
+        List<GameObject> ePoints = [];
+        try
+        {
+            if (RoundDirector.instance == null)
+                return [];
+
+            ePoints = (List<GameObject>)FetchField<List<GameObject>>("extractionPointList").GetValue(RoundDirector.instance);
+            if (ePoints == null || ePoints.Count == 0)
+                return [];
+        }
+        catch (Exception)
+        {
+            //Console.WriteLine($"Error fetching extraction points: {ex}");
+            return [];
+        }
+
+        return ePoints;
+    }
+
+    private static List<ValuableObject> valuableObjects = [];
+    private static Stopwatch timer;
+    public static List<ValuableObject> GetValuableList() // this is gonna piss me off lowkey..
+    {
+        if (timer == null)
+            timer = Stopwatch.StartNew();
+        
+        if (timer.ElapsedMilliseconds >= 1000)
+        {
+            valuableObjects = Object.FindObjectsOfType<ValuableObject>(true).ToList();
+            timer = Stopwatch.StartNew();
+        }
+        
+        return valuableObjects;
+    }
+
     public static GameObject GetLocalPlayer()
     {
-        //if (_localPlayer != null && _localPlayer.activeInHierarchy)
-        //    return _localPlayer;
-
         var players = SemiFunc.PlayerGetList();
         if (players == null || players.Count == 0)
-        {
-            //Console.WriteLine("No players found");
             return null;
-        }
 
-        _localPlayer = players[0].gameObject;
-        if (_localPlayer != null)
-        {
-            //Console.WriteLine($"Local player found: {_localPlayer.name}");
-            return _localPlayer;
-        }
+        return players[0].gameObject;
+    }
 
-        //Console.WriteLine("Local player not found");
-        return null;
+    public static PlayerAvatar GetLocalAvatar()
+    {
+        var players = SemiFunc.PlayerGetList();
+        if (players == null || players.Count == 0)
+            return null;
+
+        return players[0];
     }
 
     internal static PhotonView GetPhotonView<T>(T instance)
