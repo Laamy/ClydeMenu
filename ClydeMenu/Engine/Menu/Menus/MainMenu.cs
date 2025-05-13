@@ -49,6 +49,7 @@ public class MainMenu : BaseMenu
         [
             "Visuals",
             "Network",
+            "Server",
             "Player",
             "Misc"
         ];
@@ -173,8 +174,9 @@ public class MainMenu : BaseMenu
                          Console.WriteLine($"Error in MainMenu {ex.Message}");
                     }
                 }
-
-                DrawSettingLabel("Server stuff");
+            },
+            () => {
+                DrawSettingLabel("Server");
 
                 if (DrawButton("Crash server"))
                 {
@@ -265,16 +267,17 @@ public class MainMenu : BaseMenu
     public override void Render()
     {
         HandleBorder();
-        RenderUtils.DrawRect(MenuStorage.menuPos, MenuStorage.menuSize, StyleTheme.ContentBoxBackground);
+        GUI.BeginClip(new Rect(MenuStorage.menuPos.x, MenuStorage.menuPos.y, MenuStorage.menuSize.x, MenuStorage.menuSize.y));
+        RenderUtils.DrawRect(new Vector2(0,0), MenuStorage.menuSize, StyleTheme.ContentBoxBackground);
 
-        RenderUtils.DrawRect(MenuStorage.menuPos, new Vector2(MenuStorage.menuSize.x, titleBarHeight), StyleTheme.Titlebar);
-        RenderUtils.DrawString(new Vector2(MenuStorage.menuPos.x + 12, MenuStorage.menuPos.y + 6), "clickgui debug", StyleTheme.TitlebarText);
-        RenderUtils.DrawRect(new Vector2(MenuStorage.menuPos.x + MenuStorage.menuSize.x - 17, MenuStorage.menuPos.y + 6), new Vector2(12, 12), StyleTheme.TitlebarCloseButton);
+        RenderUtils.DrawRect(new Vector2(0, 0), new Vector2(MenuStorage.menuSize.x, titleBarHeight), StyleTheme.Titlebar);
+        RenderUtils.DrawString(new Vector2(12, 6), "clickgui debug", StyleTheme.TitlebarText);
+        RenderUtils.DrawRect(new Vector2(MenuStorage.menuSize.x - 17, 6), new Vector2(12, 12), StyleTheme.TitlebarCloseButton);
         
-        if (LabelPressed("TitlebarCloseButton", new Rect(MenuStorage.menuPos.x + MenuStorage.menuSize.x - 17, MenuStorage.menuPos.y + 6, 12, 12)))
+        if (LabelPressed("TitlebarCloseButton", new Rect(MenuStorage.menuSize.x - 17, 6, 12, 12)))
             MenuSceneComponent.Instance.PopMenu(this);
 
-        var sidebarPos = new Vector2(MenuStorage.menuPos.x, MenuStorage.menuPos.y + titleBarHeight);
+        var sidebarPos = new Vector2(0, titleBarHeight);
         var sidebarHeight = MenuStorage.menuSize.y - titleBarHeight;
         RenderUtils.DrawRect(sidebarPos, new Vector2(sidebarWidth, sidebarHeight), StyleTheme.Sidebar);
 
@@ -295,10 +298,11 @@ public class MainMenu : BaseMenu
             RenderUtils.DrawString(new Vector2(sidebarPos.x + 16, y + 5), MenuStorage.renderNames[i], textColor);
         }
 
-        contentStart = new Vector2(MenuStorage.menuPos.x + sidebarWidth + padding, MenuStorage.menuPos.y + titleBarHeight + padding);
+        contentStart = new Vector2(sidebarWidth + padding, titleBarHeight + padding);
         yCursor = contentStart.y;
 
         DrawCategory();
+        GUI.EndClip();
     }
 
     void DrawSettingLabel(string text)
