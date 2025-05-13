@@ -61,6 +61,7 @@ internal class Storage
         get;
         internal set;
     } = 1;
+
     public static bool CHEAT_ESP_Player
     {
         get;
@@ -81,6 +82,16 @@ internal class Storage
         get;
         internal set;
     } = false;
+    public static bool CHEAT_PLAYER_Namespoof
+    {
+        get;
+        internal set;
+    } = false;
+    public static int CHEAT_PLAYERSELECT
+    {
+        get;
+        internal set;
+    } = 0;
 
     public static class Network
     {

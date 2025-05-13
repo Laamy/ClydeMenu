@@ -49,8 +49,16 @@ public class NamespoofModule : BaseModule
 
     private void OnLobbyJoinStart()
     {
-        //var name = names[rng.Next(names.Length)] + names[rng.Next(names.Length)];
-        //Console.WriteLine($"Name Spoofed to {name}");
-        //PhotonNetwork.NickName = name;
+        if (Storage.CHEAT_PLAYER_Namespoof)
+        {
+            RandomizeName();
+        }
+    }
+
+    private void RandomizeName()
+    {
+        var name = names[rng.Next(names.Length)] + names[rng.Next(names.Length)];
+        Console.WriteLine($"Name Spoofed to {name}");
+        PhotonNetwork.NickName = name;
     }
 }

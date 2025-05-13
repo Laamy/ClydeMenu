@@ -2,12 +2,13 @@
 
 using System;
 using System.Collections.Generic;
-using System.Configuration;
+
 using ExitGames.Client.Photon;
+
 using Photon.Pun;
 using Photon.Realtime;
+
 using UnityEngine;
-using UnityEngine.Rendering;
 
 class MenuStorage
 {
@@ -17,7 +18,7 @@ class MenuStorage
     public static int selectedCategory = 0;
 
     public static Vector2 menuPos = new(10, 10);
-    public static Vector2 menuSize = new(400, 320);
+    public static Vector2 menuSize = new(400, 340);
 }
 
 public class MainMenu : BaseMenu
@@ -48,6 +49,7 @@ public class MainMenu : BaseMenu
         [
             "Visuals",
             "Network",
+            "Player",
             "Misc"
         ];
 
@@ -70,23 +72,47 @@ public class MainMenu : BaseMenu
             },
             () => {
                 DrawSettingLabel("Network");
-                if (DrawButton("Kick Master/Host"))
+                Storage.CHEAT_PLAYERSELECT = DrawPlayerSelect("Select Player", Storage.CHEAT_PLAYERSELECT);
+                if (DrawButton("Kick Player"))
                 {
-                    var options = new RaiseEventOptions();
-                    options.Receivers = ReceiverGroup.MasterClient;
-                    PhotonNetwork.RaiseEvent(199, null, options, SendOptions.SendReliable);
+                    try
+                    {
+                        var plyr = SemiFunc.PlayerGetList()[Storage.CHEAT_PLAYERSELECT];
+                        var plyrActorId = plyr.photonView.OwnerActorNr;
+
+                        var options = new RaiseEventOptions();
+                        options.TargetActors = new[] { plyrActorId };
+                        PhotonNetwork.RaiseEvent(199, null, options, SendOptions.SendReliable);
+                        Console.WriteLine($"Kicked player {plyr.name} from the server.");
+                    }
+                    catch (Exception ex)
+                    {
+                         Console.WriteLine($"Error in MainMenu {ex.Message}");
+                    }
                 }
+
+                if (DrawButton("Steal Crown"))
+                {
+                    try
+                    {
+                        var plyr = SemiFunc.PlayerGetList()[Storage.CHEAT_PLAYERSELECT];
+
+                        var view = ClientInstance.GetPhotonView(PunManager.instance);
+                        view.RPC("CrownPlayerRPC", RpcTarget.AllBuffered, [SemiFunc.PlayerGetSteamID(plyr)]);
+                        Console.WriteLine($"Gave crown to player {plyr.name}.");
+                    }
+                    catch (Exception ex)
+                    {
+                         Console.WriteLine($"Error in MainMenu {ex.Message}");
+                    }
+                }
+
+                DrawSettingLabel("Server stuff");
 
                 if (DrawButton("Crash server"))
                 {
                     for (var i = 0; i < 0xFFF; i++)
                         ItemUtils.SpawnSurplus(Vector2.zero, false);
-                }
-
-                if (DrawButton("Steal Crown"))
-                {
-                    var view = ClientInstance.GetPhotonView(PunManager.instance);
-                    view.RPC("CrownPlayerRPC", RpcTarget.AllBuffered, [SemiFunc.PlayerGetSteamID(ClientInstance.GetLocalAvatar())]);
                 }
 
                 if (DrawButton("Everyones a cheater (Upgrades)"))
@@ -108,6 +134,10 @@ public class MainMenu : BaseMenu
                         view.RPC("UpgradePlayerHealthRPC", RpcTarget.AllBuffered, [steamId, 255]);
                     }
                 }
+            },
+            () => {
+                DrawSettingLabel("Player");
+                Storage.CHEAT_PLAYER_Namespoof = DrawBoolean("NameSpoof", Storage.CHEAT_PLAYER_Namespoof);
             },
             () => {
                 DrawSettingLabel("Misc");
@@ -313,7 +343,18 @@ public class MainMenu : BaseMenu
             }
 
             var plyrName = SemiFunc.PlayerGetName(player);
-            var strMsurs = RenderUtils.StringSize(plyrName);
+
+            if (PhotonNetwork.IsConnected && PhotonNetwork.LocalPlayer != null && PhotonNetwork.MasterClient != null)
+            {
+                if (PhotonNetwork.LocalPlayer.ActorNumber == player.photonView.OwnerActorNr)
+                    plyrName += " [LOCAL]";
+
+                if (PhotonNetwork.MasterClient.ActorNumber == player.photonView.OwnerActorNr)
+                    plyrName += " [HOST]";
+            }
+            else plyrName += " [LOCAL]";
+
+                var strMsurs = RenderUtils.StringSize(plyrName);
             RenderUtils.DrawString(new Vector2(contentStart.x + padding, yCursor + ((20 / 2) - strMsurs.y / 2)), plyrName, StyleTheme.MenuTextDark);
             yCursor += 20;
             i++;
