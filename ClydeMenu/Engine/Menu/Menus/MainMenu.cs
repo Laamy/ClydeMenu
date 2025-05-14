@@ -18,7 +18,7 @@ class MenuStorage
     public static int selectedCategory = 0;
 
     public static Vector2 menuPos = new(10, 10);
-    public static Vector2 menuSize = new(400, 340);
+    public static Vector2 menuSize = new(400, 400);
 }
 
 public class MainMenu : BaseMenu
