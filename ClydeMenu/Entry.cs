@@ -1,40 +1,21 @@
 ﻿namespace ClydeMenu;
 
 using System;
-using System.IO;
 using System.Collections.Generic;
-
-using UnityEngine;
-using Object = UnityEngine.Object;
 
 using ClydeMenu.Engine;
 using ClydeMenu.Engine.Menu;
 using ClydeMenu.Engine.Commands;
-using System.Reflection;
-using System.Text;
-//using HarmonyLib;
+using ClydeMenu.Engine.Components;
 
 public class Entry
 {
-    private static readonly List<GameObject> loadedComps = [];
+    private static readonly List<BaseComponent> loadedComps = [];
 
     public static void Load()
     {
-        Kernel32.AllocConsole();
-        {
-            var stdHandle = Kernel32.GetStdHandle(-11);
-            var safeFileHandle = new Microsoft.Win32.SafeHandles.SafeFileHandle(stdHandle, true);
-            var fileStream = new FileStream(safeFileHandle, FileAccess.Write);
-            var encoding = System.Text.Encoding.UTF8;
-            var standardOutput = new StreamWriter(fileStream, encoding) { AutoFlush = true };
-            Console.SetOut(standardOutput);
-            Console.Clear();
-        }
-
-        //new Harmony("com.clyde.mods").PatchAll();
-
-        GameEvents.Init();
-        ModuleHandler.Init();
+        GameEvents.Start();
+        ModuleHandler.Start();
         
         try
         {
@@ -52,23 +33,41 @@ public class Entry
         Console.WriteLine("ClydeMenu injected successfully");
     }
 
-    public static void InitModule<T>(string modName) where T : MonoBehaviour
+    public static void InitModule<T>(string modName) where T : BaseComponent
     {
-        var LoadObj = new GameObject(modName);
-        var clientModule = LoadObj.AddComponent<T>();
-        loadedComps.Add(LoadObj);
-        Object.DontDestroyOnLoad(LoadObj);
+        Console.WriteLine($"Creating {modName} component");
+
+        var type = typeof(T);
+        var instance = (T)Activator.CreateInstance(type);
+        loadedComps.Add(instance);
     }
 
     public static void Unload()
     {
-        Console.Clear();
-        Kernel32.FreeConsole();
+        loadedComps.Clear();
 
-        foreach (var obj in loadedComps)
-            Object.DestroyImmediate(obj);
+        GameEvents.Shutdown();
+        ModuleHandler.Shutdown();
 
-        //CleanStaticReferences();
         GC.Collect();
+        GC.WaitForPendingFinalizers();
+    }
+
+    public static void Update()
+    {
+        foreach (var comp in loadedComps)
+            comp.Update();
+    }
+
+    public static void FixedUpdate()
+    {
+        foreach (var comp in loadedComps)
+            comp.FixedUpdate();
+    }
+
+    public static void OnGUI()
+    {
+        foreach (var comp in loadedComps)
+            comp.OnGUI();
     }
 }

@@ -3,7 +3,7 @@
 using Photon.Pun;
 using UnityEngine;
 
-public abstract class BaseMenu : MonoBehaviourPunCallbacks
+public abstract class BaseMenu
 {
     public abstract void Render();
 

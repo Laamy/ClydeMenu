@@ -13,13 +13,24 @@ internal class GameEvents
     public static event Action? OnBanned;
     public static event Action? OnKicked;
 
-    public static void Init()
+    public static void Start()
     {
         Console.WriteLine("ClydeMenu - GameEvents Init");
 
         Application.logMessageReceived += onLog;
 
         Console.WriteLine("ClydeMenu - GameEvents Hooked");
+    }
+
+    public static void Shutdown()
+    {
+        Application.logMessageReceived -= onLog;
+        OnLobbyJoin = null;
+        OnLobbyJoinStart = null;
+        OnLobbyLeft = null;
+        OnBanned = null;
+        OnKicked = null;
+        Console.WriteLine("GameEvents::Shutdown(void) -> Shutdown successful, resources cleaned up.");
     }
 
     private static void onLog(string logString, string stackTrace, LogType type)

@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35919.96 d17.13
+VisualStudioVersion = 17.13.35919.96
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClydeMenu", "ClydeMenu\ClydeMenu.csproj", "{49A1DE4F-9E05-468A-A3ED-BC842B9C54C4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hot-reload", "Hot-reload\Hot-reload.csproj", "{31B9D1CD-4C9B-41A7-9596-C2B2CEBE6987}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{49A1DE4F-9E05-468A-A3ED-BC842B9C54C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{49A1DE4F-9E05-468A-A3ED-BC842B9C54C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{49A1DE4F-9E05-468A-A3ED-BC842B9C54C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31B9D1CD-4C9B-41A7-9596-C2B2CEBE6987}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31B9D1CD-4C9B-41A7-9596-C2B2CEBE6987}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31B9D1CD-4C9B-41A7-9596-C2B2CEBE6987}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31B9D1CD-4C9B-41A7-9596-C2B2CEBE6987}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

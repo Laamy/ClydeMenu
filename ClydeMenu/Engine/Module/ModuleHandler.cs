@@ -4,12 +4,28 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+using UnityEngine;
+using Object = UnityEngine.Object;
+
 public class ModuleHandler
 {
     public static List<BaseModule> Modules = [];
     public static Dictionary<string, List<BaseModule>> Categories = new();
 
-    public static void Init()
+    public static void Shutdown()
+    {
+        foreach (var module in Modules)
+            module.OnDisable();
+
+        Modules.Clear();
+        Modules = null;
+
+        Categories.Clear();
+        Categories = null;
+        Console.WriteLine("ModuleHandler::Shutdown(void) -> Shutdown successful, resources cleaned up.");
+    }
+
+    public static void Start()
     {
         try
         {

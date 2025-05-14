@@ -2,7 +2,7 @@
 
 using Photon.Pun;
 
-public abstract class BaseModule : MonoBehaviourPunCallbacks
+public abstract class BaseModule
 {
     public string Name { get; set; }
     public string Category { get; set; }

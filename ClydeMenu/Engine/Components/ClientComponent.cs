@@ -1,22 +1,20 @@
 ﻿namespace ClydeMenu.Engine;
 
 using System;
-using System.IO;
 
 using UnityEngine;
 
 using ClydeMenu.Engine.Menu;
 using ClydeMenu.Engine.Commands;
+using ClydeMenu.Engine.Components;
 
-public class ClientComponent : MonoBehaviour
+public class ClientComponent : BaseComponent
 {
     public bool isShown = false;
 
-    public void Start()
+    public ClientComponent()
     {
-        RenderUtils.Init();
-        RenderUtils.SetCursorState(isShown);
-
+        //RenderUtils.Init();
         Console.WriteLine("ClydeMenu initialized");
     }
 
@@ -26,6 +24,21 @@ public class ClientComponent : MonoBehaviour
         {
             MenuSceneComponent.Instance.PushOrPopMenuByType<DebugMenu>();
             Console.WriteLine($"Menu is now {(MenuSceneComponent.Instance.HasMenuByType<DebugMenu>() ? "shown" : "hidden")}");
+        }
+
+        if (Input.GetKeyDown(KeyCode.F7))
+        {
+            // HotReloadListener gameobject
+            // get objecvct by namne in scene
+            var hotreload = GameObject.Find("HotReloadListener");
+            if (hotreload != null)
+            {
+                Console.WriteLine("Located hot-reload listener, loaded in debug mode(?).");
+            }
+            else
+            {
+                Console.WriteLine("Unable to locate hot-reload listener, reboot in debug mode to access this tool.");
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.RightShift))
@@ -38,25 +51,23 @@ public class ClientComponent : MonoBehaviour
         //if (Input.GetKeyDown(KeyCode.Delete))
         //    Process.GetCurrentProcess().Kill();
 
-        if (Input.GetKeyDown(KeyCode.F12))
-            Entry.Unload();//bro
+        //if (Input.GetKeyDown(KeyCode.F12))
+        //    Entry.Unload();//bro
     }
 
-    public void Update()
+    public override void Update()
     {
         HandleInputs();
     }
 
     public bool isInitialized = false;
 
-    public void OnGUI()
+    public override void OnGUI()
     {
         if (!isInitialized)
         {
-            Start();
-            isInitialized = true;
-
             GUI.skin.font = Font.CreateDynamicFontFromOSFont("Consolas", 48);
+            isInitialized = true;
         }
 
         // esps

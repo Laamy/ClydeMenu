@@ -5,12 +5,13 @@ using System;
 using UnityEngine;
 
 using ClydeMenu.Engine.Commands;
+using ClydeMenu.Engine.Components;
 
-public class CmdBarComponent : MonoBehaviour
+public class CmdBarComponent : BaseComponent
 {
     public bool isCmdBar = false;
 
-    public void Start()
+    public CmdBarComponent()
     {
         Console.WriteLine("CmdBar initialized");
     }
@@ -28,21 +29,15 @@ public class CmdBarComponent : MonoBehaviour
         }
     }
 
-    public void Update()
+    public override void Update()
     {
         HandleInputs();
     }
 
     public bool isInitialized = false;
 
-    public void OnGUI()
+    public override void OnGUI()
     {
-        if (!isInitialized)
-        {
-            Start();
-            isInitialized = true;
-        }
-
         if (!isCmdBar)
             return;
 

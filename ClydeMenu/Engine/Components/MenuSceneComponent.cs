@@ -3,23 +3,23 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
+
 using UnityEngine;
 
-internal class MenuSceneComponent : MonoBehaviour
+using ClydeMenu.Engine.Components;
+
+internal class MenuSceneComponent : BaseComponent
 {
     public static MenuSceneComponent Instance { get; private set; }
 
-    public void Awake()
+    public MenuSceneComponent()
     {
         if (Instance != null)
         {
-            Destroy(this);
-            Debug.LogWarning("MenuScene instance already exists. Destroying duplicate.");
+            Debug.LogWarning("MenuScene instance already exists.");
             return;
         }
-
-        DontDestroyOnLoad(this);
+        
         Instance = this;
     }
 
@@ -68,7 +68,7 @@ internal class MenuSceneComponent : MonoBehaviour
             RenderUtils.SetCursorState(false);
     }
 
-    public void Update()
+    public override void Update()
     {
         if (baseMenus.Count != 0)
             RenderUtils.SetCursorState(true);
@@ -82,11 +82,7 @@ internal class MenuSceneComponent : MonoBehaviour
         }
     }
 
-    public void FixedUpdate()
-    {
-    }
-
-    public void OnGUI()
+    public override void OnGUI()
     {
         foreach (var menu in baseMenus)
         {
