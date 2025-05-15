@@ -92,6 +92,11 @@ internal class Storage
         get;
         internal set;
     } = 0;
+    public static string DEBUGBOX
+    {
+        get;
+        internal set;
+    } = "";
 
     public static class Network
     {

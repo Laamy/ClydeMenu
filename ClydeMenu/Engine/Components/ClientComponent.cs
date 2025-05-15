@@ -25,22 +25,7 @@ public class ClientComponent : BaseComponent
             MenuSceneComponent.Instance.PushOrPopMenuByType<DebugMenu>();
             Console.WriteLine($"Menu is now {(MenuSceneComponent.Instance.HasMenuByType<DebugMenu>() ? "shown" : "hidden")}");
         }
-
-        if (Input.GetKeyDown(KeyCode.F7))
-        {
-            // HotReloadListener gameobject
-            // get objecvct by namne in scene
-            var hotreload = GameObject.Find("HotReloadListener");
-            if (hotreload != null)
-            {
-                Console.WriteLine("Located hot-reload listener, loaded in debug mode(?).");
-            }
-            else
-            {
-                Console.WriteLine("Unable to locate hot-reload listener, reboot in debug mode to access this tool.");
-            }
-        }
-
+        
         if (Input.GetKeyDown(KeyCode.RightShift))
         {
             MenuSceneComponent.Instance.PushOrPopMenuByType<MainMenu>();

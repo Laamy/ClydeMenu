@@ -70,6 +70,7 @@ public class MainMenu : BaseMenu
                 Storage.CHEAT_ESP_Enemy = DrawBoolean("Enemy ESP", Storage.CHEAT_ESP_Enemy);
                 Storage.CHEAT_ESP_Valuable = DrawBoolean("Valuable ESP", Storage.CHEAT_ESP_Valuable);
                 Storage.CHEAT_NETWORK_MassCrasher = DrawBoolean("Extraction ESP", Storage.CHEAT_NETWORK_MassCrasher);
+                //Storage.DEBUGBOX = DrawTextField("DebugBox", Storage.DEBUGBOX);
             },
             () => {
                 DrawSettingLabel("Network");
@@ -452,6 +453,28 @@ public class MainMenu : BaseMenu
         yCursor += 25 + padding;
         return LabelPressed(label, buttonRect);
     }
+
+    private static GUIStyle fontStyle = null;
+    string DrawTextField(string label, string text)
+    {
+        if (fontStyle == null)
+        {
+            fontStyle = new GUIStyle();
+            fontStyle.font = Font.CreateDynamicFontFromOSFont("Consolas", 20);
+            fontStyle.normal.textColor = Color.white;
+        }
+
+        DrawSettingLabel(label);
+        Rect textFieldBounds = new Rect(contentStart.x, yCursor, MenuStorage.menuSize.x - contentStart.x - padding, 20);
+        GUI.Box(textFieldBounds, GUIContent.none);
+        text = GUI.TextField(textFieldBounds, text, 24, fontStyle);
+
+        yCursor += 20 + padding;
+
+        return text;
+    }
+
+    // TODO: scrollbar, enum selection, textfield/numberfield
 
     class StyleTheme
     {
