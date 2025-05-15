@@ -2,7 +2,7 @@
 
 using System;
 using System.Collections.Generic;
-
+using ClydeMenu.Engine.Utils;
 using ExitGames.Client.Photon;
 
 using Photon.Pun;
@@ -70,11 +70,25 @@ public class MainMenu : BaseMenu
                 Storage.CHEAT_ESP_Enemy = DrawBoolean("Enemy ESP", Storage.CHEAT_ESP_Enemy);
                 Storage.CHEAT_ESP_Valuable = DrawBoolean("Valuable ESP", Storage.CHEAT_ESP_Valuable);
                 Storage.CHEAT_NETWORK_MassCrasher = DrawBoolean("Extraction ESP", Storage.CHEAT_NETWORK_MassCrasher);
-                //Storage.DEBUGBOX = DrawTextField("DebugBox", Storage.DEBUGBOX);
+                //Storage.DEBUGBOX = DrawNumberField("DebugBox", Storage.DEBUGBOX);
             },
             () => {
                 DrawSettingLabel("Network");
                 Storage.CHEAT_PLAYERSELECT = DrawPlayerSelect("Select Player", Storage.CHEAT_PLAYERSELECT);
+                Storage.CHEAT_PLAYERSELECT_MSGSPOOF = DrawTextField("MessageSpoof", Storage.CHEAT_PLAYERSELECT_MSGSPOOF);
+                if (DrawButton("Send Spoof"))
+                {
+                    try
+                    {
+                        var plyr = SemiFunc.PlayerGetList()[Storage.CHEAT_PLAYERSELECT];
+                        ClientInstance.SpoofMsg(plyr, Storage.CHEAT_PLAYERSELECT_MSGSPOOF);
+                    }
+                    catch (Exception ex)
+                    {
+                         Console.WriteLine($"Error in MainMenu {ex.Message}");
+                    }
+                }
+
                 if (DrawButton("Kick Player"))
                 {
                     try
@@ -119,18 +133,18 @@ public class MainMenu : BaseMenu
                     }
                 }
 
-                if (DrawButton("Heal Player (+100)"))
-                {
-                    try
-                    {
-                        var plyr = SemiFunc.PlayerGetList()[Storage.CHEAT_PLAYERSELECT];
-                        ClientInstance.HealPlayer(plyr, 100);
-                    }
-                    catch (Exception ex)
-                    {
-                         Console.WriteLine($"Error in MainMenu {ex.Message}");
-                    }
-                }
+                //if (DrawButton("Heal Player (+100)"))
+                //{
+                //    try
+                //    {
+                //        var plyr = SemiFunc.PlayerGetList()[Storage.CHEAT_PLAYERSELECT];
+                //        ClientInstance.HealPlayer(plyr, 100);
+                //    }
+                //    catch (Exception ex)
+                //    {
+                //         Console.WriteLine($"Error in MainMenu {ex.Message}");
+                //    }
+                //}
 
                 if (DrawButton("Steal Crown"))
                 {
@@ -148,33 +162,33 @@ public class MainMenu : BaseMenu
                     }
                 }
 
-                if (DrawButton("Make Cheater"))
-                {
-                    try
-                    {
-                        var plyr = SemiFunc.PlayerGetList()[Storage.CHEAT_PLAYERSELECT];
-
-                        var steamId = SemiFunc.PlayerGetSteamID(plyr);
-                        var view = ClientInstance.GetPhotonView(PunManager.instance);
-
-                        view.RPC("UpgradeItemBatteryRPC", RpcTarget.AllBuffered, [steamId, 255]);
-                        view.RPC("UpgradePlayerExtraJumpRPC", RpcTarget.AllBuffered, [steamId, 255]);
-                        view.RPC("UpgradePlayerTumbleLaunchRPC", RpcTarget.AllBuffered, [steamId, 255]);
-                        view.RPC("UpgradePlayerSprintSpeedRPC", RpcTarget.AllBuffered, [steamId, 255]);
-                        view.RPC("UpgradePlayerGrabStrengthRPC", RpcTarget.AllBuffered, [steamId, 255]);
-                        view.RPC("UpgradePlayerGrabRangeRPC", RpcTarget.AllBuffered, [steamId, 255]);
-                        view.RPC("UpgradeMapPlayerCountRPC", RpcTarget.AllBuffered, [steamId, 255]);
-                        view.RPC("UpgradePlayerThrowStrengthRPC", RpcTarget.AllBuffered, [steamId, 255]);
-                        view.RPC("UpgradePlayerEnergyRPC", RpcTarget.AllBuffered, [steamId, 255]);
-                        view.RPC("UpgradePlayerHealthRPC", RpcTarget.AllBuffered, [steamId, 255]);
-
-                        Console.WriteLine($"Gave all upgrades to player {plyr.name}.");
-                    }
-                    catch (Exception ex)
-                    {
-                         Console.WriteLine($"Error in MainMenu {ex.Message}");
-                    }
-                }
+                //if (DrawButton("Make Cheater"))
+                //{
+                //    try
+                //    {
+                //        var plyr = SemiFunc.PlayerGetList()[Storage.CHEAT_PLAYERSELECT];
+                //
+                //        var steamId = SemiFunc.PlayerGetSteamID(plyr);
+                //        var view = ClientInstance.GetPhotonView(PunManager.instance);
+                //
+                //        view.RPC("UpgradeItemBatteryRPC", RpcTarget.AllBuffered, [steamId, 255]);
+                //        view.RPC("UpgradePlayerExtraJumpRPC", RpcTarget.AllBuffered, [steamId, 255]);
+                //        view.RPC("UpgradePlayerTumbleLaunchRPC", RpcTarget.AllBuffered, [steamId, 255]);
+                //        view.RPC("UpgradePlayerSprintSpeedRPC", RpcTarget.AllBuffered, [steamId, 255]);
+                //        view.RPC("UpgradePlayerGrabStrengthRPC", RpcTarget.AllBuffered, [steamId, 255]);
+                //        view.RPC("UpgradePlayerGrabRangeRPC", RpcTarget.AllBuffered, [steamId, 255]);
+                //        view.RPC("UpgradeMapPlayerCountRPC", RpcTarget.AllBuffered, [steamId, 255]);
+                //        view.RPC("UpgradePlayerThrowStrengthRPC", RpcTarget.AllBuffered, [steamId, 255]);
+                //        view.RPC("UpgradePlayerEnergyRPC", RpcTarget.AllBuffered, [steamId, 255]);
+                //        view.RPC("UpgradePlayerHealthRPC", RpcTarget.AllBuffered, [steamId, 255]);
+                //
+                //        Console.WriteLine($"Gave all upgrades to player {plyr.name}.");
+                //    }
+                //    catch (Exception ex)
+                //    {
+                //         Console.WriteLine($"Error in MainMenu {ex.Message}");
+                //    }
+                //}
             },
             () => {
                 DrawSettingLabel("Server");
@@ -460,7 +474,7 @@ public class MainMenu : BaseMenu
         if (fontStyle == null)
         {
             fontStyle = new GUIStyle();
-            fontStyle.font = Font.CreateDynamicFontFromOSFont("Consolas", 20);
+            fontStyle.font = Font.CreateDynamicFontFromOSFont("Consolas", 12);
             fontStyle.normal.textColor = Color.white;
         }
 
@@ -468,6 +482,43 @@ public class MainMenu : BaseMenu
         Rect textFieldBounds = new Rect(contentStart.x, yCursor, MenuStorage.menuSize.x - contentStart.x - padding, 20);
         GUI.Box(textFieldBounds, GUIContent.none);
         text = GUI.TextField(textFieldBounds, text, 24, fontStyle);
+
+        yCursor += 20 + padding;
+
+        return text;
+    }
+
+    private static GUIStyle fontStyleGreen = null;
+    private static GUIStyle fontStyleRed = null;
+    string DrawNumberField(string label, string text)
+    {
+        if (fontStyleGreen == null)
+        {
+            fontStyleGreen = new GUIStyle();
+            fontStyleGreen.font = Font.CreateDynamicFontFromOSFont("Consolas", 20);
+            fontStyleGreen.normal.textColor = new Color(0, 0.5f, 0);
+            //fontStyleGreen.normal.background = TextureUtils.CreateSolid(new Color(0, 0.2f, 0));
+
+            fontStyleRed = new GUIStyle();
+            fontStyleRed.font = Font.CreateDynamicFontFromOSFont("Consolas", 20);
+            fontStyleRed.normal.textColor = new Color(0.5f, 0, 0);
+           // fontStyleRed.normal.background = TextureUtils.CreateSolid(new Color(0.2f, 0, 0));
+        }
+
+        DrawSettingLabel(label);
+        Rect textFieldBounds = new Rect(contentStart.x, yCursor, MenuStorage.menuSize.x - contentStart.x - padding, 20);
+        GUI.Box(textFieldBounds, GUIContent.none);
+
+        if (text.Length >= 1 && float.TryParse(text, out _))
+        {
+            GUI.Box(textFieldBounds, GUIContent.none, fontStyleGreen);
+            text = GUI.TextField(textFieldBounds, text, 24, fontStyleGreen);
+        }
+        else
+        {
+            GUI.Box(textFieldBounds, GUIContent.none, fontStyleRed);
+            text = GUI.TextField(textFieldBounds, text, 24, fontStyleRed);
+        }
 
         yCursor += 20 + padding;
 

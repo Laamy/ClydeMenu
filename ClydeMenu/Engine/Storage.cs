@@ -92,11 +92,11 @@ internal class Storage
         get;
         internal set;
     } = 0;
-    public static string DEBUGBOX
+    public static string CHEAT_PLAYERSELECT_MSGSPOOF
     {
         get;
         internal set;
-    } = "";
+    } = "hello!";
 
     public static class Network
     {
