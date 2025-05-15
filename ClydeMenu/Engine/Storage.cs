@@ -97,6 +97,11 @@ internal class Storage
         get;
         internal set;
     } = "hello!";
+    public static string CHEAT_NETWORK_HEALTHAMOUNT
+    {
+        get;
+        internal set;
+    } = "100";
 
     public static class Network
     {

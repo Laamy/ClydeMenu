@@ -1,4 +1,4 @@
-﻿namespace ClydeMenu.Engine;
+﻿    namespace ClydeMenu.Engine;
 
 using System;
 using System.Reflection;
@@ -13,6 +13,7 @@ using System.Linq;
 using System.Threading;
 using System.Diagnostics;
 using static PlayerHealth;
+using Unity.VisualScripting;
 
 internal static class AssemblyReader
 {
@@ -184,7 +185,11 @@ internal class ClientInstance
     }
 
     internal static void SpoofMsg(PlayerAvatar avatar, string msg) => avatar.ChatMessageSend(msg, false);
-    internal static void RevivePlayer(PlayerAvatar avatar) => avatar.Revive(true);
+    internal static void RevivePlayer(PlayerAvatar avatar)
+    {
+        if (FetchFieldValue<int, PlayerHealth>("health", avatar.playerHealth) > 0)
+            avatar.Revive(true);
+    }
     internal static void HealPlayer(PlayerAvatar avatar, int amount)
     {
         var _this = avatar.playerHealth;

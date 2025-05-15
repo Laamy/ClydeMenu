@@ -37,7 +37,8 @@ public class NamespoofModule : BaseModule
         "White", "Xiong", "Yates", "Zuniga", "Adams", "Bishop", "Caldwell", "Dixon",
         "Edwards", "Floyd", "Gordon", "Harrison", "Ibarra", "Jordan", "Klein", "Lamb",
         "Mason", "Nash", "O'Connor", "Peters", "Quinlan", "Ramos", "Sullivan", "Tate",
-        "Ullman", "Vaughn", "Wagner", "Alvarez", "Adolf", "Hitler"
+        "Ullman", "Vaughn", "Wagner", "Alvarez", "Adolf", "Hitler", "Shock", "Lilly", "Alex",
+        "Confusion", "Seth", "Rambo", "Random", "Olvera"
     ];
 
     public override void Initialize()

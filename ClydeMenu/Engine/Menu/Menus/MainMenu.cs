@@ -18,7 +18,7 @@ class MenuStorage
     public static int selectedCategory = 0;
 
     public static Vector2 menuPos = new(10, 10);
-    public static Vector2 menuSize = new(400, 400);
+    public static Vector2 menuSize = new(400, 500);
 }
 
 public class MainMenu : BaseMenu
@@ -75,120 +75,135 @@ public class MainMenu : BaseMenu
             () => {
                 DrawSettingLabel("Network");
                 Storage.CHEAT_PLAYERSELECT = DrawPlayerSelect("Select Player", Storage.CHEAT_PLAYERSELECT);
-                Storage.CHEAT_PLAYERSELECT_MSGSPOOF = DrawTextField("MessageSpoof", Storage.CHEAT_PLAYERSELECT_MSGSPOOF);
-                if (DrawButton("Send Spoof"))
+
+                if (DrawExpandBox("Power Utils"))
                 {
-                    try
+                    Storage.CHEAT_PLAYERSELECT_MSGSPOOF = DrawTextField("MessageSpoof", Storage.CHEAT_PLAYERSELECT_MSGSPOOF);
+                    if (DrawButton("Send Spoof"))
                     {
-                        var plyr = SemiFunc.PlayerGetList()[Storage.CHEAT_PLAYERSELECT];
-                        ClientInstance.SpoofMsg(plyr, Storage.CHEAT_PLAYERSELECT_MSGSPOOF);
+                        try
+                        {
+                            var plyr = SemiFunc.PlayerGetList()[Storage.CHEAT_PLAYERSELECT];
+                            ClientInstance.SpoofMsg(plyr, Storage.CHEAT_PLAYERSELECT_MSGSPOOF);
+                        }
+                        catch (Exception ex)
+                        {
+                             Console.WriteLine($"Error in MainMenu {ex.Message}");
+                        }
                     }
-                    catch (Exception ex)
+
+                    if (DrawButton("Kick Player"))
                     {
-                         Console.WriteLine($"Error in MainMenu {ex.Message}");
+                        try
+                        {
+                            var plyr = SemiFunc.PlayerGetList()[Storage.CHEAT_PLAYERSELECT];
+                            var plyrActorId = plyr.photonView.OwnerActorNr;
+
+                            var options = new RaiseEventOptions();
+                            options.TargetActors = new[] { plyrActorId };
+                            PhotonNetwork.RaiseEvent(199, null, options, SendOptions.SendReliable);
+                            Console.WriteLine($"Kicked player {plyr.name} from the server.");
+                        }
+                        catch (Exception ex)
+                        {
+                             Console.WriteLine($"Error in MainMenu {ex.Message}");
+                        }
                     }
                 }
 
-                if (DrawButton("Kick Player"))
+                if (DrawExpandBox("Health Utils"))
                 {
-                    try
+                    if (DrawButton("Kill Player"))
                     {
-                        var plyr = SemiFunc.PlayerGetList()[Storage.CHEAT_PLAYERSELECT];
-                        var plyrActorId = plyr.photonView.OwnerActorNr;
+                        try
+                        {
+                            var plyr = SemiFunc.PlayerGetList()[Storage.CHEAT_PLAYERSELECT];
+                            ClientInstance.KillPlayer(plyr);
+                        }
+                        catch (Exception ex)
+                        {
+                             Console.WriteLine($"Error in MainMenu {ex.Message}");
+                        }
+                    }
 
-                        var options = new RaiseEventOptions();
-                        options.TargetActors = new[] { plyrActorId };
-                        PhotonNetwork.RaiseEvent(199, null, options, SendOptions.SendReliable);
-                        Console.WriteLine($"Kicked player {plyr.name} from the server.");
-                    }
-                    catch (Exception ex)
+                    if (DrawButton("Revive Player"))
                     {
-                         Console.WriteLine($"Error in MainMenu {ex.Message}");
+                        try
+                        {
+                            var plyr = SemiFunc.PlayerGetList()[Storage.CHEAT_PLAYERSELECT];
+                            ClientInstance.RevivePlayer(plyr);
+                        }
+                        catch (Exception ex)
+                        {
+                             Console.WriteLine($"Error in MainMenu {ex.Message}");
+                        }
                     }
+
+                    if (DrawButton("Heal Player (+Amount)"))
+                    {
+                        try
+                        {
+                            var plyr = SemiFunc.PlayerGetList()[Storage.CHEAT_PLAYERSELECT];
+                            if (float.TryParse(Storage.CHEAT_NETWORK_HEALTHAMOUNT, out var value))
+                            {
+                                ClientInstance.HealPlayer(plyr, (int)Math.Floor(value));
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                             Console.WriteLine($"Error in MainMenu {ex.Message}");
+                        }
+                    }
+
+                    Storage.CHEAT_NETWORK_HEALTHAMOUNT = DrawNumberField("Health Amount", Storage.CHEAT_NETWORK_HEALTHAMOUNT);
                 }
 
-                if (DrawButton("Kill Player"))
+                if (DrawExpandBox("Give Utils"))
                 {
-                    try
+                    if (DrawButton("Steal Crown"))
                     {
-                        var plyr = SemiFunc.PlayerGetList()[Storage.CHEAT_PLAYERSELECT];
-                        ClientInstance.KillPlayer(plyr);
+                        try
+                        {
+                            var plyr = SemiFunc.PlayerGetList()[Storage.CHEAT_PLAYERSELECT];
+
+                            var view = ClientInstance.GetPhotonView(PunManager.instance);
+                            view.RPC("CrownPlayerRPC", RpcTarget.AllBuffered, [SemiFunc.PlayerGetSteamID(plyr)]);
+                            Console.WriteLine($"Gave crown to player {plyr.name}.");
+                        }
+                        catch (Exception ex)
+                        {
+                             Console.WriteLine($"Error in MainMenu {ex.Message}");
+                        }
                     }
-                    catch (Exception ex)
+
+                    if (DrawButton("Make Cheater"))
                     {
-                         Console.WriteLine($"Error in MainMenu {ex.Message}");
+                        try
+                        {
+                            var plyr = SemiFunc.PlayerGetList()[Storage.CHEAT_PLAYERSELECT];
+
+                            var steamId = SemiFunc.PlayerGetSteamID(plyr);
+                            var view = ClientInstance.GetPhotonView(PunManager.instance);
+
+                            view.RPC("UpgradeItemBatteryRPC", RpcTarget.AllBuffered, [steamId, 255]);
+                            view.RPC("UpgradePlayerExtraJumpRPC", RpcTarget.AllBuffered, [steamId, 255]);
+                            view.RPC("UpgradePlayerTumbleLaunchRPC", RpcTarget.AllBuffered, [steamId, 255]);
+                            view.RPC("UpgradePlayerSprintSpeedRPC", RpcTarget.AllBuffered, [steamId, 255]);
+                            view.RPC("UpgradePlayerGrabStrengthRPC", RpcTarget.AllBuffered, [steamId, 255]);
+                            view.RPC("UpgradePlayerGrabRangeRPC", RpcTarget.AllBuffered, [steamId, 255]);
+                            view.RPC("UpgradeMapPlayerCountRPC", RpcTarget.AllBuffered, [steamId, 255]);
+                            view.RPC("UpgradePlayerThrowStrengthRPC", RpcTarget.AllBuffered, [steamId, 255]);
+                            view.RPC("UpgradePlayerEnergyRPC", RpcTarget.AllBuffered, [steamId, 255]);
+                            view.RPC("UpgradePlayerHealthRPC", RpcTarget.AllBuffered, [steamId, 255]);
+
+                            Console.WriteLine($"Gave all upgrades to player {plyr.name}.");
+                        }
+                        catch (Exception ex)
+                        {
+                             Console.WriteLine($"Error in MainMenu {ex.Message}");
+                        }
                     }
                 }
-
-                if (DrawButton("Revive Player"))
-                {
-                    try
-                    {
-                        var plyr = SemiFunc.PlayerGetList()[Storage.CHEAT_PLAYERSELECT];
-                        ClientInstance.RevivePlayer(plyr);
-                    }
-                    catch (Exception ex)
-                    {
-                         Console.WriteLine($"Error in MainMenu {ex.Message}");
-                    }
-                }
-
-                //if (DrawButton("Heal Player (+100)"))
-                //{
-                //    try
-                //    {
-                //        var plyr = SemiFunc.PlayerGetList()[Storage.CHEAT_PLAYERSELECT];
-                //        ClientInstance.HealPlayer(plyr, 100);
-                //    }
-                //    catch (Exception ex)
-                //    {
-                //         Console.WriteLine($"Error in MainMenu {ex.Message}");
-                //    }
-                //}
-
-                if (DrawButton("Steal Crown"))
-                {
-                    try
-                    {
-                        var plyr = SemiFunc.PlayerGetList()[Storage.CHEAT_PLAYERSELECT];
-
-                        var view = ClientInstance.GetPhotonView(PunManager.instance);
-                        view.RPC("CrownPlayerRPC", RpcTarget.AllBuffered, [SemiFunc.PlayerGetSteamID(plyr)]);
-                        Console.WriteLine($"Gave crown to player {plyr.name}.");
-                    }
-                    catch (Exception ex)
-                    {
-                         Console.WriteLine($"Error in MainMenu {ex.Message}");
-                    }
-                }
-
-                //if (DrawButton("Make Cheater"))
-                //{
-                //    try
-                //    {
-                //        var plyr = SemiFunc.PlayerGetList()[Storage.CHEAT_PLAYERSELECT];
-                //
-                //        var steamId = SemiFunc.PlayerGetSteamID(plyr);
-                //        var view = ClientInstance.GetPhotonView(PunManager.instance);
-                //
-                //        view.RPC("UpgradeItemBatteryRPC", RpcTarget.AllBuffered, [steamId, 255]);
-                //        view.RPC("UpgradePlayerExtraJumpRPC", RpcTarget.AllBuffered, [steamId, 255]);
-                //        view.RPC("UpgradePlayerTumbleLaunchRPC", RpcTarget.AllBuffered, [steamId, 255]);
-                //        view.RPC("UpgradePlayerSprintSpeedRPC", RpcTarget.AllBuffered, [steamId, 255]);
-                //        view.RPC("UpgradePlayerGrabStrengthRPC", RpcTarget.AllBuffered, [steamId, 255]);
-                //        view.RPC("UpgradePlayerGrabRangeRPC", RpcTarget.AllBuffered, [steamId, 255]);
-                //        view.RPC("UpgradeMapPlayerCountRPC", RpcTarget.AllBuffered, [steamId, 255]);
-                //        view.RPC("UpgradePlayerThrowStrengthRPC", RpcTarget.AllBuffered, [steamId, 255]);
-                //        view.RPC("UpgradePlayerEnergyRPC", RpcTarget.AllBuffered, [steamId, 255]);
-                //        view.RPC("UpgradePlayerHealthRPC", RpcTarget.AllBuffered, [steamId, 255]);
-                //
-                //        Console.WriteLine($"Gave all upgrades to player {plyr.name}.");
-                //    }
-                //    catch (Exception ex)
-                //    {
-                //         Console.WriteLine($"Error in MainMenu {ex.Message}");
-                //    }
-                //}
             },
             () => {
                 DrawSettingLabel("Server");
@@ -370,6 +385,26 @@ public class MainMenu : BaseMenu
 
         yCursor += 20 + padding;
         return cur;
+    }
+
+    // gonna switch up the theme or smth
+    private Dictionary<string, bool> expandBoxes = [];
+    bool DrawExpandBox(string label, bool _default = false)
+    {
+        if (!expandBoxes.ContainsKey(label))
+            expandBoxes.Add(label, _default);
+
+        var strSub = expandBoxes[label] == true ? "[x]" : "[ ]";
+        var str = $"{strSub} {label}";
+        var strMsur = RenderUtils.StringSize(str);
+        RenderUtils.DrawString(new Vector2(contentStart.x, yCursor), str, StyleTheme.MenuText);
+        RenderUtils.DrawRect(new Vector2(contentStart.x + strMsur.x + padding, yCursor + 7), new Vector2(MenuStorage.menuSize.x - (contentStart.x + strMsur.x + (padding * 2)), 3), StyleTheme.Titlebar);
+
+        if (LabelPressed(label, new Rect(contentStart.x, yCursor, MenuStorage.menuSize.x, 16)))// hhh
+            expandBoxes[label] = !expandBoxes[label];
+
+        yCursor += 20 + padding;
+        return expandBoxes[label];
     }
 
     bool LabelPressed(string selectionKey, Rect buttonRect)
