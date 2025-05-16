@@ -283,14 +283,13 @@ public class RenderUtils
         //Console.WriteLine($"Setting cursor state to {visible}");
         // gotta fix the cursor bruh
         var info = ClientInstance.FetchField<InputManager>("disableAimingTimer");
-        var info2 = ClientInstance.FetchField<MenuCursor>("showTimer");
-        if (info == null || info2 == null)
+        if (info == null)
             return;
 
         if (visible)
         {
             info.SetValue(InputManager.instance, 0.1f);
-            info2.SetValue(MenuCursor.instance, 0.1f);
+            CursorManager.instance.Unlock(-0.1f);
         }
 
         if (Cursor.visible == visible)
