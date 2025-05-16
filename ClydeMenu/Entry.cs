@@ -7,6 +7,7 @@ using ClydeMenu.Engine;
 using ClydeMenu.Engine.Menu;
 using ClydeMenu.Engine.Commands;
 using ClydeMenu.Engine.Components;
+using HarmonyLib;
 
 public class Entry
 {
@@ -16,7 +17,10 @@ public class Entry
     {
         GameEvents.Start();
         ModuleHandler.Start();
-        
+
+        Storage.harmony = new Harmony("com.clyde_menu");
+        Storage.harmony.PatchAll(typeof(Engine.Patches).Assembly);
+
         try
         {
             InitModule<MenuSceneComponent>("MenuScene"); // menu stack stuff for other components to use
@@ -44,6 +48,8 @@ public class Entry
 
     public static void Unload()
     {
+        Storage.harmony.UnpatchAll("com.clyde_menu");
+
         loadedComps.Clear();
 
         GameEvents.Shutdown();

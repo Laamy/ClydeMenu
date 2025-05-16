@@ -42,7 +42,18 @@ public class Entry
 
         Console.WriteLine("Hot-reload injected successfully");
 
+        InitDependencies();
+        Console.WriteLine("Mod dependences loaded");
         Reload();
+        Console.WriteLine("Mod successfully loaded");
+    }
+
+    public static void InitDependencies()
+    {
+        // executable patching live ig
+        var dllPath = @"C:\build\r.e.p.o\0Harmony.dll";
+        var bytes = File.ReadAllBytes(dllPath);
+        Assembly.Load(bytes);
     }
 
     public static void Reload()

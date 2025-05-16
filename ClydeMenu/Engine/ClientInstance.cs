@@ -173,7 +173,6 @@ internal class ClientInstance
     internal static T FetchFieldValue<T, B>(string v, B cls)
     {
         var field = FetchField<B>(v);
-        Console.WriteLine(field);
         return (T)field.GetValue(cls);
     }
 
@@ -228,27 +227,6 @@ internal class ClientInstance
     {
         if (FetchFieldValue<int, PlayerHealth>("health", avatar.playerHealth) > 0)
             avatar.Revive(true);
-    }
-    internal static void HealPlayer(PlayerAvatar avatar, int amount)
-    {
-        var _this = avatar.playerHealth;
-
-        var health = FetchFieldValue<int, PlayerHealth>("health", _this);
-        var maxHealth = FetchFieldValue<int, PlayerHealth>("maxHealth", _this);
-
-        SetFieldValue("health", _this, Mathf.Clamp(health + amount, 0, maxHealth));
-        health = FetchFieldValue<int, PlayerHealth>("health", _this);
-
-        StatsManager.instance.SetPlayerHealth(SemiFunc.PlayerGetSteamID(avatar), health, false);
-        if (GameManager.Multiplayer())
-        {
-            GetPhotonView(_this).RPC("UpdateHealthRPC", RpcTarget.Others, new object[]
-            {
-                health,
-                maxHealth,
-                false
-            });
-        }
     }
     internal static void KillPlayer(PlayerAvatar avatar)
     {
