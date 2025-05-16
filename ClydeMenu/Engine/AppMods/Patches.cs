@@ -3,6 +3,7 @@
 using ClydeMenu.Engine.Menu;
 
 using HarmonyLib;
+using UnityEngine;
 
 internal static class Patches
 {
@@ -17,6 +18,70 @@ internal static class Patches
     public static class Patches_PlayerSwitch
     {
         public static bool Prefix(bool _next)
+            => !MenuSceneComponent.Instance.HasMenuByType<MainMenu>();
+    }
+
+    // bro...
+    [HarmonyPatch(typeof(MenuButton), "Update")]
+    public static class Patches_MenuButtonUpdate
+    {
+        public static bool Prefix()
+            => !MenuSceneComponent.Instance.HasMenuByType<MainMenu>();
+    }
+
+    [HarmonyPatch(typeof(MenuElementServer), "Update")]
+    public static class Patches_MenuElementServerUpdate
+    {
+        public static bool Prefix()
+            => !MenuSceneComponent.Instance.HasMenuByType<MainMenu>();
+    }
+
+    [HarmonyPatch(typeof(MenuElementSaveFile), "Update")]
+    public static class Patches_MenuElementSaveFileUpdate
+    {
+        public static bool Prefix()
+            => !MenuSceneComponent.Instance.HasMenuByType<MainMenu>();
+    }
+
+    [HarmonyPatch(typeof(MenuElementRegion), "Update")]
+    public static class Patches_MenuElementRegionUpdate
+    {
+        public static bool Prefix()
+            => !MenuSceneComponent.Instance.HasMenuByType<MainMenu>();
+    }
+
+    [HarmonyPatch(typeof(MenuSlider), "Update")]
+    public static class Patches_MenuSliderUpdate
+    {
+        public static bool Prefix()
+            => !MenuSceneComponent.Instance.HasMenuByType<MainMenu>();
+    }
+
+    [HarmonyPatch(typeof(MenuScrollBox), "Update")]
+    public static class Patches_MenuScrollBoxUpdate
+    {
+        public static bool Prefix()
+            => !MenuSceneComponent.Instance.HasMenuByType<MainMenu>();
+    }
+
+    [HarmonyPatch(typeof(MenuManager), "Update")]
+    public static class Patches_MenuManagerUpdate
+    {
+        public static bool Prefix()
+            => !MenuSceneComponent.Instance.HasMenuByType<MainMenu>();
+    }
+
+    [HarmonyPatch(typeof(MenuButtonArrow), "Update")]
+    public static class Patches_MenuButtonArrowUpdate
+    {
+        public static bool Prefix()
+            => !MenuSceneComponent.Instance.HasMenuByType<MainMenu>();
+    }
+
+    [HarmonyPatch(typeof(MenuElementHover), "Update")]
+    public static class Patches_MenuElementHoverUpdate
+    {
+        public static bool Prefix()
             => !MenuSceneComponent.Instance.HasMenuByType<MainMenu>();
     }
 
