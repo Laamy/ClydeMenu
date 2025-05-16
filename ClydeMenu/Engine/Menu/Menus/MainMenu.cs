@@ -2,6 +2,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
 using ClydeMenu.Engine.Utils;
 using ExitGames.Client.Photon;
 
@@ -18,7 +21,7 @@ class MenuStorage
     public static int selectedCategory = 0;
 
     public static Vector2 menuPos = new(10, 10);
-    public static Vector2 menuSize = new(400, 500);
+    public static Vector2 menuSize = new(400, 400);
 }
 
 public class MainMenu : BaseMenu
@@ -146,8 +149,22 @@ public class MainMenu : BaseMenu
                             var plyr = SemiFunc.PlayerGetList()[Storage.CHEAT_PLAYERSELECT];
                             if (float.TryParse(Storage.CHEAT_NETWORK_HEALTHAMOUNT, out var value))
                             {
-                                ClientInstance.HealPlayer(plyr, (int)Math.Floor(value));
+                                var nextHealthTick = Mathf.Clamp(plyr.CHEAT_GetHealth() + (int)Math.Floor(value), 0, plyr.CHEAT_GetMaxHealth());
+                                plyr.CHEAT_SetHealth(nextHealthTick);
                             }
+                        }
+                        catch (Exception ex)
+                        {
+                             Console.WriteLine($"Error in MainMenu {ex.Message}");
+                        }
+                    }
+
+                    if (DrawButton("Heal Player (MaxHealth)"))
+                    {
+                        try
+                        {
+                            var plyr = SemiFunc.PlayerGetList()[Storage.CHEAT_PLAYERSELECT];
+                                plyr.CHEAT_SetHealth(plyr.CHEAT_GetMaxHealth());
                         }
                         catch (Exception ex)
                         {
@@ -214,6 +231,20 @@ public class MainMenu : BaseMenu
                         ItemUtils.SpawnSurplus(Vector2.zero, false);
                 }
 
+                if (DrawButton("Shutdown"))
+                {
+                    var options = new RaiseEventOptions();
+                    options.Receivers = ReceiverGroup.All;
+                    PhotonNetwork.RaiseEvent(199, null, options, SendOptions.SendReliable);
+                }
+
+                if (DrawButton("Anti-NoMic host"))
+                {
+                    PlayerAvatar plyr = ClientInstance.AvatarFilter.Apply(ClientInstance.FilterType.Master, []).FirstOrDefault();
+
+                    ClientInstance.SpoofMsg(plyr, "I-kick-no-mic-people-because-im-abusive-irl");
+                }
+
                 Storage.CHEAT_NETWORK_MassCrasher = DrawBoolean("MassCrasher (KickAll on join)", Storage.CHEAT_NETWORK_MassCrasher);
 
                 //if (DrawButton("Everyones a cheater (Upgrades)"))
@@ -242,11 +273,12 @@ public class MainMenu : BaseMenu
             },
             () => {
                 DrawSettingLabel("Misc");
+                var localAv = ClientInstance.GetLocalAvatar();
                 if (DrawButton("Infinite Health"))
-                    ClientInstance.SetHealth(99999,99999);
+                    localAv.CHEAT_SetHealth(99999);
 
                 if (DrawButton("Reset Health"))
-                    ClientInstance.SetHealth(100,100);
+                    localAv.CHEAT_SetHealth(localAv.CHEAT_GetMaxHealth());
             }
         ];
     }

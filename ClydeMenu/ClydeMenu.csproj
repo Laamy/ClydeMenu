@@ -42,6 +42,7 @@
     <Compile Include="Engine\Command\Commands\MessageSpoofCommand.cs" />
     <Compile Include="Engine\Command\Commands\StableSpawnCommand.cs" />
     <Compile Include="Engine\Components\BaseComponent.cs" />
+    <Compile Include="Engine\EXtensions.cs" />
     <Compile Include="Engine\GameEvents.cs" />
     <Compile Include="Engine\Menu\BaseMenu.cs" />
     <Compile Include="Engine\Components\MenuSceneComponent.cs" />

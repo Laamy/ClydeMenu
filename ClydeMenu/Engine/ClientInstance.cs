@@ -14,6 +14,7 @@ using System.Threading;
 using System.Diagnostics;
 using static PlayerHealth;
 using Unity.VisualScripting;
+using System.CodeDom;
 
 internal static class AssemblyReader
 {
@@ -115,6 +116,43 @@ internal class ClientInstance
         return players[0];
     }
 
+    public enum FilterType
+    {
+        None,
+        Dead,
+        Alive,
+        Master,
+        NameContains,
+        ActorNumber,
+        AllButLocalHost
+    }
+
+    public class AvatarFilter
+    {
+        private static readonly Dictionary<FilterType, Func<object[], PlayerAvatar, bool>> Filters = new()
+        {
+            [FilterType.None] = (_, _) => true,
+            [FilterType.Dead] = (_, p) => FetchFieldValue<int, PlayerHealth>("health", p.playerHealth) <= 0,
+            [FilterType.Alive] = (_, p) => FetchFieldValue<int, PlayerHealth>("health", p.playerHealth) > 0,
+            [FilterType.Master] = (_, p) => p.photonView.OwnerActorNr == PhotonNetwork.MasterClient.ActorNumber,
+            [FilterType.NameContains] = (args, p) => SemiFunc.PlayerGetName(p).Contains((string)args[0]),
+            [FilterType.ActorNumber] = (args, p) => p.photonView.OwnerActorNr == (int)args[0],
+            [FilterType.AllButLocalHost] = (_, p) =>
+                p.photonView.OwnerActorNr != PhotonNetwork.MasterClient.ActorNumber &&
+                p.photonView.OwnerActorNr != PhotonNetwork.LocalPlayer.ActorNumber
+        };
+
+        public static List<PlayerAvatar> Apply(FilterType type, object[] args)
+        {
+            var fn = Filters[type];
+            var result = new List<PlayerAvatar>();
+            foreach (var p in SemiFunc.PlayerGetList())
+                if (fn(args, p))
+                    result.Add(p);
+            return result;
+        }
+    }
+
     internal static PhotonView GetPhotonView<T>(T instance)
     {
         var type = typeof(T);
@@ -134,13 +172,14 @@ internal class ClientInstance
 
     internal static T FetchFieldValue<T, B>(string v, B cls)
     {
-        var field = FetchField<T>(v);
+        var field = FetchField<B>(v);
+        Console.WriteLine(field);
         return (T)field.GetValue(cls);
     }
 
     internal static void SetFieldValue<T, B>(string v, B cls, T newValue)
     {
-        var field = FetchField<T>(v);
+        var field = FetchField<B>(v);
         field.SetValue(cls, newValue);
     }
 
@@ -184,7 +223,7 @@ internal class ClientInstance
         return resultBounds;
     }
 
-    internal static void SpoofMsg(PlayerAvatar avatar, string msg) => avatar.ChatMessageSend(msg, false);
+    internal static void SpoofMsg(PlayerAvatar avatar, string msg) => avatar.photonView.RPC("ChatMessageSendRPC", RpcTarget.All, msg, false);
     internal static void RevivePlayer(PlayerAvatar avatar)
     {
         if (FetchFieldValue<int, PlayerHealth>("health", avatar.playerHealth) > 0)
