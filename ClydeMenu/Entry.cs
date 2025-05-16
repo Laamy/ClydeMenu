@@ -7,6 +7,7 @@ using ClydeMenu.Engine;
 using ClydeMenu.Engine.Menu;
 using ClydeMenu.Engine.Commands;
 using ClydeMenu.Engine.Components;
+
 using HarmonyLib;
 
 public class Entry
