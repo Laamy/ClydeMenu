@@ -517,22 +517,25 @@ public class MainMenu : BaseMenu
     }
 
     Dictionary<string, bool> enumDropdownOpen = new();
+    Dictionary<string, string> enumSearchText = new();
+
     int DrawEnum(string label, string[] enums, int selection = 0)
     {
         if (!enumDropdownOpen.ContainsKey(label))
             enumDropdownOpen[label] = false;
+        if (!enumSearchText.ContainsKey(label))
+            enumSearchText[label] = "";
 
-        bool open = enumDropdownOpen[label];
-        string selectedText = enums[selection];
-        float labelHeight = 20f;
-        float dropdownHeight = enums.Length * labelHeight;
-        float boxWidth = 200f;
+        var open = enumDropdownOpen[label];
+        var search = enumSearchText[label];
+        var labelHeight = 20f;
+        var boxWidth = 200f;
 
         DrawSettingLabel(label);
 
         Rect labelRect = new Rect(contentStart.x, yCursor, boxWidth, labelHeight);
         RenderUtils.DrawRect(labelRect.position, labelRect.size, StyleTheme.ContentBox);
-        RenderUtils.DrawString(labelRect.position + new Vector2(4, 2), selectedText, StyleTheme.MenuText);
+        RenderUtils.DrawString(labelRect.position + new Vector2(4, 2), enums[selection], StyleTheme.MenuText);
 
         var cur = Event.current;
         Vector2 mousePos = cur.mousePosition;
@@ -547,18 +550,40 @@ public class MainMenu : BaseMenu
 
         if (open)
         {
+            Rect searchRect = new Rect(contentStart.x, yCursor, boxWidth, labelHeight);
+            RenderUtils.DrawRect(searchRect.position, searchRect.size, StyleTheme.ContentBoxBackground);
+
+            if (cur.type == EventType.KeyDown && !labelRect.Contains(mousePos))
+            {
+                if (cur.keyCode == KeyCode.Backspace && search.Length > 0)
+                    search = search.Substring(0, search.Length - 1);
+                else if (!char.IsControl(cur.character) && cur.character != '\0')
+                    search += cur.character;
+                enumSearchText[label] = search;
+                cur.Use();
+            }
+
+            RenderUtils.DrawString(searchRect.position + new Vector2(4, 2), search.Length > 0 ? search : "Search...", StyleTheme.MenuTextDark);
+            yCursor += labelHeight + padding;
+
+            var filteredEnums = enums
+                .Where(e => e.IndexOf(search, StringComparison.OrdinalIgnoreCase) >= 0)
+                .ToArray();
+
+            var dropdownHeight = filteredEnums.Length * labelHeight;
             Rect dropdownRect = new Rect(contentStart.x, yCursor, boxWidth, dropdownHeight);
             RenderUtils.DrawRect(dropdownRect.position, dropdownRect.size, StyleTheme.ContentBox);
 
-            for (int i = 0; i < enums.Length; i++)
+            for (int i = 0; i < filteredEnums.Length; i++)
             {
                 Rect itemRect = new Rect(contentStart.x, yCursor + i * labelHeight, boxWidth, labelHeight);
-                RenderUtils.DrawString(itemRect.position + new Vector2(4, 2), enums[i], StyleTheme.MenuText);
+                RenderUtils.DrawString(itemRect.position + new Vector2(4, 2), filteredEnums[i], StyleTheme.MenuText);
 
                 if (cur.type == EventType.MouseDown && itemRect.Contains(mousePos))
                 {
-                    selection = i;
+                    selection = Array.IndexOf(enums, filteredEnums[i]);
                     enumDropdownOpen[label] = false;
+                    enumSearchText[label] = "";
                     cur.Use();
                 }
             }
