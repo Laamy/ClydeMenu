@@ -1,7 +1,7 @@
 ﻿namespace ClydeMenu.Engine.Commands;
 
 using System;
-
+using ClydeMenu.Engine.Settings;
 using ExitGames.Client.Photon;
 
 
@@ -43,7 +43,7 @@ public class NamespoofModule : BaseModule
 
     private void OnLobbyJoinStart()
     {
-        if (Storage.CHEAT_PLAYER_AccountSpoofer)
+        if (MenuSettings.AccountSpoofer.Value)
         {
             // randomize name from a small array of names n last names
             var name = names[rng.Next(names.Length)] + names[rng.Next(names.Length)];
@@ -94,7 +94,7 @@ public class NamespoofModule : BaseModule
     // so if you set the volume of a account spoofer you can still identify them
     private void OnLobbyJoin()
     {
-        if (Storage.CHEAT_PLAYER_AccountSpoofer)
+        if (MenuSettings.AccountSpoofer.Value)
         {
             // randomize colour 2!!
             ClientInstance.GetLocalAvatar().PlayerAvatarSetColor(new Random().Next(0, 35));

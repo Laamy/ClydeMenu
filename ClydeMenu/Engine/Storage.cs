@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Configuration;
+using ClydeMenu.Engine.Menu;
 using HarmonyLib;
 
 namespace ClydeMenu.Engine;
@@ -8,12 +9,7 @@ namespace ClydeMenu.Engine;
 internal class Storage
 {
     internal static Harmony harmony;
-
-    public static bool MOD_Godmode
-    {
-        get;
-        internal set;
-    }
+    
     public static string CmdBarInput
     {
         get;
@@ -39,16 +35,6 @@ internal class Storage
         get;
         internal set;
     }
-    public static bool MOD_AntiKickMsg
-    {
-        get;
-        internal set;
-    } = false;
-    public static bool MOD_RandomizeName
-    {
-        get;
-        internal set;
-    }
     public static bool Example_Boolean
     {
         get;
@@ -65,31 +51,6 @@ internal class Storage
         internal set;
     } = 1;
 
-    public static bool CHEAT_ESP_Player
-    {
-        get;
-        internal set;
-    } = true;
-    public static bool CHEAT_ESP_Enemy
-    {
-        get;
-        internal set;
-    } = true;
-    public static bool CHEAT_ESP_Valuable
-    {
-        get;
-        internal set;
-    } = true;
-    public static bool CHEAT_NETWORK_MassCrasher
-    {
-        get;
-        internal set;
-    } = false;
-    public static bool CHEAT_PLAYER_AccountSpoofer
-    {
-        get;
-        internal set;
-    } = false;
     public static int CHEAT_PLAYERSELECT
     {
         get;
@@ -105,6 +66,21 @@ internal class Storage
         get;
         internal set;
     } = "100";
+    public static int CHEAT_Upgrade_Type
+    {
+        get;
+        internal set;
+    } = 0;
+    public static string CHEAT_Upgrade_Amount
+    {
+        get;
+        internal set;
+    } = "13";
+    public static ThemeConfig InternalThemeStyle
+    {
+        get;
+        internal set;
+    }
     public static int SETTINGS_Theme
     {
         get;

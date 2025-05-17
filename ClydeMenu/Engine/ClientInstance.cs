@@ -69,7 +69,7 @@ internal class ClientInstance
             if (RoundDirector.instance == null)
                 return [];
 
-            ePoints = (List<GameObject>)FetchField<List<GameObject>>("extractionPointList").GetValue(RoundDirector.instance);
+            ePoints = FetchFieldValue<List<GameObject>, RoundDirector>("extractionPointList", RoundDirector.instance);
             if (ePoints == null || ePoints.Count == 0)
                 return [];
         }

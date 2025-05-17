@@ -2,14 +2,11 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
-using ClydeMenu.Engine.Utils;
-using ExitGames.Client.Photon;
+
+using ClydeMenu.Engine.Settings;
 
 using Photon.Pun;
-using Photon.Realtime;
 
 using UnityEngine;
 
@@ -156,6 +153,16 @@ public class MainMenu : BaseMenu
 
     public MainMenu()
     {
+        if (Storage.InternalThemeStyle != null)
+            StyleTheme = Storage.InternalThemeStyle;
+        else
+        {
+            if (MenuSettings.GameTheme != null)
+                StyleTheme = StyleThemes[MenuSettings.GameTheme.Value];
+            else
+                StyleTheme = StyleThemes["Dark"];
+        }
+        Storage.SETTINGS_Theme = Array.IndexOf(StyleThemes.Keys.ToArray(), MenuSettings.GameTheme.Value);
 
         MenuStorage.renderNames =
         [
@@ -179,10 +186,10 @@ public class MainMenu : BaseMenu
            //Storage.Example_Boolean = DrawBoolean("Booleanoff", Storage.Example_Boolean);
             () => {
                 DrawSettingLabel("Visual");
-                Storage.CHEAT_ESP_Player = DrawBoolean("Player ESP", Storage.CHEAT_ESP_Player);
-                Storage.CHEAT_ESP_Enemy = DrawBoolean("Enemy ESP", Storage.CHEAT_ESP_Enemy);
-                Storage.CHEAT_ESP_Valuable = DrawBoolean("Valuable ESP", Storage.CHEAT_ESP_Valuable);
-                Storage.CHEAT_NETWORK_MassCrasher = DrawBoolean("Extraction ESP", Storage.CHEAT_NETWORK_MassCrasher);
+                MenuSettings.ESP_Player.Value = DrawBoolean("Player ESP", MenuSettings.ESP_Player.Value);
+                MenuSettings.ESP_Enemy.Value = DrawBoolean("Enemy ESP", MenuSettings.ESP_Enemy.Value);
+                MenuSettings.ESP_Valuable.Value = DrawBoolean("Valuable ESP", MenuSettings.ESP_Valuable.Value);
+                MenuSettings.ESP_Extractions.Value = DrawBoolean("Extraction ESP", MenuSettings.ESP_Extractions.Value);
                 //Storage.DEBUGBOX = DrawNumberField("DebugBox", Storage.DEBUGBOX);
             },
             () => {
@@ -285,7 +292,7 @@ public class MainMenu : BaseMenu
                         }
                     }
 
-                    if (DrawButton("Make Cheater"))
+                    if (DrawButton("Give all Upgrades(255)"))
                     {
                         try
                         {
@@ -310,6 +317,25 @@ public class MainMenu : BaseMenu
                         catch (Exception ex)
                         {
                              Console.WriteLine($"Error in MainMenu {ex.Message}");
+                        }
+                    }
+
+                    Storage.CHEAT_Upgrade_Type = DrawEnum("Upgrade", ItemUtils.Upgrades, Storage.CHEAT_Upgrade_Type);
+
+                    Storage.CHEAT_Upgrade_Amount = DrawNumberField("Amount", Storage.CHEAT_Upgrade_Amount);
+
+                    if (DrawButton("Give Upgrade")) {
+                        if (float.TryParse(Storage.CHEAT_Upgrade_Amount, out var amount))
+                        {
+                            var parsedAmount = (int)Math.Floor(Mathf.Clamp(amount, 0, 255));
+
+                            var plyr = SemiFunc.PlayerGetList()[Storage.CHEAT_PLAYERSELECT];
+
+                            var steamId = SemiFunc.PlayerGetSteamID(plyr);
+                            var view = ClientInstance.GetPhotonView(PunManager.instance);
+
+                            var upgrade = $"Upgrade{ItemUtils.Upgrades[Storage.CHEAT_Upgrade_Type]}RPC";
+                            view.RPC(upgrade, RpcTarget.AllBuffered, [steamId, parsedAmount]);
                         }
                     }
                 }
@@ -339,7 +365,7 @@ public class MainMenu : BaseMenu
             },
             () => {
                 DrawSettingLabel("Player");
-                Storage.CHEAT_PLAYER_AccountSpoofer = DrawBoolean("AccountSpoofer", Storage.CHEAT_PLAYER_AccountSpoofer);
+                MenuSettings.AccountSpoofer.Value = DrawBoolean("AccountSpoofer", MenuSettings.AccountSpoofer.Value);
             },
             () => {
                 DrawSettingLabel("Misc");
@@ -359,6 +385,8 @@ public class MainMenu : BaseMenu
                 {
                     Storage.SETTINGS_Theme = newTheme;
                     StyleTheme = StyleThemes[StyleThemes.Keys.ToArray()[newTheme]];
+                    Storage.InternalThemeStyle = StyleTheme;
+                    MenuSettings.GameTheme.Value = StyleThemes.Keys.ToArray()[newTheme];
                 }
             }
         ];

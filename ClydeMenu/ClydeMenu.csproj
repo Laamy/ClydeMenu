@@ -52,7 +52,7 @@
     <Compile Include="Engine\Module\Modules\ClickGuiModule.cs" />
     <Compile Include="Engine\Module\Modules\NamespoofModule.cs" />
     <Compile Include="Engine\AppMods\Patches.cs" />
-    <Compile Include="Engine\Settings\Settings.cs" />
+    <Compile Include="Engine\Settings\MenuSettings.cs" />
     <Compile Include="Engine\ClientInstance.cs" />
     <Compile Include="Engine\Components\ClientComponent.cs" />
     <Compile Include="Engine\Components\CmdBarComponent.cs" />

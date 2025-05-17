@@ -7,6 +7,7 @@ using ClydeMenu.Engine;
 using ClydeMenu.Engine.Menu;
 using ClydeMenu.Engine.Commands;
 using ClydeMenu.Engine.Components;
+using ClydeMenu.Engine.Settings;
 
 using HarmonyLib;
 
@@ -16,6 +17,8 @@ public class Entry
 
     public static void Load()
     {
+        MenuSettings.Load();
+
         GameEvents.Start();
         ModuleHandler.Start();
 
@@ -52,6 +55,9 @@ public class Entry
         Storage.harmony.UnpatchAll("com.clyde_menu");
 
         loadedComps.Clear();
+
+        MenuSettings._saveTimer?.Stop();
+        MenuSettings._saveTimer?.Dispose();
 
         GameEvents.Shutdown();
         ModuleHandler.Shutdown();

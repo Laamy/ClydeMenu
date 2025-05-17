@@ -10,6 +10,7 @@ using HarmonyLib;
 using System.Diagnostics;
 using Unity.VisualScripting;
 using System;
+using ClydeMenu.Engine.Settings;
 
 internal static class Patches
 {
@@ -98,7 +99,7 @@ internal static class Patches
     {
         public static bool Prefix(PlayerAvatar __instance, PhotonStream stream, PhotonMessageInfo info)
         {
-            if (!Storage.CHEAT_PLAYER_AccountSpoofer)
+            if (!MenuSettings.AccountSpoofer.Value)
                 return true; // only pingspoof if accountspoof is active
 
             // macros !! (closest thing to it)

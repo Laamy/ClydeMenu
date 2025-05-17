@@ -7,6 +7,7 @@ using UnityEngine;
 using ClydeMenu.Engine.Menu;
 using ClydeMenu.Engine.Commands;
 using ClydeMenu.Engine.Components;
+using ClydeMenu.Engine.Settings;
 
 public class ClientComponent : BaseComponent
 {
@@ -57,22 +58,22 @@ public class ClientComponent : BaseComponent
 
         // esps
         {
-            if (Storage.CHEAT_ESP_Player)
+            if (MenuSettings.ESP_Player.Value)
                 RenderPlayerESP();
 
-            if (Storage.CHEAT_ESP_Enemy)
+            if (MenuSettings.ESP_Enemy.Value)
             {
                 foreach (var enemy in ClientInstance.GetEnemyList())
                     RenderUtils.DrawAABB(ClientInstance.GetActiveColliderBounds(enemy.gameObject), Color.red);
             }
 
-            if (Storage.CHEAT_ESP_Valuable)
+            if (MenuSettings.ESP_Valuable.Value)
             {
                 foreach (var valuable in ClientInstance.GetValuableList())
                     RenderUtils.DrawAABB(ClientInstance.GetActiveColliderBounds(valuable.gameObject), Color.yellow);
             }
 
-            if (Storage.CHEAT_NETWORK_MassCrasher)
+            if (MenuSettings.ESP_Extractions.Value)
             {
                 foreach (var extract in ClientInstance.GetExtractionPoints())
                     RenderUtils.DrawAABB(ClientInstance.GetActiveColliderBounds(extract.gameObject), Color.cyan);

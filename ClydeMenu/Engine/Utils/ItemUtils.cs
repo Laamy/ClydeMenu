@@ -22,6 +22,19 @@ internal class ItemUtils : MonoBehaviourPunCallbacks
         return items;
     }
 
+    public static string[] Upgrades = [
+        "ItemBattery",
+        "PlayerExtraJump",
+        "PlayerTumbleLaunch",
+        "PlayerSprintSpeed",
+        "PlayerGrabStrength",
+        "PlayerGrabRange",
+        "MapPlayerCount",
+        "PlayerThrowStrength",
+        "PlayerEnergy",
+        "PlayerHealth"
+    ];
+
     // bugged so this is local only
     //public static void SpawnPrefab(Vector3 targetPos, string prefab)
     //{
