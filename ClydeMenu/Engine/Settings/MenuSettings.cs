@@ -36,6 +36,7 @@ internal class MenuSettings
     public static Setting<bool> ESP_Extractions { get; set; } = new("ESP_Extractions", false);
 
     public static Setting<bool> AccountSpoofer { get; set; } = new("AccountSpoofer", false);
+    public static Setting<bool> PingSpoofer { get; set; } = new("PingSpoofer", false);
 
     public static Timer _saveTimer;
 

@@ -170,7 +170,6 @@ public class MainMenu : BaseMenu
             "Network",
             "Server",
             "Player",
-            "Misc",
             "Settings"
         ];
 
@@ -366,15 +365,7 @@ public class MainMenu : BaseMenu
             () => {
                 DrawSettingLabel("Player");
                 MenuSettings.AccountSpoofer.Value = DrawBoolean("AccountSpoofer", MenuSettings.AccountSpoofer.Value);
-            },
-            () => {
-                DrawSettingLabel("Misc");
-                //var localAv = ClientInstance.GetLocalAvatar();
-                //if (DrawButton("Infinite Health"))
-                //    localAv.CHEAT_SetHealth(99999);
-                //
-                //if (DrawButton("Reset Health"))
-                //    localAv.CHEAT_SetHealth(localAv.CHEAT_GetMaxHealth());
+                MenuSettings.PingSpoofer.Value = DrawBoolean("PingSpoofer", MenuSettings.PingSpoofer.Value);
             },
             () => {
                 DrawSettingLabel("Settings");
