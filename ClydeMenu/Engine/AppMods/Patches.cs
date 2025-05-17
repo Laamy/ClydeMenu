@@ -108,7 +108,7 @@ internal static class Patches
             playerPingTimer -= Time.deltaTime;
             if (playerPingTimer <= 0f)
             {
-                playerPing = new System.Random().Next(1, 3);
+                playerPing = new System.Random().Next(15, 25);
                 playerPingTimer = 6f;
             }
 
