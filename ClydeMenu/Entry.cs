@@ -16,7 +16,6 @@ public class Entry
 
     public static void Load()
     {
-        return;
         GameEvents.Start();
         ModuleHandler.Start();
 
@@ -50,7 +49,6 @@ public class Entry
 
     public static void Unload()
     {
-        return;
         Storage.harmony.UnpatchAll("com.clyde_menu");
 
         loadedComps.Clear();
@@ -64,21 +62,18 @@ public class Entry
 
     public static void Update()
     {
-        return;
         foreach (var comp in loadedComps)
             comp.Update();
     }
 
     public static void FixedUpdate()
     {
-        return;
         foreach (var comp in loadedComps)
             comp.FixedUpdate();
     }
 
     public static void OnGUI()
     {
-        return;
         foreach (var comp in loadedComps)
             comp.OnGUI();
     }

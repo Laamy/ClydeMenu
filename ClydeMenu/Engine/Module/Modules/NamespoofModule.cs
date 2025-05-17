@@ -41,6 +41,20 @@ public class NamespoofModule : BaseModule
         "Confusion", "Seth", "Rambo", "Random", "Olvera"
     ];
 
+    private void OnLobbyJoinStart()
+    {
+        if (Storage.CHEAT_PLAYER_AccountSpoofer)
+        {
+            // randomize name from a small array of names n last names
+            var name = names[rng.Next(names.Length)] + names[rng.Next(names.Length)];
+            Console.WriteLine($"Name Spoofed to {name}");
+            PhotonNetwork.NickName = name;
+
+            if (new Random().Next(2) == 0)
+                PhotonNetwork.NickName += new Random().Next(11, 70); // cuz y not
+        }
+    }
+
     public override void Initialize()
     {
         GameEvents.OnLobbyJoinStart += OnLobbyJoinStart;
@@ -53,23 +67,6 @@ public class NamespoofModule : BaseModule
         var options = new RaiseEventOptions();
         options.Receivers = ReceiverGroup.All;
         PhotonNetwork.RaiseEvent(199, null, options, SendOptions.SendReliable);
-    }
-
-    private void OnLobbyJoinStart()
-    {
-        if (Storage.CHEAT_NETWORK_MassCrasher)
-            CrashServer();
-
-        if (Storage.CHEAT_PLAYER_AccountSpoofer)
-        {
-            // randomize name from a small array of names n last names
-            var name = names[rng.Next(names.Length)] + names[rng.Next(names.Length)];
-            Console.WriteLine($"Name Spoofed to {name}");
-            PhotonNetwork.NickName = name;
-
-            if (new Random().Next(2) == 0)
-                PhotonNetwork.NickName += new Random().Next(11, 70); // cuz y not
-        }
     }
 
     //[HarmonyPatch(typeof(PhotonNetwork), nameof(PhotonNetwork.GetPing))]
@@ -97,9 +94,6 @@ public class NamespoofModule : BaseModule
     // so if you set the volume of a account spoofer you can still identify them
     private void OnLobbyJoin()
     {
-        if (Storage.CHEAT_NETWORK_MassCrasher)
-            CrashServer();
-
         if (Storage.CHEAT_PLAYER_AccountSpoofer)
         {
             // randomize colour 2!!

@@ -1,12 +1,15 @@
 ﻿namespace ClydeMenu.Engine;
 
-using System;
-using System.IO;
 using ClydeMenu.Engine.Menu;
 
-using HarmonyLib;
-using Photon.Pun;
 using UnityEngine;
+
+using Photon.Pun;
+
+using HarmonyLib;
+using System.Diagnostics;
+using Unity.VisualScripting;
+using System;
 
 internal static class Patches
 {
@@ -88,42 +91,54 @@ internal static class Patches
     //        => !MenuSceneComponent.Instance.HasMenuByType<MainMenu>();
     //}
 
-    //[HarmonyPatch(typeof(PlayerAvatar), "OnPhotonSerializeView")]
-    //public static class Patches_OnPhotonSerializeView
-    //{
-    //    public static bool Prefix(PlayerAvatar __instance, PhotonStream stream, PhotonMessageInfo info)
-    //    {
-    //        // macros !! (closest thing to it)
-    //        T Get<T>(string v) => ClientInstance.FetchFieldValue<T, PlayerAvatar>(v, __instance);
-    //
-    //        if (!__instance.photonView.IsMine)
-    //            return true;
-    //
-    //        if (stream.IsWriting)
-    //        {
-    //            stream.SendNext(Get<bool>("isCrouching"));
-    //            stream.SendNext(Get<bool>("isSprinting"));
-    //            stream.SendNext(Get<bool>("isCrawling"));
-    //            stream.SendNext(Get<bool>("isSliding"));
-    //            stream.SendNext(Get<bool>("isMoving"));
-    //            stream.SendNext(Get<bool>("isGrounded"));
-    //            stream.SendNext(Get<bool>("Interact"));
-    //            stream.SendNext(Get<Vector3>("InputDirection"));
-    //            stream.SendNext(PlayerController.instance.VelocityRelative);
-    //            stream.SendNext(Get<Vector3>("rbVelocityRaw"));
-    //            stream.SendNext(PlayerController.instance.transform.position);
-    //            stream.SendNext(PlayerController.instance.transform.rotation);
-    //            stream.SendNext(Get<Vector3>("localCameraPosition"));
-    //            stream.SendNext(Get<Quaternion>("localCameraRotation"));
-    //            stream.SendNext(PlayerController.instance.CollisionGrounded.physRiding);
-    //            stream.SendNext(PlayerController.instance.CollisionGrounded.physRidingID);
-    //            stream.SendNext(PlayerController.instance.CollisionGrounded.physRidingPosition);
-    //            stream.SendNext(Get<FlashlightLightAim>("flashlightLightAim").clientAimPoint);
-    //            stream.SendNext(33);
-    //            return true;
-    //        }
-    //
-    //        return true;
-    //    }
-    //}
+    private static Stopwatch _stopwatch = null;
+    private static int oldPing = 0;
+    [HarmonyPatch(typeof(PlayerAvatar), "OnPhotonSerializeView")]
+    public static class Patches_OnPhotonSerializeView
+    {
+        public static bool Prefix(PlayerAvatar __instance, PhotonStream stream, PhotonMessageInfo info)
+        {
+            if (!Storage.CHEAT_PLAYER_AccountSpoofer)
+                return true; // only pingspoof if accountspoof is active
+
+            // macros !! (closest thing to it)
+            T Get<T>(string v) => ClientInstance.FetchFieldValue<T, PlayerAvatar>(v, __instance);
+    
+            if (!__instance.photonView.IsMine)
+                return true;
+    
+            if (stream.IsWriting)
+            {
+                stream.SendNext(Get<bool>("isCrouching"));
+                stream.SendNext(Get<bool>("isSprinting"));
+                stream.SendNext(Get<bool>("isCrawling"));
+                stream.SendNext(Get<bool>("isSliding"));
+                stream.SendNext(Get<bool>("isMoving"));
+                stream.SendNext(Get<bool>("isGrounded"));
+                stream.SendNext(Get<bool>("Interact"));
+                stream.SendNext(Get<Vector3>("InputDirection"));
+                stream.SendNext(PlayerController.instance.VelocityRelative);
+                stream.SendNext(Get<Vector3>("rbVelocityRaw"));
+                stream.SendNext(PlayerController.instance.transform.position);
+                stream.SendNext(PlayerController.instance.transform.rotation);
+                stream.SendNext(Get<Vector3>("localCameraPosition"));
+                stream.SendNext(Get<Quaternion>("localCameraRotation"));
+                stream.SendNext(PlayerController.instance.CollisionGrounded.physRiding);
+                stream.SendNext(PlayerController.instance.CollisionGrounded.physRidingID);
+                stream.SendNext(PlayerController.instance.CollisionGrounded.physRidingPosition);
+                stream.SendNext(__instance.flashlightLightAim.clientAimPoint);
+
+                if (_stopwatch == null || _stopwatch.ElapsedMilliseconds > 1000)
+                {
+                    _stopwatch = Stopwatch.StartNew();
+                    oldPing = new System.Random().Next(15,25); // randomize ping to avoid detection
+                    Console.WriteLine($"Ping: {oldPing}");
+                }
+                stream.SendNext(oldPing);
+                return true;
+            }
+    
+            return true;
+        }
+    }
 }
