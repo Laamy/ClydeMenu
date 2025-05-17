@@ -46,7 +46,6 @@
     <Compile Include="Engine\GameEvents.cs" />
     <Compile Include="Engine\Menu\BaseMenu.cs" />
     <Compile Include="Engine\Components\MenuSceneComponent.cs" />
-    <Compile Include="Engine\Menu\Menus\DebugMenu.cs" />
     <Compile Include="Engine\Menu\Menus\MainMenu.cs" />
     <Compile Include="Engine\Module\BaseModule.cs" />
     <Compile Include="Engine\Module\ModuleHandler.cs" />

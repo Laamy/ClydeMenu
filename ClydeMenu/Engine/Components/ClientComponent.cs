@@ -20,11 +20,11 @@ public class ClientComponent : BaseComponent
 
     public void HandleInputs()
     {
-        if (Input.GetKeyDown(KeyCode.Delete))
-        {
-            MenuSceneComponent.Instance.PushOrPopMenuByType<DebugMenu>();
-            Console.WriteLine($"Menu is now {(MenuSceneComponent.Instance.HasMenuByType<DebugMenu>() ? "shown" : "hidden")}");
-        }
+        //if (Input.GetKeyDown(KeyCode.Delete))
+        //{
+        //    MenuSceneComponent.Instance.PushOrPopMenuByType<DebugMenu>();
+        //    Console.WriteLine($"Menu is now {(MenuSceneComponent.Instance.HasMenuByType<DebugMenu>() ? "shown" : "hidden")}");
+        //}
         
         if (Input.GetKeyDown(KeyCode.RightShift))
         {

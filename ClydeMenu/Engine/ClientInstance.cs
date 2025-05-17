@@ -173,6 +173,8 @@ internal class ClientInstance
     internal static T FetchFieldValue<T, B>(string v, B cls)
     {
         var field = FetchField<B>(v);
+        if (field == null)
+            throw new Exception($"FieldInfo for {v} doesnt exist");
         return (T)field.GetValue(cls);
     }
 
@@ -222,15 +224,116 @@ internal class ClientInstance
         return resultBounds;
     }
 
-    internal static void SpoofMsg(PlayerAvatar avatar, string msg) => avatar.photonView.RPC("ChatMessageSendRPC", RpcTarget.All, msg, false);
-    internal static void RevivePlayer(PlayerAvatar avatar)
-    {
-        if (FetchFieldValue<int, PlayerHealth>("health", avatar.playerHealth) > 0)
-            avatar.Revive(true);
-    }
-    internal static void KillPlayer(PlayerAvatar avatar)
-    {
-        avatar.playerHealth.Death();
-        avatar.PlayerDeath(-1);
-    }
+    // new MasterAndOwnerOnlyRPC & MasterOnlyRPC func groomed these
+    //internal static void SpoofMsg(PlayerAvatar avatar, string msg) => avatar.photonView.RPC("ChatMessageSendRPC", RpcTarget.All, msg, false);
+    //internal static void RevivePlayer(PlayerAvatar avatar)
+    //{
+    //    if (FetchFieldValue<int, PlayerHealth>("health", avatar.playerHealth) > 0)
+    //        avatar.Revive(true);
+    //}
+    //internal static void KillPlayer(PlayerAvatar avatar)
+    //{
+    //    avatar.playerHealth.Death();
+    //    avatar.PlayerDeath(-1);
+    //}
+
+    // rpc funcs without security checks
+    // exported
+
+    // PlayerAvatar::HealedOtherRPC(void) -> void
+    // PlayerAvatar::ResetPhysPusher(void) -> void
+    // PlayerAvatar::UpdateMyPlayerVoiceChat(int photonViewID) -> void
+    // PlayerAvatar::OverrideAnimationSpeedActivateRPC(bool active, float _speedMulti, float _in, float _out, float _time = 0.1f) -> void
+    // PlayerAvatar::OverridePupilSizeActivateRPC(bool active, float _multiplier, int _prio, float springSpeedIn, float dampIn, float springSpeedOut, float dampOut, float _time = 0.1f) -> void
+
+    // NetworkManager::PlayerSpawnedRPC(void) -> void
+    // NetworkManager::AllPlayerSpawnedRPC(void) -> void
+    // NetworkManager::AllPlayerSpawnedRPC(void) -> void
+
+    // ClownTrap::TouchNoseRPC(void) -> void
+    // ClownTrap::HeadSpinDoneRPC(void) -> void
+
+    // AmbienceBreaker::PlaySoundRPC(Vector3 _position, int _preset, int _breaker) -> void
+
+    // BlenderValuable::SetStateRPC(BlenderValuable.States state) -> void
+
+    // Cauldron::EndCookRPC(void) -> void
+    // Cauldron::ExplosionRPC(void) -> void
+    // Cauldron::CookStartRPC(void) -> void
+
+    // ChargingStation::StopChargeRPC(void) -> void
+    // ChargingStation::StartChargeRPC(void) -> void
+    // ChargingStation::UpdateChargeBarRPC(int segmentPassed) -> void
+
+    // ChompBookTrap::TrapStopRPC(void) -> void
+
+    // EnemyHealth::HurtRPC(int _damage, Vector3 _hurtDirection) -> void
+    // EnemyHealth::DeathRPC(Vector3 _deathDirection) -> void
+    // EnemyHealth::DeathImpulseRPC(void) -> void
+
+    // EnemyJump::JumpingSetRPC(bool _jumping) -> void
+    // EnemyJump::JumpingDelaySetRPC(bool _jumpingDelay) -> void
+    // EnemyJump::LandDelaySetRPC(bool _landDelay) -> void
+
+    // EnemyOnScreen::OnScreenPlayerUpdateRPC(int playerID, bool onScreen, bool culled) -> void
+
+    // EnemyRigidBody::GrabReleaseRPC(void) -> void
+    // EnemyRigidBody::GrabbedSetRPC(bool _grabbed) -> void
+
+    // ExtractionPoint::ButtonDenyRPC(void) -> void
+
+    // FanTrap::SetStateRPC(FanTrap.States state) -> void
+
+    // FlameThrowerValuable::GrabTriggerRPC(void) -> void
+    // FlameThrowerValuable::ReleaseTriggerRPC(void) -> void
+    // FlameThrowerValuable::SetStateRPC(FlameThrowerValuable.States state) -> void
+
+    // FlatScreenTV::BrokenOrNotRPC(bool _broken) -> void
+    // FlatScreenTV::actionTimeRPC(void) -> void
+
+    // GumballValuable::PlayerStateChangedRPC(bool _state, int _playerID) -> void
+
+    // IceSawValuable::SetStateRPC(IceSawValuable.States state) -> void
+
+    // ItemAttribute::GetValueRPC(int _value) -> void
+    // ItemAttribute::DisableUIRPC(bool _disable) -> void
+
+    // BatteryItem::BatteryToggleRPC(bool toggle) -> void
+    // BatteryItem::BatteryChargeStartRPC(bool toggle) -> void
+    // BatteryItem::BatteryFullPercentChangeRPC(int batteryLifeInt, bool charge) -> void
+
+    // ItemCartCannon::ShootBulletRPC(Vector3 _end, bool _hit) -> void
+
+    // ItemCartCannonMain::StateSetRPC(int state) -> void
+
+    // ItemDrone::TeleportEffectRPC(Vector3 startPosition, Vector3 endPosition) -> void
+    // ItemDrone::ButtonToggleRPC(bool activated) -> void
+    // ItemDrone::MagnetActiveToggleRPC(bool activated) -> void
+    // ItemDrone::NewRayHitPointRPC(Vector3 newAttachPoint, int photonViewId, int colliderID) -> void
+    // ItemDrone::SetTumbleTargetRPC(int _photonViewID) -> void
+
+    // ItemEquippable::RPC_RequestEquip(int spotIndex, int physGrabberPhotonViewID) -> void
+    // ItemEquippable::RPC_UpdateItemState(int state, int spotIndex, int ownerId) -> void
+    // ItemEquippable::RPC_StartUnequip(int requestingPlayerId) -> void
+    // ItemEquippable::RPC_CompleteUnequip(int physGrabberPhotonViewID, Vector3 teleportPos) -> void
+    // ItemEquippable::RPC_ForceUnequip(Vector3 dropPosition, int physGrabberPhotonViewID) -> void
+
+    // ItemGrenade::TickStartRPC(void) -> void
+    // ItemGrenade::TickEndRPC(void) -> void
+
+    // ItemGun::ShootRPC(void) -> void
+    // ItemGun::ShootBulletRPC(Vector3 _endPosition, bool _hit) -> void
+
+    // ItemHealthPack::UsedRPC(void) -> void
+    // ItemHealthPack::RejectRPC(void) -> void
+
+    // ItemMelee::EnemyOrPVPSwingHitRPC(bool _playerHit) -> void
+    // ItemMelee::SwingHitRPC(bool durabilityLoss) -> void
+    // ItemMelee::MeleeBreakRPC(void) -> void
+    // ItemMelee::MeleeFixRPC(void) -> void
+
+    // ItemMeleeInflatableHammer::ExplosionRPC(void) -> void
+
+    // ItemMine::TriggerRPC(void) -> void
+    // ItemMine::SetStateRPC(ItemMine.States state) -> void
 }

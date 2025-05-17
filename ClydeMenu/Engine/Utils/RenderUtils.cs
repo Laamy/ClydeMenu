@@ -5,6 +5,7 @@ using System;
 using UnityEngine;
 
 using ClydeMenu.Engine.Utils;
+using Photon.Pun;
 
 public class RenderWindow
 {
@@ -289,7 +290,7 @@ public class RenderUtils
         if (visible)
         {
             info.SetValue(InputManager.instance, 0.1f);
-            CursorManager.instance.Unlock(-0.1f);
+            CursorManager.instance.Unlock(-0.1f);//hides orange cursor
         }
 
         if (Cursor.visible == visible)

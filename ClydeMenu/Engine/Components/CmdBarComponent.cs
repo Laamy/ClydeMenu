@@ -21,8 +21,8 @@ public class CmdBarComponent : BaseComponent
         // cmdbar
         if (Input.GetKeyDown(KeyCode.Semicolon))
         {
-            isCmdBar = !isCmdBar;
-            Console.WriteLine($"CmdBar is now {(isCmdBar ? "shown" : "hidden")}");
+            //isCmdBar = !isCmdBar;
+            //Console.WriteLine($"CmdBar is now {(isCmdBar ? "shown" : "hidden")}");
 
             // SemiFunc.InputDisableMovement();
             //_ = isCmdBar ? SemiFunc.InputDisableMovement() : SemiFunc.input();
