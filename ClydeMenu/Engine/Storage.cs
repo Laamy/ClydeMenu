@@ -105,6 +105,11 @@ internal class Storage
         get;
         internal set;
     } = "100";
+    public static int SETTINGS_Theme
+    {
+        get;
+        internal set;
+    } = 0;
 
     public static class Network
     {

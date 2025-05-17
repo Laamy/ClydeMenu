@@ -127,6 +127,7 @@ internal static class Patches
                 stream.SendNext(PlayerController.instance.CollisionGrounded.physRidingID);
                 stream.SendNext(PlayerController.instance.CollisionGrounded.physRidingPosition);
                 stream.SendNext(__instance.flashlightLightAim.clientAimPoint);
+                Console.WriteLine(__instance.flashlightLightAim.clientAimPoint);
 
                 if (_stopwatch == null || _stopwatch.ElapsedMilliseconds > 1000)
                 {

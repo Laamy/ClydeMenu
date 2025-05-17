@@ -24,11 +24,67 @@ class MenuStorage
     public static Vector2 menuSize = new(400, 400);
 }
 
+class ThemeConfig
+{
+    public Color MenuTextDark = new(0.8f, 0.8f, 0.8f);
+    public Color MenuText = new(1, 1, 1);
+    public Color MenuTextSelected = new(0.7f, 0.7f, 0.8f);
+
+    public Color TitlebarCloseButton = new(0.8f, 0.3f, 0.3f);
+    public Color Titlebar = new(0.15f, 0.15f, 0.25f);
+    public Color TitlebarText = new(0.9f, 0.9f, 1);
+
+    public Color Sidebar = new(0.1f, 0.1f, 0.2f);
+    public Color SidebarButton = new(0.2f, 0.2f, 0.35f);
+    public Color SidebarButtonSelected = new(0.12f, 0.12f, 0.2f);
+
+    public Color ContentBoxBackground = new(0.05f, 0.05f, 0.08f);
+
+    public Color ContentBox = new(0.1f, 0.1f, 0.18f); // player selection
+
+    public Color BooleanOn = new(0.2f, 0.6f, 0.2f); // booleans
+    public Color BooleanOff = new(0.6f, 0.2f, 0.2f);
+
+    public Color SliderHolder = new(1, 1, 1); // sliders
+    public Color SliderFilled = new(0.5f, 0.2f, 1f);
+    public Color SliderBackground = new(0.15f, 0.15f, 0.2f);
+
+    public static ThemeConfig Create(
+        Color basePrimary,
+        Color baseSecondary,
+        Color baseAccent,
+        Color textPrimary,
+        Color textSecondary,
+        Color background,
+        Color altBackground)
+    {
+        return new ThemeConfig
+        {
+            MenuTextDark = textSecondary,
+            MenuText = textPrimary,
+            MenuTextSelected = Color.Lerp(textPrimary, baseAccent, 0.2f),
+            TitlebarCloseButton = Color.Lerp(baseAccent, new Color(1, 0, 0), 0.4f),
+            Titlebar = basePrimary,
+            TitlebarText = textPrimary,
+            Sidebar = background,
+            SidebarButton = baseSecondary,
+            SidebarButtonSelected = Color.Lerp(baseSecondary, basePrimary, 0.3f),
+            ContentBoxBackground = background,
+            ContentBox = baseSecondary,
+            BooleanOn = baseAccent,
+            BooleanOff = Color.Lerp(baseAccent, background, 0.5f),
+            SliderHolder = textPrimary,
+            SliderFilled = baseAccent,
+            SliderBackground = altBackground
+        };
+    }
+}
+
 public class MainMenu : BaseMenu
 {
-    public override void OnPop() {}
-    public override void OnPush() {}
-    public override void OnUpdate() {}
+    public override void OnPop() { }
+    public override void OnPush() { }
+    public override void OnUpdate() { }
 
     // ui comps
     private float sidebarWidth = 110f;
@@ -37,6 +93,58 @@ public class MainMenu : BaseMenu
 
     private Vector2 contentStart = Vector2.zero;
     private float yCursor = 0;
+
+    private ThemeConfig StyleTheme = new();
+
+    private Dictionary<string, ThemeConfig> StyleThemes = new()
+    {
+        { "Dark", new ThemeConfig() },
+        { "Light", ThemeConfig.Create(
+            new Color(0.9f, 0.9f, 0.95f),
+            new Color(0.8f, 0.8f, 0.9f),
+            new Color(0.5f, 0.4f, 1f),
+            new Color(0.1f, 0.1f, 0.2f),
+            new Color(0.3f, 0.3f, 0.4f),
+            new Color(1f, 1f, 1f),
+            new Color(0.95f, 0.95f, 0.98f)
+        )},
+        { "Red", ThemeConfig.Create(
+            new Color(0.4f, 0.1f, 0.1f),
+            new Color(0.6f, 0.2f, 0.2f),
+            new Color(1f, 0.3f, 0.3f),
+            new Color(1f, 0.9f, 0.9f),
+            new Color(0.9f, 0.7f, 0.7f),
+            new Color(0.15f, 0.05f, 0.05f),
+            new Color(0.2f, 0.1f, 0.1f)
+        )},
+        { "Blue", ThemeConfig.Create(
+            new Color(0.1f, 0.1f, 0.4f),
+            new Color(0.2f, 0.2f, 0.6f),
+            new Color(0.3f, 0.5f, 1f),
+            new Color(0.9f, 0.9f, 1f),
+            new Color(0.7f, 0.7f, 0.9f),
+            new Color(0.05f, 0.05f, 0.15f),
+            new Color(0.1f, 0.1f, 0.2f)
+        )},
+        { "Green", ThemeConfig.Create(
+            new Color(0.1f, 0.3f, 0.1f),
+            new Color(0.2f, 0.4f, 0.2f),
+            new Color(0.3f, 0.9f, 0.4f),
+            new Color(0.9f, 1f, 0.9f),
+            new Color(0.7f, 0.9f, 0.7f),
+            new Color(0.05f, 0.15f, 0.05f),
+            new Color(0.1f, 0.2f, 0.1f)
+        )},
+        { "Purple", ThemeConfig.Create(
+            new Color(0.2f, 0.1f, 0.3f),
+            new Color(0.3f, 0.2f, 0.5f),
+            new Color(0.6f, 0.3f, 1f),
+            new Color(0.95f, 0.9f, 1f),
+            new Color(0.85f, 0.8f, 0.95f),
+            new Color(0.08f, 0.05f, 0.1f),
+            new Color(0.12f, 0.08f, 0.18f)
+        )}
+    };
 
     private void DrawCategory()
     {
@@ -48,13 +156,15 @@ public class MainMenu : BaseMenu
 
     public MainMenu()
     {
+
         MenuStorage.renderNames =
         [
             "Visuals",
             "Network",
             "Server",
             "Player",
-            "Misc"
+            "Misc",
+            "Settings"
         ];
 
         MenuStorage.renderActions =
@@ -239,6 +349,17 @@ public class MainMenu : BaseMenu
                 //
                 //if (DrawButton("Reset Health"))
                 //    localAv.CHEAT_SetHealth(localAv.CHEAT_GetMaxHealth());
+            },
+            () => {
+                DrawSettingLabel("Settings");
+
+                //StyleThemes.Keys.ToArray()
+                var newTheme = DrawEnum("Theme", StyleThemes.Keys.ToArray(), Storage.SETTINGS_Theme);
+                if (newTheme != Storage.SETTINGS_Theme)
+                {
+                    Storage.SETTINGS_Theme = newTheme;
+                    StyleTheme = StyleThemes[StyleThemes.Keys.ToArray()[newTheme]];
+                }
             }
         ];
     }
@@ -286,16 +407,18 @@ public class MainMenu : BaseMenu
         }
     }
 
+    float scrollOffset;
+
     public override void Render()
     {
         HandleBorder();
         GUI.BeginClip(new Rect(MenuStorage.menuPos.x, MenuStorage.menuPos.y, MenuStorage.menuSize.x, MenuStorage.menuSize.y));
-        RenderUtils.DrawRect(new Vector2(0,0), MenuStorage.menuSize, StyleTheme.ContentBoxBackground);
+        RenderUtils.DrawRect(new Vector2(0, 0), MenuStorage.menuSize, StyleTheme.ContentBoxBackground);
 
         RenderUtils.DrawRect(new Vector2(0, 0), new Vector2(MenuStorage.menuSize.x, titleBarHeight), StyleTheme.Titlebar);
         RenderUtils.DrawString(new Vector2(12, 6), "clickgui debug", StyleTheme.TitlebarText);
         RenderUtils.DrawRect(new Vector2(MenuStorage.menuSize.x - 17, 6), new Vector2(12, 12), StyleTheme.TitlebarCloseButton);
-        
+
         if (LabelPressed("TitlebarCloseButton", new Rect(MenuStorage.menuSize.x - 17, 6, 12, 12)))
             MenuSceneComponent.Instance.PopMenu(this);
 
@@ -320,10 +443,24 @@ public class MainMenu : BaseMenu
             RenderUtils.DrawString(new Vector2(sidebarPos.x + 16, y + 5), MenuStorage.renderNames[i], textColor);
         }
 
-        contentStart = new Vector2(sidebarWidth + padding, titleBarHeight + padding);
+        var cur = Event.current;
+        float scrollAreaHeight = MenuStorage.menuSize.y - titleBarHeight - 2 * padding;
+        var scrollRect = new Rect(sidebarWidth + padding, titleBarHeight + padding, MenuStorage.menuSize.x - sidebarWidth - 2 * padding, scrollAreaHeight);
+
+        if (cur.type == EventType.ScrollWheel && scrollRect.Contains(cur.mousePosition))
+        {
+            scrollOffset += cur.delta.y * 10f;
+            scrollOffset = Mathf.Max(scrollOffset, 0f);
+            cur.Use();
+        }
+
+        GUI.BeginGroup(scrollRect);
+        contentStart = new Vector2(0, -scrollOffset);
         yCursor = contentStart.y;
 
         DrawCategory();
+
+        GUI.EndGroup();
         GUI.EndClip();
     }
 
@@ -377,6 +514,59 @@ public class MainMenu : BaseMenu
 
         yCursor += 20 + padding;
         return cur;
+    }
+
+    Dictionary<string, bool> enumDropdownOpen = new();
+    int DrawEnum(string label, string[] enums, int selection = 0)
+    {
+        if (!enumDropdownOpen.ContainsKey(label))
+            enumDropdownOpen[label] = false;
+
+        bool open = enumDropdownOpen[label];
+        string selectedText = enums[selection];
+        float labelHeight = 20f;
+        float dropdownHeight = enums.Length * labelHeight;
+        float boxWidth = 200f;
+
+        DrawSettingLabel(label);
+
+        Rect labelRect = new Rect(contentStart.x, yCursor, boxWidth, labelHeight);
+        RenderUtils.DrawRect(labelRect.position, labelRect.size, StyleTheme.ContentBox);
+        RenderUtils.DrawString(labelRect.position + new Vector2(4, 2), selectedText, StyleTheme.MenuText);
+
+        var cur = Event.current;
+        Vector2 mousePos = cur.mousePosition;
+
+        if (cur.type == EventType.MouseDown && labelRect.Contains(mousePos))
+        {
+            enumDropdownOpen[label] = !open;
+            cur.Use();
+        }
+
+        yCursor += labelHeight + padding;
+
+        if (open)
+        {
+            Rect dropdownRect = new Rect(contentStart.x, yCursor, boxWidth, dropdownHeight);
+            RenderUtils.DrawRect(dropdownRect.position, dropdownRect.size, StyleTheme.ContentBox);
+
+            for (int i = 0; i < enums.Length; i++)
+            {
+                Rect itemRect = new Rect(contentStart.x, yCursor + i * labelHeight, boxWidth, labelHeight);
+                RenderUtils.DrawString(itemRect.position + new Vector2(4, 2), enums[i], StyleTheme.MenuText);
+
+                if (cur.type == EventType.MouseDown && itemRect.Contains(mousePos))
+                {
+                    selection = i;
+                    enumDropdownOpen[label] = false;
+                    cur.Use();
+                }
+            }
+
+            yCursor += dropdownHeight + padding;
+        }
+
+        return selection;
     }
 
     // gonna switch up the theme or smth
@@ -553,30 +743,4 @@ public class MainMenu : BaseMenu
     }
 
     // TODO: scrollbar, enum selection, textfield/numberfield
-
-    class StyleTheme
-    {
-        public static Color MenuTextDark = new(0.8f, 0.8f, 0.8f);
-        public static Color MenuText = new(1, 1, 1);
-        public static Color MenuTextSelected = new(0.7f, 0.7f, 0.8f);
-
-        public static Color TitlebarCloseButton = new(0.8f, 0.3f, 0.3f);
-        public static Color Titlebar = new(0.15f, 0.15f, 0.25f);
-        public static Color TitlebarText = new(0.9f, 0.9f, 1);
-
-        public static Color Sidebar = new(0.1f, 0.1f, 0.2f);
-        public static Color SidebarButton = new(0.2f, 0.2f, 0.35f);
-        public static Color SidebarButtonSelected = new(0.12f, 0.12f, 0.2f);
-
-        public static Color ContentBoxBackground = new(0.05f, 0.05f, 0.08f);
-
-        public static Color ContentBox = new(0.1f, 0.1f, 0.18f); // player selection
-
-        public static Color BooleanOn = new(0.2f, 0.6f, 0.2f); // booleans
-        public static Color BooleanOff = new(0.6f, 0.2f, 0.2f);
-
-        public static Color SliderHolder = new(1, 1, 1); // sliders
-        public static Color SliderFilled = new(0.5f, 0.2f, 1f);
-        public static Color SliderBackground = new(0.15f, 0.15f, 0.2f);
-    }
 }
