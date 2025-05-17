@@ -428,7 +428,7 @@ public class MainMenu : BaseMenu
 
         for (int i = 0; i < MenuStorage.renderNames.Length; i++)
         {
-            float y = sidebarPos.y + padding + i * 27;
+            var y = sidebarPos.y + padding + i * 27;
             var isSelected = i == MenuStorage.selectedCategory;
             var bgCol = isSelected ? StyleTheme.SidebarButton : StyleTheme.SidebarButtonSelected;
             RenderUtils.DrawRect(new Vector2(sidebarPos.x + 6, y), new Vector2(sidebarWidth - 12, 24), bgCol);
@@ -444,7 +444,7 @@ public class MainMenu : BaseMenu
         }
 
         var cur = Event.current;
-        float scrollAreaHeight = MenuStorage.menuSize.y - titleBarHeight - 2 * padding;
+        var scrollAreaHeight = MenuStorage.menuSize.y - titleBarHeight - 2 * padding;
         var scrollRect = new Rect(sidebarWidth + padding, titleBarHeight + padding, MenuStorage.menuSize.x - sidebarWidth - 2 * padding, scrollAreaHeight);
 
         if (cur.type == EventType.ScrollWheel && scrollRect.Contains(cur.mousePosition))
