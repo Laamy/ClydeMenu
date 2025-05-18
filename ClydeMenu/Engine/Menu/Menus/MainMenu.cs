@@ -366,6 +366,16 @@ public class MainMenu : BaseMenu
                 DrawSettingLabel("Player");
                 MenuSettings.AccountSpoofer.Value = DrawBoolean("AccountSpoofer", MenuSettings.AccountSpoofer.Value);
                 MenuSettings.PingSpoofer.Value = DrawBoolean("PingSpoofer", MenuSettings.PingSpoofer.Value);
+
+                if (DrawButton("debug utils"))
+                {
+                    // works but just once 2 heal
+                    //ClientInstance.GetLocalAvatar().photonView.RPC("FinalHealRPC", RpcTarget.All, Array.Empty<object>());
+
+                    // useless but it exists..
+                    //ChatManager.instance.ForceSendMessage("this-should-be-silent-chat\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r");
+
+                }
             },
             () => {
                 DrawSettingLabel("Settings");

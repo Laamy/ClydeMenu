@@ -240,6 +240,30 @@ internal class ClientInstance
     // rpc funcs without security checks
     // exported
 
+    //[PunRPC]
+    // public void SyncHaul(int value)
+
+    //[PunRPC]
+    // public void UpdateStatRPC(string dictionaryName, string key, int value)
+
+    //[PunRPC]
+    // public void SetRunStatRPC(string statName, int value)
+
+    // UpdateSTatRPC("runStats", "currency", 1000)
+    // theres no way that works...
+
+    //[PunRPC]
+    //	public void ReceiveSyncData(Hashtable data, bool finalChunk)
+
+    //[PunRPC]
+    // public void SetItemNameRPC(string name, int photonViewID)
+
+    // public void HurtOtherRPC(int damage, Vector3 hurtPosition, bool savingGrace, int enemyIndex, PhotonMessageInfo _info = default(PhotonMessageInfo))
+    // you can hhhheal enemies using this and a nneg value
+
+    // NOTE: this'll give you 20hp extra to your maxhealthh and heal you 20
+    // PunManager::UpgradePlayerHealthRPC(string playerName, int value) => void
+
     // PlayerAvatar::HealedOtherRPC(void) -> void
     // PlayerAvatar::ResetPhysPusher(void) -> void
     // PlayerAvatar::UpdateMyPlayerVoiceChat(int photonViewID) -> void
