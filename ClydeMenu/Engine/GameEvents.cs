@@ -15,11 +15,11 @@ internal class GameEvents
 
     public static void Start()
     {
-        Console.WriteLine("ClydeMenu - GameEvents Init");
+        Entry.Log("ClydeMenu - GameEvents Init");
 
         Application.logMessageReceived += onLog;
 
-        Console.WriteLine("ClydeMenu - GameEvents Hooked");
+        Entry.Log("ClydeMenu - GameEvents Hooked");
     }
 
     public static void Shutdown()
@@ -30,17 +30,17 @@ internal class GameEvents
         OnLobbyLeft = null;
         OnBanned = null;
         OnKicked = null;
-        Console.WriteLine("GameEvents::Shutdown(void) -> Shutdown successful, resources cleaned up.");
+        Entry.Log("GameEvents::Shutdown(void) -> Shutdown successful, resources cleaned up.");
     }
 
     private static void onLog(string logString, string stackTrace, LogType type)
     {
         if (type != LogType.Exception)
-            Console.WriteLine($"(LOG) [{type}] {logString}");
+            Entry.Log($"(LOG) [{type}] {logString}");
         else
         {
-            Console.WriteLine($"(LOG) [{type}] {logString}");
-            Console.WriteLine($"(STACKTRACE) [{type}] {stackTrace}");
+            Entry.Log($"(LOG) [{type}] {logString}");
+            Entry.Log($"(STACKTRACE) [{type}] {stackTrace}");
         }
 
         if (logString.Contains("Photon - Set AppId")) // good spot for namespoof & versionspoof(packet)

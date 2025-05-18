@@ -23,29 +23,57 @@ public class Entry
 
     static Assembly modAssembly;
 
+    static bool isBepinExLoaded = false;
+    static GameObject HotReloadListener = null;
+
+    public static void Log(string msg)
+    {
+        if (!isBepinExLoaded)
+            Console.WriteLine(msg);
+        else Debug.Log($"[HotReloadListener] {msg}", HotReloadListener);
+    }
+
     public static void Load()
     {
-        Kernel32.AllocConsole();
+        foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
         {
-            var stdHandle = Kernel32.GetStdHandle(-11);
-            var safeFileHandle = new Microsoft.Win32.SafeHandles.SafeFileHandle(stdHandle, true);
-            var fileStream = new FileStream(safeFileHandle, FileAccess.Write);
-            var encoding = System.Text.Encoding.UTF8;
-            var standardOutput = new StreamWriter(fileStream, encoding) { AutoFlush = true };
-            Console.SetOut(standardOutput);
-            Console.Clear();
+            if (assembly.GetName().Name == "BepInEx")
+            {
+                isBepinExLoaded = true;
+                break;
+            }
         }
 
-        var obj = new GameObject("HotReloadListener");
-        obj.AddComponent<HotReloadBehaviour>();
-        Object.DontDestroyOnLoad(obj);
+        HotReloadListener = new GameObject("HotReloadListener");
+        HotReloadListener.AddComponent<HotReloadBehaviour>();
+        Object.DontDestroyOnLoad(HotReloadListener);
 
-        Console.WriteLine("Hot-reload injected successfully");
+        if (!isBepinExLoaded)
+        {
+            Kernel32.AllocConsole();
+            {
+                var stdHandle = Kernel32.GetStdHandle(-11);
+                var safeFileHandle = new Microsoft.Win32.SafeHandles.SafeFileHandle(stdHandle, true);
+                var fileStream = new FileStream(safeFileHandle, FileAccess.Write);
+                var encoding = System.Text.Encoding.UTF8;
+                var standardOutput = new StreamWriter(fileStream, encoding) { AutoFlush = true };
+                Console.SetOut(standardOutput);
+                Console.Clear();
+            }
+
+            Log("Booted into alone mode");
+        }
+        else
+        {
+            Log("Booted into bepinex mode");
+        }
+
+        Log("Hot-reload injected successfully");
 
         InitDependencies();
-        Console.WriteLine("Mod dependences loaded");
+        Log("Mod dependences loaded");
         Reload();
-        Console.WriteLine("Mod successfully loaded");
+        Log("Mod successfully loaded");
     }
 
     public static void InitDependencies()
@@ -84,11 +112,11 @@ public class Entry
             modLoad?.Invoke(null, null);
             isLoaded = true;
 
-            Console.WriteLine("ClydeMenu hot-reloaded.");
+            Log("ClydeMenu hot-reloaded.");
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Reload error: {ex}");
+            Log($"Reload error: {ex}");
         }
     }
 
@@ -100,7 +128,7 @@ public class Entry
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Unload error: {ex}");
+            Log($"Unload error: {ex}");
         }
 
         modUnload = null;
@@ -110,7 +138,10 @@ public class Entry
 
         GC.Collect();
 
-        Console.Clear();
-        Kernel32.FreeConsole();
+        if (!isBepinExLoaded)
+        {
+            Console.Clear();
+            Kernel32.FreeConsole();
+        }
     }
 }

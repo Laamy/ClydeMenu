@@ -53,7 +53,7 @@ public class RenderWindow
         }
         catch (Exception e)
         {
-            Console.WriteLine($"Error in GUI: {e.Message}");
+            Entry.Log($"Error in GUI: {e.Message}");
         }
     }
 
@@ -281,7 +281,7 @@ public class RenderUtils
 
     public static void SetCursorState(bool visible)
     {
-        //Console.WriteLine($"Setting cursor state to {visible}");
+        //Entry.Log($"Setting cursor state to {visible}");
         // gotta fix the cursor bruh
         var info = ClientInstance.FetchField<InputManager>("disableAimingTimer");
         if (info == null)

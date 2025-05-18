@@ -10,13 +10,32 @@ using ClydeMenu.Engine.Components;
 using ClydeMenu.Engine.Settings;
 
 using HarmonyLib;
+using UnityEngine;
 
 public class Entry
 {
     private static readonly List<BaseComponent> loadedComps = [];
 
+    public static void Log(string msg)
+    {
+        if (!Storage.IsBepinExLoaded)
+            Console.WriteLine(msg);
+        else Debug.Log($"[ClydeMenu] {msg}", Storage.HotReloadListener);
+    }
+
     public static void Load()
     {
+        Storage.HotReloadListener = GameObject.Find("HotReloadListener");
+        Storage.IsBepinExLoaded = false;
+        foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+        {
+            if (assembly.GetName().Name == "BepInEx")
+            {
+                Storage.IsBepinExLoaded = true;
+                break;
+            }
+        }
+
         MenuSettings.Load();
 
         GameEvents.Start();
@@ -34,16 +53,16 @@ public class Entry
         }
         catch (Exception e)
         {
-            Console.WriteLine($"Error loading comps: {e}");
+            Entry.Log($"Error loading comps: {e}");
             return;
         }
 
-        Console.WriteLine("ClydeMenu injected successfully");
+        Entry.Log("ClydeMenu injected successfully");
     }
 
     public static void InitModule<T>(string modName) where T : BaseComponent
     {
-        Console.WriteLine($"Creating {modName} component");
+        Entry.Log($"Creating {modName} component");
 
         var type = typeof(T);
         var instance = (T)Activator.CreateInstance(type);

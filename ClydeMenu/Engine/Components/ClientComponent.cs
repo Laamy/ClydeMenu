@@ -17,7 +17,7 @@ public class ClientComponent : BaseComponent
     public ClientComponent()
     {
         //RenderUtils.Init();
-        Console.WriteLine("ClydeMenu initialized");
+        Entry.Log("ClydeMenu initialized");
     }
 
     public void HandleInputs()
@@ -25,13 +25,13 @@ public class ClientComponent : BaseComponent
         //if (Input.GetKeyDown(KeyCode.Delete))
         //{
         //    MenuSceneComponent.Instance.PushOrPopMenuByType<DebugMenu>();
-        //    Console.WriteLine($"Menu is now {(MenuSceneComponent.Instance.HasMenuByType<DebugMenu>() ? "shown" : "hidden")}");
+        //    Entry.Log($"Menu is now {(MenuSceneComponent.Instance.HasMenuByType<DebugMenu>() ? "shown" : "hidden")}");
         //}
         
         if (Input.GetKeyDown(KeyCode.RightShift))
         {
             MenuSceneComponent.Instance.PushOrPopMenuByType<MainMenu>();
-            Console.WriteLine($"Menu is now {(MenuSceneComponent.Instance.HasMenuByType<MainMenu>() ? "shown" : "hidden")}");
+            Entry.Log($"Menu is now {(MenuSceneComponent.Instance.HasMenuByType<MainMenu>() ? "shown" : "hidden")}");
         }
 
         // im gonna get so mad if i press this 1 more fucking time

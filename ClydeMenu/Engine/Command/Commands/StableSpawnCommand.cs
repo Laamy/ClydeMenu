@@ -13,7 +13,7 @@ using UnityEngine;
 //        var localPlyr = ClientInstance.GetLocalPlayer();
 //        if (localPlyr == null)
 //        {
-//            Console.WriteLine("Local player not found.");
+//            Entry.Log("Local player not found.");
 //            return;
 //        }
 //
@@ -22,7 +22,7 @@ using UnityEngine;
 //
 //        if (args.Length < 2)
 //        {
-//            Console.WriteLine("Invalid arguments. Usage: sspawn <(orb,bag), (small,medium,large)>");
+//            Entry.Log("Invalid arguments. Usage: sspawn <(orb,bag), (small,medium,large)>");
 //            return;
 //        }
 //        string itemType = args[0].ToLower();
@@ -58,13 +58,13 @@ using UnityEngine;
 //                };
 //                break;
 //            default:
-//                Console.WriteLine($"Item type '{itemType}' not recognized.");
+//                Entry.Log($"Item type '{itemType}' not recognized.");
 //                return;
 //        }
 //
 //        if (itemPrefab == null)
 //        {
-//            Console.WriteLine($"Item '{itemType}' with size '{itemSize}' not found.");
+//            Entry.Log($"Item '{itemType}' with size '{itemSize}' not found.");
 //            return;
 //        }
 //
@@ -78,23 +78,23 @@ Main.Button(new Vector2(10, 10), "Big Orb", () => {
     GameObject plyr = ClientInstance.GetLocalPlayer();
     if (plyr == null)
     {
-        Console.WriteLine("Player not found");
+        Entry.Log("Player not found");
         return;
     }
     Vector3 targetPos = plyr.transform.position + plyr.transform.forward * 2f;
     ItemUtils.SpawnEnemyOrb(targetPos);
-    Console.WriteLine($"Spawned enemy orb at {targetPos}");
+    Entry.Log($"Spawned enemy orb at {targetPos}");
 });
 
 Main.Button(new Vector2(100, 10), "Money Bag", () => {
     GameObject plyr = ClientInstance.GetLocalPlayer();
     if (plyr == null)
     {
-        Console.WriteLine("Player not found");
+        Entry.Log("Player not found");
         return;
     }
     Vector3 targetPos = plyr.transform.position + plyr.transform.forward * 2f;
     ItemUtils.SpawnSurplus(targetPos);
-    Console.WriteLine($"Spawned money bag at {targetPos}");
+    Entry.Log($"Spawned money bag at {targetPos}");
 });
 */

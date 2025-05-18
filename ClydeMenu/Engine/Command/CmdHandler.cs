@@ -18,7 +18,7 @@ public class CmdHandler
         {
             var command = (BaseCommand)Activator.CreateInstance(commandType);
             Commands.Add(command);
-            Console.WriteLine($"Command '{command.Name}' initialized.");
+            Entry.Log($"Command '{command.Name}' initialized.");
         }
     }
 
@@ -74,6 +74,6 @@ public class CmdHandler
             }
         }
 
-        Console.WriteLine($"Command '{cmd}' not found.");
+        Entry.Log($"Command '{cmd}' not found.");
     }
 }

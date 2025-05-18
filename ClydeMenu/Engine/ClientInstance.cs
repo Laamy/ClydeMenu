@@ -26,7 +26,7 @@ internal static class AssemblyReader
         var type = Type.GetType(typeName);
         if (type != null)
             return Object.FindObjectOfType(type);
-        Console.WriteLine($"{typeName} instance not found");
+        Entry.Log($"{typeName} instance not found");
         return null;
     }
 }
@@ -39,7 +39,7 @@ internal class ClientInstance
         {
             var instance = AssemblyReader.Fetch("PlayerController, Assembly-CSharp");
             if (instance == null)
-                Console.WriteLine("Unable to find PlayerController instance.");
+                Entry.Log("Unable to find PlayerController instance.");
 
             return (PlayerController)instance;
         }
@@ -75,7 +75,7 @@ internal class ClientInstance
         }
         catch (Exception)
         {
-            //Console.WriteLine($"Error fetching extraction points: {ex}");
+            //Entry.Log($"Error fetching extraction points: {ex}");
             return [];
         }
 

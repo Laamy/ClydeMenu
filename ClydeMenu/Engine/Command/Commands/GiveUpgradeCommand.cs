@@ -35,7 +35,7 @@ public class GiveUpgradeCommand : BaseCommand
 
         if (upgradeFound.IsNullOrEmpty())
         {
-            Console.WriteLine($"Upgrade '{args[1]}' not found.");
+            Entry.Log($"Upgrade '{args[1]}' not found.");
             return;
         }
 
@@ -46,7 +46,7 @@ public class GiveUpgradeCommand : BaseCommand
         }
         else
         {
-            Console.WriteLine($"Invalid amount '{args[2]}'.");
+            Entry.Log($"Invalid amount '{args[2]}'.");
             return;
         }
 
@@ -58,10 +58,10 @@ public class GiveUpgradeCommand : BaseCommand
                 continue;
 
             view.RPC(upgradeFound, RpcTarget.AllBuffered, [steamId, amount]);
-            Console.WriteLine($"Gave {amount} {upgradeFound} to {plyrName}");
+            Entry.Log($"Gave {amount} {upgradeFound} to {plyrName}");
             return;
         }
 
-        Console.WriteLine($"Player '{args[0]}' not found.");
+        Entry.Log($"Player '{args[0]}' not found.");
     }
 }

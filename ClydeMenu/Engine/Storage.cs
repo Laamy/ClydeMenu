@@ -2,6 +2,7 @@
 using System.Configuration;
 using ClydeMenu.Engine.Menu;
 using HarmonyLib;
+using UnityEngine;
 
 namespace ClydeMenu.Engine;
 
@@ -86,6 +87,16 @@ internal class Storage
         get;
         internal set;
     } = 0;
+    public static bool IsBepinExLoaded
+    {
+        get;
+        internal set;
+    }
+    public static GameObject HotReloadListener
+    {
+        get;
+        internal set;
+    }
 
     public static class Network
     {

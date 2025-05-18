@@ -50,7 +50,7 @@ internal class MenuSceneComponent : BaseComponent
     public void PushMenu(BaseMenu menu)
     {
         baseMenus.Add(menu);
-        Console.WriteLine($"Pushed menu: {menu?.GetType().Name}");
+        Entry.Log($"Pushed menu: {menu?.GetType().Name}");
 
         FocusedMenu = menu;
 

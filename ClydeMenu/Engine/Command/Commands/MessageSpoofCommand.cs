@@ -31,6 +31,6 @@ public class MessageSpoofCommand : BaseCommand
             return;
         }
 
-        Console.WriteLine($"Player '{args[0]}' not found.");
+        Entry.Log($"Player '{args[0]}' not found.");
     }
 }

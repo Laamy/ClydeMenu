@@ -47,7 +47,7 @@ public class NamespoofModule : BaseModule
         {
             // randomize name from a small array of names n last names
             var name = names[rng.Next(names.Length)] + names[rng.Next(names.Length)];
-            Console.WriteLine($"Name Spoofed to {name}");
+            Entry.Log($"Name Spoofed to {name}");
             PhotonNetwork.NickName = name;
 
             if (new Random().Next(2) == 0)

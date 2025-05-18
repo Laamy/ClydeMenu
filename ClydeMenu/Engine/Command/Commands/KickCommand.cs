@@ -33,10 +33,10 @@ using Photon.Realtime;
 //            var options = new RaiseEventOptions();
 //            options.TargetActors = new[] { plyrActorId };
 //            PhotonNetwork.RaiseEvent(199, null, options, SendOptions.SendReliable);
-//            Console.WriteLine($"Kicked player {plyr.name} from the server.");
+//            Entry.Log($"Kicked player {plyr.name} from the server.");
 //            return;
 //        }
 //
-//        Console.WriteLine($"Player '{args[0]}' not found.");
+//        Entry.Log($"Player '{args[0]}' not found.");
 //    }
 //}

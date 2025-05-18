@@ -13,7 +13,7 @@ public class CmdBarComponent : BaseComponent
 
     public CmdBarComponent()
     {
-        Console.WriteLine("CmdBar initialized");
+        Entry.Log("CmdBar initialized");
     }
 
     public void HandleInputs()
@@ -22,7 +22,7 @@ public class CmdBarComponent : BaseComponent
         if (Input.GetKeyDown(KeyCode.Semicolon))
         {
             //isCmdBar = !isCmdBar;
-            //Console.WriteLine($"CmdBar is now {(isCmdBar ? "shown" : "hidden")}");
+            //Entry.Log($"CmdBar is now {(isCmdBar ? "shown" : "hidden")}");
 
             // SemiFunc.InputDisableMovement();
             //_ = isCmdBar ? SemiFunc.InputDisableMovement() : SemiFunc.input();
@@ -76,7 +76,7 @@ public class CmdBarComponent : BaseComponent
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine($"Error in CmdBar event polling: {e.Message}");
+                        Entry.Log($"Error in CmdBar event polling: {e.Message}");
                         CloseCmdbar();
                     }
                     break;

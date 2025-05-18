@@ -22,7 +22,7 @@ public class ModuleHandler
 
         Categories.Clear();
         Categories = null;
-        Console.WriteLine("ModuleHandler::Shutdown(void) -> Shutdown successful, resources cleaned up.");
+        Entry.Log("ModuleHandler::Shutdown(void) -> Shutdown successful, resources cleaned up.");
     }
 
     public static void Start()
@@ -37,7 +37,7 @@ public class ModuleHandler
             {
                 var module = (BaseModule)Activator.CreateInstance(moduleT);
                 Modules.Add(module);
-                Console.WriteLine($"Module '{module.Name}' initialized.");
+                Entry.Log($"Module '{module.Name}' initialized.");
             }
 
             foreach (var module in Modules)
@@ -53,7 +53,7 @@ public class ModuleHandler
         }
         catch (Exception e)
         {
-            Console.WriteLine($"Error initializing modules: {e}");
+            Entry.Log($"Error initializing modules: {e}");
         }
     }
 }

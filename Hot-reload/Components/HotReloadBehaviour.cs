@@ -10,9 +10,9 @@ public class HotReloadBehaviour : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.F12))
         {
-            Console.WriteLine("Reloading the clydemenu assemblies");
+            Entry.Log("Reloading the clydemenu assemblies");
             Entry.Reload();
-            Console.WriteLine("Successfully reloaded the clydemenu assemblies");
+            Entry.Log("Successfully reloaded the clydemenu assemblies");
         }
 
         if (Entry.isLoaded)

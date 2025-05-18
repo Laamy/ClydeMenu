@@ -40,11 +40,11 @@ internal class ItemUtils : MonoBehaviourPunCallbacks
     //{
     //    if (!PhotonNetwork.IsConnected)
     //    {
-    //        Console.WriteLine("Not connected to Photon, offlinemode");
+    //        Entry.Log("Not connected to Photon, offlinemode");
     //        var localItem = Instantiate(getItemsContains(prefab).FirstOrDefault().prefab, targetPos, Quaternion.identity);
     //        if (!localItem)
     //        {
-    //            Console.WriteLine("Failed to spawn enemy orb (offlinemode)");
+    //            Entry.Log("Failed to spawn enemy orb (offlinemode)");
     //            return;
     //        }
     //
@@ -57,11 +57,11 @@ internal class ItemUtils : MonoBehaviourPunCallbacks
     //{
     //    if (!PhotonNetwork.IsConnected)
     //    {
-    //        Console.WriteLine("Not connected to Photon, offlinemode");
+    //        Entry.Log("Not connected to Photon, offlinemode");
     //        var localItem = Instantiate(prefab, targetPos, Quaternion.identity);
     //        if (!localItem)
     //        {
-    //            Console.WriteLine("Failed to spawn enemy orb (offlinemode)");
+    //            Entry.Log("Failed to spawn enemy orb (offlinemode)");
     //            return;
     //        }
     //
@@ -73,7 +73,7 @@ internal class ItemUtils : MonoBehaviourPunCallbacks
     //
     //    if (!item)
     //    {
-    //        Console.WriteLine("Failed to spawn enemy orb (PhotonNetwork)");
+    //        Entry.Log("Failed to spawn enemy orb (PhotonNetwork)");
     //        return;
     //    }
     //

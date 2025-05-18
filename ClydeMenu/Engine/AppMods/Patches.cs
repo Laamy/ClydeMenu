@@ -113,7 +113,7 @@ internal static class Patches
     //    {
     //        if (sender.ActorNumber == PhotonNetwork.LocalPlayer.ActorNumber)
     //        {
-    //            Console.WriteLine($"[RPC] spoofed from localplayer to master");
+    //            Entry.Log($"[RPC] spoofed from localplayer to master");
     //            MethodInfo method = typeof(PhotonNetwork).GetMethod("ExecuteRpc", BindingFlags.NonPublic | BindingFlags.Static, null, [typeof(Hashtable), typeof(Player)], null);
     //            method?.Invoke(null, [rpcData, PhotonNetwork.MasterClient]);
     //            return true;

@@ -179,7 +179,7 @@ public class MainMenu : BaseMenu
            //Storage.Example_SelectionBox = DrawPlayerSelect("Player Selection", Storage.Example_SelectionBox);
            //
            //if (DrawButton("Button"))
-           //    Console.WriteLine($"Player is {SemiFunc.PlayerGetName(GetPlayerFromID(Storage.Example_SelectionBox))}");
+           //    Entry.Log($"Player is {SemiFunc.PlayerGetName(GetPlayerFromID(Storage.Example_SelectionBox))}");
            //
            //Storage.Example_Slider70 = DrawSlider("Slider70", Storage.Example_Slider70);
            //Storage.Example_Boolean = DrawBoolean("Booleanoff", Storage.Example_Boolean);
@@ -207,7 +207,7 @@ public class MainMenu : BaseMenu
                 //        }
                 //        catch (Exception ex)
                 //        {
-                //             Console.WriteLine($"Error in MainMenu {ex.Message}");
+                //             Entry.Log($"Error in MainMenu {ex.Message}");
                 //        }
                 //    }
                 //}
@@ -223,7 +223,7 @@ public class MainMenu : BaseMenu
                 //        }
                 //        catch (Exception ex)
                 //        {
-                //             Console.WriteLine($"Error in MainMenu {ex.Message}");
+                //             Entry.Log($"Error in MainMenu {ex.Message}");
                 //        }
                 //    }
                 //
@@ -236,7 +236,7 @@ public class MainMenu : BaseMenu
                 //        }
                 //        catch (Exception ex)
                 //        {
-                //             Console.WriteLine($"Error in MainMenu {ex.Message}");
+                //             Entry.Log($"Error in MainMenu {ex.Message}");
                 //        }
                 //    }
                 //
@@ -253,7 +253,7 @@ public class MainMenu : BaseMenu
                 //        }
                 //        catch (Exception ex)
                 //        {
-                //             Console.WriteLine($"Error in MainMenu {ex.Message}");
+                //             Entry.Log($"Error in MainMenu {ex.Message}");
                 //        }
                 //    }
                 //
@@ -266,7 +266,7 @@ public class MainMenu : BaseMenu
                 //        }
                 //        catch (Exception ex)
                 //        {
-                //             Console.WriteLine($"Error in MainMenu {ex.Message}");
+                //             Entry.Log($"Error in MainMenu {ex.Message}");
                 //        }
                 //    }
                 //
@@ -283,11 +283,11 @@ public class MainMenu : BaseMenu
 
                             var view = ClientInstance.GetPhotonView(PunManager.instance);
                             view.RPC("CrownPlayerRPC", RpcTarget.AllBuffered, [SemiFunc.PlayerGetSteamID(plyr)]);
-                            Console.WriteLine($"Gave crown to player {plyr.name}.");
+                            Entry.Log($"Gave crown to player {plyr.name}.");
                         }
                         catch (Exception ex)
                         {
-                             Console.WriteLine($"Error in MainMenu {ex.Message}");
+                             Entry.Log($"Error in MainMenu {ex.Message}");
                         }
                     }
 
@@ -311,11 +311,11 @@ public class MainMenu : BaseMenu
                             view.RPC("UpgradePlayerEnergyRPC", RpcTarget.AllBuffered, [steamId, 255]);
                             view.RPC("UpgradePlayerHealthRPC", RpcTarget.AllBuffered, [steamId, 255]);
 
-                            Console.WriteLine($"Gave all upgrades to player {plyr.name}.");
+                            Entry.Log($"Gave all upgrades to player {plyr.name}.");
                         }
                         catch (Exception ex)
                         {
-                             Console.WriteLine($"Error in MainMenu {ex.Message}");
+                             Entry.Log($"Error in MainMenu {ex.Message}");
                         }
                     }
 
@@ -516,7 +516,7 @@ public class MainMenu : BaseMenu
         Vector2 mousePos = cur.mousePosition;
         if (cur.type == EventType.MouseDrag && sliderHolderRect.Contains(mousePos))
         {
-            Console.WriteLine("Slider clicked");
+            Entry.Log("Slider clicked");
             percent = Mathf.Clamp01((mousePos.x - sliderX) / barWidth);
             cur.Use();
         }

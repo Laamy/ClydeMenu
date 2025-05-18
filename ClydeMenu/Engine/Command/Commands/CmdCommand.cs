@@ -10,8 +10,8 @@ public class CmdCommand : BaseCommand
 
     public override void Execute(string[] args)
     {
-        Console.WriteLine("Commands:");
+        Entry.Log("Commands:");
         foreach (var cmd in CmdHandler.Commands)
-            Console.WriteLine($"- {cmd.Name} {cmd.Arguments} -- {cmd.Description}");
+            Entry.Log($"- {cmd.Name} {cmd.Arguments} -- {cmd.Description}");
     }
 }
