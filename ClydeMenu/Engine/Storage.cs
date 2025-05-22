@@ -98,6 +98,37 @@ internal class Storage
         internal set;
     }
 
+    public static int DEBUG_ENUM
+    {
+        get;
+        internal set;
+    } = 0;
+    public static bool DEBUG_BOOLEAN
+    {
+        get;
+        internal set;
+    } = false;
+    public static string DEBUG_NUMBERFIELD
+    {
+        get;
+        internal set;
+    } = "-.1";
+    public static int DEBUG_PLAYERSELECT
+    {
+        get;
+        internal set;
+    } = 0;
+    public static float DEBUG_SLIDER
+    {
+        get;
+        internal set;
+    } = 0.7f;
+    public static string DEBUG_TEXTFIELD
+    {
+        get;
+        internal set;
+    } = "Text here";
+
     public static class Network
     {
         public static bool CanSendPackets

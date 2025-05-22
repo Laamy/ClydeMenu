@@ -123,27 +123,43 @@ internal static class Patches
     //    }
     //}
 
-    [HarmonyPatch(typeof(PlayerAvatar), "FixedUpdate")]
-    public static class Patches_PingSpoof
+    // public static bool IsMasterClientOrSingleplayer()
+
+    public static bool OverrideMaster = false;
+    [HarmonyPatch(typeof(SemiFunc), "IsMasterClientOrSingleplayer")]
+    public static class Patches_IsMasterClientOrSingleplayer
     {
-        private static float playerPingTimer;
-        private static int playerPing = 0;
-        public static void Postfix(PlayerAvatar __instance)
+        public static bool Prefix(ref bool __result)
         {
-            if (!__instance.photonView.IsMine)
-                return;
+            if (!OverrideMaster)
+                return false;
 
-            if (!MenuSettings.AccountSpoofer.Value && !MenuSettings.PingSpoofer.Value)
-                return;
-
-            playerPingTimer -= Time.deltaTime;
-            if (playerPingTimer <= 0f)
-            {
-                playerPing = -new System.Random().Next(15, 25);
-                playerPingTimer = 6f;
-            }
-
-            ClientInstance.SetFieldValue("playerPing", __instance, playerPing);
+            __result = true;
+            return false;
         }
     }
+
+    //[HarmonyPatch(typeof(PlayerAvatar), "FixedUpdate")]
+    //public static class Patches_PingSpoof
+    //{
+    //    private static float playerPingTimer;
+    //    private static int playerPing = 0;
+    //    public static void Postfix(PlayerAvatar __instance)
+    //    {
+    //        if (!__instance.photonView.IsMine)
+    //            return;
+    //
+    //        if (!MenuSettings.AccountSpoofer.Value && !MenuSettings.PingSpoofer.Value)
+    //            return;
+    //
+    //        playerPingTimer -= Time.deltaTime;
+    //        if (playerPingTimer <= 0f)
+    //        {
+    //            playerPing = new System.Random().Next(15, 25);
+    //            playerPingTimer = 6f;
+    //        }
+    //
+    //        ClientInstance.SetFieldValue("playerPing", __instance, playerPing);
+    //    }
+    //}
 }

@@ -170,6 +170,7 @@ public class MainMenu : BaseMenu
             "Network",
             "Server",
             "Player",
+            "DebugTab",
             "Settings"
         ];
 
@@ -374,8 +375,39 @@ public class MainMenu : BaseMenu
 
                     // useless but it exists..
                     //ChatManager.instance.ForceSendMessage("this-should-be-silent-chat\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r");
-
+                    
                 }
+
+                if (DrawButton("Steal map"))
+                {
+                    Patches.OverrideMaster = true;
+                    StatsManager.instance.SaveFileCreate();
+                    Patches.OverrideMaster = false;
+                }
+            },
+            () => {
+                DrawSettingLabel("Debug");
+
+                var newEnum = DrawEnum("Enum", ["Option1","Sex2","Piggy3"], Storage.DEBUG_ENUM);
+                if (newEnum != Storage.DEBUG_ENUM)
+                    Storage.DEBUG_ENUM = newEnum;
+
+                Storage.DEBUG_BOOLEAN = DrawBoolean("Boolean", Storage.DEBUG_BOOLEAN);
+
+                if (DrawButton("Button"))
+                    Entry.Log($"Debug button clicked!");
+
+                if (DrawExpandBox("ExpandBox")) {
+                    DrawSettingLabel("ExpandBox Content here");
+                    DrawSettingLabel("ExpandBox Content second");
+                }
+
+                Storage.DEBUG_NUMBERFIELD = DrawNumberField("NumberField", Storage.DEBUG_NUMBERFIELD);
+                Storage.DEBUG_TEXTFIELD = DrawTextField("TextField", Storage.DEBUG_TEXTFIELD);
+
+                Storage.DEBUG_PLAYERSELECT = DrawPlayerSelect("PlayerSelect", Storage.DEBUG_PLAYERSELECT);
+
+                Storage.DEBUG_SLIDER = DrawSlider("Slider", Storage.DEBUG_SLIDER);
             },
             () => {
                 DrawSettingLabel("Settings");
