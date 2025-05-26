@@ -87,6 +87,9 @@ public class ClientComponent : BaseComponent
                 mod.OnRender();
         }
 
+        if (!MenuSettings.VISUAL_MAPINFO.Value)
+            return;
+
         if (RoundDirector.instance == null)
             return;
 

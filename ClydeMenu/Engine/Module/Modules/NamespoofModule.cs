@@ -17,7 +17,7 @@ public class NamespoofModule : BaseModule
 
     private readonly Random rng = new();
 
-    string[] names = [
+    readonly string[] names = [
         "Aiden", "Brielle", "Caleb", "Delilah", "Ethan", "Fiona", "Gavin", "Hazel",
         "Isaac", "Jasmine", "Kai", "Luna", "Miles", "Nora", "Owen", "Penelope",
         "Quentin", "Ruby", "Silas", "Tessa", "Uriel", "Violet", "Wyatt", "Ximena",

@@ -1,19 +1,11 @@
 ﻿namespace ClydeMenu.Engine;
 
-using ClydeMenu.Engine.Menu;
-
 using UnityEngine;
 
-using Photon.Pun;
-
 using HarmonyLib;
-using System.Diagnostics;
-using Unity.VisualScripting;
-using System;
+
 using ClydeMenu.Engine.Settings;
-using Photon.Realtime;
-using ExitGames.Client.Photon;
-using System.Reflection;
+using ClydeMenu.Engine.Menu;
 
 internal static class Patches
 {
@@ -132,34 +124,34 @@ internal static class Patches
         public static bool Prefix(ref bool __result)
         {
             if (!OverrideMaster)
-                return false;
+                return true;
 
             __result = true;
             return false;
         }
     }
 
-    //[HarmonyPatch(typeof(PlayerAvatar), "FixedUpdate")]
-    //public static class Patches_PingSpoof
-    //{
-    //    private static float playerPingTimer;
-    //    private static int playerPing = 0;
-    //    public static void Postfix(PlayerAvatar __instance)
-    //    {
-    //        if (!__instance.photonView.IsMine)
-    //            return;
-    //
-    //        if (!MenuSettings.AccountSpoofer.Value && !MenuSettings.PingSpoofer.Value)
-    //            return;
-    //
-    //        playerPingTimer -= Time.deltaTime;
-    //        if (playerPingTimer <= 0f)
-    //        {
-    //            playerPing = new System.Random().Next(15, 25);
-    //            playerPingTimer = 6f;
-    //        }
-    //
-    //        ClientInstance.SetFieldValue("playerPing", __instance, playerPing);
-    //    }
-    //}
+    [HarmonyPatch(typeof(PlayerAvatar), "FixedUpdate")]
+    public static class Patches_PingSpoof
+    {
+        private static float playerPingTimer;
+        private static int playerPing = 0;
+        public static void Postfix(PlayerAvatar __instance)
+        {
+            if (!__instance.photonView.IsMine)
+                return;
+    
+            if (!MenuSettings.AccountSpoofer.Value && !MenuSettings.PingSpoofer.Value)
+                return;
+    
+            playerPingTimer -= Time.deltaTime;
+            if (playerPingTimer <= 0f)
+            {
+                playerPing = new System.Random().Next(20,22);//20,22
+                playerPingTimer = 6f;
+            }
+    
+            ClientInstance.SetFieldValue("playerPing", __instance, playerPing);
+        }
+    }
 }

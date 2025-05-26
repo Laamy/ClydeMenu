@@ -166,10 +166,9 @@ public class MainMenu : BaseMenu
 
         MenuStorage.renderNames =
         [
-            "Visuals",
-            "Network",
-            "Server",
+            "Visual",
             "Player",
+            "Server",
             "DebugTab",
             "Settings"
         ];
@@ -186,198 +185,192 @@ public class MainMenu : BaseMenu
            //Storage.Example_Boolean = DrawBoolean("Booleanoff", Storage.Example_Boolean);
             () => {
                 DrawSettingLabel("Visual");
-                MenuSettings.ESP_Player.Value = DrawBoolean("Player ESP", MenuSettings.ESP_Player.Value);
-                MenuSettings.ESP_Enemy.Value = DrawBoolean("Enemy ESP", MenuSettings.ESP_Enemy.Value);
-                MenuSettings.ESP_Valuable.Value = DrawBoolean("Valuable ESP", MenuSettings.ESP_Valuable.Value);
-                MenuSettings.ESP_Extractions.Value = DrawBoolean("Extraction ESP", MenuSettings.ESP_Extractions.Value);
+                MenuSettings.VISUAL_MAPINFO.Value = DrawBoolean("MapInfo (Lvl & maxHaul)", MenuSettings.VISUAL_MAPINFO.Value);
                 //Storage.DEBUGBOX = DrawNumberField("DebugBox", Storage.DEBUGBOX);
             },
+            // might expose this tab if localhost
+            //() => {
+            //    DrawSettingLabel("Network");
+            //    Storage.CHEAT_PLAYERSELECT = DrawPlayerSelect("Select Player", Storage.CHEAT_PLAYERSELECT);
+            //
+            //    //if (DrawExpandBox("Power Utils"))
+            //    //{
+            //    //    Storage.CHEAT_PLAYERSELECT_MSGSPOOF = DrawTextField("MessageSpoof", Storage.CHEAT_PLAYERSELECT_MSGSPOOF);
+            //    //    if (DrawButton("Send Spoof"))
+            //    //    {
+            //    //        try
+            //    //        {
+            //    //            var plyr = SemiFunc.PlayerGetList()[Storage.CHEAT_PLAYERSELECT];
+            //    //            ClientInstance.SpoofMsg(plyr, Storage.CHEAT_PLAYERSELECT_MSGSPOOF);
+            //    //        }
+            //    //        catch (Exception ex)
+            //    //        {
+            //    //             Entry.Log($"Error in MainMenu {ex.Message}");
+            //    //        }
+            //    //    }
+            //    //}
+            //    //
+            //    //if (DrawExpandBox("Health Utils"))
+            //    //{
+            //    //    if (DrawButton("Kill Player"))
+            //    //    {
+            //    //        try
+            //    //        {
+            //    //            var plyr = SemiFunc.PlayerGetList()[Storage.CHEAT_PLAYERSELECT];
+            //    //            ClientInstance.KillPlayer(plyr);
+            //    //        }
+            //    //        catch (Exception ex)
+            //    //        {
+            //    //             Entry.Log($"Error in MainMenu {ex.Message}");
+            //    //        }
+            //    //    }
+            //    //
+            //    //    if (DrawButton("Revive Player"))
+            //    //    {
+            //    //        try
+            //    //        {
+            //    //            var plyr = SemiFunc.PlayerGetList()[Storage.CHEAT_PLAYERSELECT];
+            //    //            ClientInstance.RevivePlayer(plyr);
+            //    //        }
+            //    //        catch (Exception ex)
+            //    //        {
+            //    //             Entry.Log($"Error in MainMenu {ex.Message}");
+            //    //        }
+            //    //    }
+            //    //
+            //    //    if (DrawButton("Heal Player (+Amount)"))
+            //    //    {
+            //    //        try
+            //    //        {
+            //    //            var plyr = SemiFunc.PlayerGetList()[Storage.CHEAT_PLAYERSELECT];
+            //    //            if (float.TryParse(Storage.CHEAT_NETWORK_HEALTHAMOUNT, out var value))
+            //    //            {
+            //    //                var nextHealthTick = Mathf.Clamp(plyr.CHEAT_GetHealth() + (int)Math.Floor(value), 0, plyr.CHEAT_GetMaxHealth());
+            //    //                plyr.CHEAT_SetHealth(nextHealthTick);
+            //    //            }
+            //    //        }
+            //    //        catch (Exception ex)
+            //    //        {
+            //    //             Entry.Log($"Error in MainMenu {ex.Message}");
+            //    //        }
+            //    //    }
+            //    //
+            //    //    if (DrawButton("Heal Player (MaxHealth)"))
+            //    //    {
+            //    //        try
+            //    //        {
+            //    //            var plyr = SemiFunc.PlayerGetList()[Storage.CHEAT_PLAYERSELECT];
+            //    //                plyr.CHEAT_SetHealth(plyr.CHEAT_GetMaxHealth());
+            //    //        }
+            //    //        catch (Exception ex)
+            //    //        {
+            //    //             Entry.Log($"Error in MainMenu {ex.Message}");
+            //    //        }
+            //    //    }
+            //    //
+            //    //    Storage.CHEAT_NETWORK_HEALTHAMOUNT = DrawNumberField("Health Amount", Storage.CHEAT_NETWORK_HEALTHAMOUNT);
+            //    //}
+            //
+            //    if (DrawExpandBox("Give Utils"))
+            //    {
+            //        if (DrawButton("Steal Crown"))
+            //        {
+            //            try
+            //            {
+            //                var plyr = SemiFunc.PlayerGetList()[Storage.CHEAT_PLAYERSELECT];
+            //
+            //                var view = ClientInstance.GetPhotonView(PunManager.instance);
+            //                view.RPC("CrownPlayerRPC", RpcTarget.AllBuffered, [SemiFunc.PlayerGetSteamID(plyr)]);
+            //                Entry.Log($"Gave crown to player {plyr.name}.");
+            //            }
+            //            catch (Exception ex)
+            //            {
+            //                 Entry.Log($"Error in MainMenu {ex.Message}");
+            //            }
+            //        }
+            //
+            //        if (DrawButton("Give all Upgrades(255)"))
+            //        {
+            //            try
+            //            {
+            //                var plyr = SemiFunc.PlayerGetList()[Storage.CHEAT_PLAYERSELECT];
+            //
+            //                var steamId = SemiFunc.PlayerGetSteamID(plyr);
+            //                var view = ClientInstance.GetPhotonView(PunManager.instance);
+            //
+            //                view.RPC("UpgradeItemBatteryRPC", RpcTarget.AllBuffered, [steamId, 255]);
+            //                view.RPC("UpgradePlayerExtraJumpRPC", RpcTarget.AllBuffered, [steamId, 255]);
+            //                view.RPC("UpgradePlayerTumbleLaunchRPC", RpcTarget.AllBuffered, [steamId, 255]);
+            //                view.RPC("UpgradePlayerSprintSpeedRPC", RpcTarget.AllBuffered, [steamId, 255]);
+            //                view.RPC("UpgradePlayerGrabStrengthRPC", RpcTarget.AllBuffered, [steamId, 255]);
+            //                view.RPC("UpgradePlayerGrabRangeRPC", RpcTarget.AllBuffered, [steamId, 255]);
+            //                view.RPC("UpgradeMapPlayerCountRPC", RpcTarget.AllBuffered, [steamId, 255]);
+            //                view.RPC("UpgradePlayerThrowStrengthRPC", RpcTarget.AllBuffered, [steamId, 255]);
+            //                view.RPC("UpgradePlayerEnergyRPC", RpcTarget.AllBuffered, [steamId, 255]);
+            //                view.RPC("UpgradePlayerHealthRPC", RpcTarget.AllBuffered, [steamId, 255]);
+            //
+            //                Entry.Log($"Gave all upgrades to player {plyr.name}.");
+            //            }
+            //            catch (Exception ex)
+            //            {
+            //                 Entry.Log($"Error in MainMenu {ex.Message}");
+            //            }
+            //        }
+            //
+            //        Storage.CHEAT_Upgrade_Type = DrawEnum("Upgrade", ItemUtils.Upgrades, Storage.CHEAT_Upgrade_Type);
+            //
+            //        Storage.CHEAT_Upgrade_Amount = DrawNumberField("Amount", Storage.CHEAT_Upgrade_Amount);
+            //
+            //        if (DrawButton("Give Upgrade")) {
+            //            if (float.TryParse(Storage.CHEAT_Upgrade_Amount, out var amount))
+            //            {
+            //                var parsedAmount = (int)Math.Floor(Mathf.Clamp(amount, 0, 255));
+            //
+            //                var plyr = SemiFunc.PlayerGetList()[Storage.CHEAT_PLAYERSELECT];
+            //
+            //                var steamId = SemiFunc.PlayerGetSteamID(plyr);
+            //                var view = ClientInstance.GetPhotonView(PunManager.instance);
+            //
+            //                var upgrade = $"Upgrade{ItemUtils.Upgrades[Storage.CHEAT_Upgrade_Type]}RPC";
+            //                view.RPC(upgrade, RpcTarget.AllBuffered, [steamId, parsedAmount]);
+            //            }
+            //        }
+            //    }
+            //},
+            //() => {
+            //    DrawSettingLabel("Server");
+            //
+            //    if (DrawButton("Everyones a cheater (Upgrades)"))
+            //    {
+            //        var view = ClientInstance.GetPhotonView(PunManager.instance);
+            //    
+            //        foreach (var plyr in SemiFunc.PlayerGetList())
+            //        {
+            //            var steamId = SemiFunc.PlayerGetSteamID(plyr);
+            //            view.RPC("UpgradeItemBatteryRPC", RpcTarget.AllBuffered, [steamId, 255]);
+            //            view.RPC("UpgradePlayerExtraJumpRPC", RpcTarget.AllBuffered, [steamId, 255]);
+            //            view.RPC("UpgradePlayerTumbleLaunchRPC", RpcTarget.AllBuffered, [steamId, 255]);
+            //            view.RPC("UpgradePlayerSprintSpeedRPC", RpcTarget.AllBuffered, [steamId, 255]);
+            //            view.RPC("UpgradePlayerGrabStrengthRPC", RpcTarget.AllBuffered, [steamId, 255]);
+            //            view.RPC("UpgradePlayerGrabRangeRPC", RpcTarget.AllBuffered, [steamId, 255]);
+            //            view.RPC("UpgradeMapPlayerCountRPC", RpcTarget.AllBuffered, [steamId, 255]);
+            //            view.RPC("UpgradePlayerThrowStrengthRPC", RpcTarget.AllBuffered, [steamId, 255]);
+            //            view.RPC("UpgradePlayerEnergyRPC", RpcTarget.AllBuffered, [steamId, 255]);
+            //            view.RPC("UpgradePlayerHealthRPC", RpcTarget.AllBuffered, [steamId, 255]);
+            //        }
+            //    }
+            //},
             () => {
-                DrawSettingLabel("Network");
-                Storage.CHEAT_PLAYERSELECT = DrawPlayerSelect("Select Player", Storage.CHEAT_PLAYERSELECT);
+                DrawSettingLabel("Player");
 
-                //if (DrawExpandBox("Power Utils"))
-                //{
-                //    Storage.CHEAT_PLAYERSELECT_MSGSPOOF = DrawTextField("MessageSpoof", Storage.CHEAT_PLAYERSELECT_MSGSPOOF);
-                //    if (DrawButton("Send Spoof"))
-                //    {
-                //        try
-                //        {
-                //            var plyr = SemiFunc.PlayerGetList()[Storage.CHEAT_PLAYERSELECT];
-                //            ClientInstance.SpoofMsg(plyr, Storage.CHEAT_PLAYERSELECT_MSGSPOOF);
-                //        }
-                //        catch (Exception ex)
-                //        {
-                //             Entry.Log($"Error in MainMenu {ex.Message}");
-                //        }
-                //    }
-                //}
-                //
-                //if (DrawExpandBox("Health Utils"))
-                //{
-                //    if (DrawButton("Kill Player"))
-                //    {
-                //        try
-                //        {
-                //            var plyr = SemiFunc.PlayerGetList()[Storage.CHEAT_PLAYERSELECT];
-                //            ClientInstance.KillPlayer(plyr);
-                //        }
-                //        catch (Exception ex)
-                //        {
-                //             Entry.Log($"Error in MainMenu {ex.Message}");
-                //        }
-                //    }
-                //
-                //    if (DrawButton("Revive Player"))
-                //    {
-                //        try
-                //        {
-                //            var plyr = SemiFunc.PlayerGetList()[Storage.CHEAT_PLAYERSELECT];
-                //            ClientInstance.RevivePlayer(plyr);
-                //        }
-                //        catch (Exception ex)
-                //        {
-                //             Entry.Log($"Error in MainMenu {ex.Message}");
-                //        }
-                //    }
-                //
-                //    if (DrawButton("Heal Player (+Amount)"))
-                //    {
-                //        try
-                //        {
-                //            var plyr = SemiFunc.PlayerGetList()[Storage.CHEAT_PLAYERSELECT];
-                //            if (float.TryParse(Storage.CHEAT_NETWORK_HEALTHAMOUNT, out var value))
-                //            {
-                //                var nextHealthTick = Mathf.Clamp(plyr.CHEAT_GetHealth() + (int)Math.Floor(value), 0, plyr.CHEAT_GetMaxHealth());
-                //                plyr.CHEAT_SetHealth(nextHealthTick);
-                //            }
-                //        }
-                //        catch (Exception ex)
-                //        {
-                //             Entry.Log($"Error in MainMenu {ex.Message}");
-                //        }
-                //    }
-                //
-                //    if (DrawButton("Heal Player (MaxHealth)"))
-                //    {
-                //        try
-                //        {
-                //            var plyr = SemiFunc.PlayerGetList()[Storage.CHEAT_PLAYERSELECT];
-                //                plyr.CHEAT_SetHealth(plyr.CHEAT_GetMaxHealth());
-                //        }
-                //        catch (Exception ex)
-                //        {
-                //             Entry.Log($"Error in MainMenu {ex.Message}");
-                //        }
-                //    }
-                //
-                //    Storage.CHEAT_NETWORK_HEALTHAMOUNT = DrawNumberField("Health Amount", Storage.CHEAT_NETWORK_HEALTHAMOUNT);
-                //}
-
-                if (DrawExpandBox("Give Utils"))
-                {
-                    if (DrawButton("Steal Crown"))
-                    {
-                        try
-                        {
-                            var plyr = SemiFunc.PlayerGetList()[Storage.CHEAT_PLAYERSELECT];
-
-                            var view = ClientInstance.GetPhotonView(PunManager.instance);
-                            view.RPC("CrownPlayerRPC", RpcTarget.AllBuffered, [SemiFunc.PlayerGetSteamID(plyr)]);
-                            Entry.Log($"Gave crown to player {plyr.name}.");
-                        }
-                        catch (Exception ex)
-                        {
-                             Entry.Log($"Error in MainMenu {ex.Message}");
-                        }
-                    }
-
-                    if (DrawButton("Give all Upgrades(255)"))
-                    {
-                        try
-                        {
-                            var plyr = SemiFunc.PlayerGetList()[Storage.CHEAT_PLAYERSELECT];
-
-                            var steamId = SemiFunc.PlayerGetSteamID(plyr);
-                            var view = ClientInstance.GetPhotonView(PunManager.instance);
-
-                            view.RPC("UpgradeItemBatteryRPC", RpcTarget.AllBuffered, [steamId, 255]);
-                            view.RPC("UpgradePlayerExtraJumpRPC", RpcTarget.AllBuffered, [steamId, 255]);
-                            view.RPC("UpgradePlayerTumbleLaunchRPC", RpcTarget.AllBuffered, [steamId, 255]);
-                            view.RPC("UpgradePlayerSprintSpeedRPC", RpcTarget.AllBuffered, [steamId, 255]);
-                            view.RPC("UpgradePlayerGrabStrengthRPC", RpcTarget.AllBuffered, [steamId, 255]);
-                            view.RPC("UpgradePlayerGrabRangeRPC", RpcTarget.AllBuffered, [steamId, 255]);
-                            view.RPC("UpgradeMapPlayerCountRPC", RpcTarget.AllBuffered, [steamId, 255]);
-                            view.RPC("UpgradePlayerThrowStrengthRPC", RpcTarget.AllBuffered, [steamId, 255]);
-                            view.RPC("UpgradePlayerEnergyRPC", RpcTarget.AllBuffered, [steamId, 255]);
-                            view.RPC("UpgradePlayerHealthRPC", RpcTarget.AllBuffered, [steamId, 255]);
-
-                            Entry.Log($"Gave all upgrades to player {plyr.name}.");
-                        }
-                        catch (Exception ex)
-                        {
-                             Entry.Log($"Error in MainMenu {ex.Message}");
-                        }
-                    }
-
-                    Storage.CHEAT_Upgrade_Type = DrawEnum("Upgrade", ItemUtils.Upgrades, Storage.CHEAT_Upgrade_Type);
-
-                    Storage.CHEAT_Upgrade_Amount = DrawNumberField("Amount", Storage.CHEAT_Upgrade_Amount);
-
-                    if (DrawButton("Give Upgrade")) {
-                        if (float.TryParse(Storage.CHEAT_Upgrade_Amount, out var amount))
-                        {
-                            var parsedAmount = (int)Math.Floor(Mathf.Clamp(amount, 0, 255));
-
-                            var plyr = SemiFunc.PlayerGetList()[Storage.CHEAT_PLAYERSELECT];
-
-                            var steamId = SemiFunc.PlayerGetSteamID(plyr);
-                            var view = ClientInstance.GetPhotonView(PunManager.instance);
-
-                            var upgrade = $"Upgrade{ItemUtils.Upgrades[Storage.CHEAT_Upgrade_Type]}RPC";
-                            view.RPC(upgrade, RpcTarget.AllBuffered, [steamId, parsedAmount]);
-                        }
-                    }
-                }
+                // these stay
+                MenuSettings.AccountSpoofer.Value = DrawBoolean("AccountSpoofer", MenuSettings.AccountSpoofer.Value);
+                MenuSettings.PingSpoofer.Value = DrawBoolean("PingSpoofer", MenuSettings.PingSpoofer.Value);
             },
             () => {
                 DrawSettingLabel("Server");
 
-                if (DrawButton("Everyones a cheater (Upgrades)"))
-                {
-                    var view = ClientInstance.GetPhotonView(PunManager.instance);
-                
-                    foreach (var plyr in SemiFunc.PlayerGetList())
-                    {
-                        var steamId = SemiFunc.PlayerGetSteamID(plyr);
-                        view.RPC("UpgradeItemBatteryRPC", RpcTarget.AllBuffered, [steamId, 255]);
-                        view.RPC("UpgradePlayerExtraJumpRPC", RpcTarget.AllBuffered, [steamId, 255]);
-                        view.RPC("UpgradePlayerTumbleLaunchRPC", RpcTarget.AllBuffered, [steamId, 255]);
-                        view.RPC("UpgradePlayerSprintSpeedRPC", RpcTarget.AllBuffered, [steamId, 255]);
-                        view.RPC("UpgradePlayerGrabStrengthRPC", RpcTarget.AllBuffered, [steamId, 255]);
-                        view.RPC("UpgradePlayerGrabRangeRPC", RpcTarget.AllBuffered, [steamId, 255]);
-                        view.RPC("UpgradeMapPlayerCountRPC", RpcTarget.AllBuffered, [steamId, 255]);
-                        view.RPC("UpgradePlayerThrowStrengthRPC", RpcTarget.AllBuffered, [steamId, 255]);
-                        view.RPC("UpgradePlayerEnergyRPC", RpcTarget.AllBuffered, [steamId, 255]);
-                        view.RPC("UpgradePlayerHealthRPC", RpcTarget.AllBuffered, [steamId, 255]);
-                    }
-                }
-            },
-            () => {
-                DrawSettingLabel("Player");
-                MenuSettings.AccountSpoofer.Value = DrawBoolean("AccountSpoofer", MenuSettings.AccountSpoofer.Value);
-                MenuSettings.PingSpoofer.Value = DrawBoolean("PingSpoofer", MenuSettings.PingSpoofer.Value);
-
-                if (DrawButton("debug utils"))
-                {
-                    // works but just once 2 heal
-                    //ClientInstance.GetLocalAvatar().photonView.RPC("FinalHealRPC", RpcTarget.All, Array.Empty<object>());
-
-                    // useless but it exists..
-                    //ChatManager.instance.ForceSendMessage("this-should-be-silent-chat\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r");
-                    
-                }
-
+                // im using this for me and my friends (the host sometimes falls asleep midgame)
                 if (DrawButton("Steal map"))
                 {
                     Patches.OverrideMaster = true;
@@ -387,12 +380,16 @@ public class MainMenu : BaseMenu
             },
             () => {
                 DrawSettingLabel("Debug");
+                DrawSettingLabel("NOTE: this tab will NOT be exposed in release mode");
 
                 var newEnum = DrawEnum("Enum", ["Option1","Sex2","Piggy3"], Storage.DEBUG_ENUM);
                 if (newEnum != Storage.DEBUG_ENUM)
                     Storage.DEBUG_ENUM = newEnum;
 
-                Storage.DEBUG_BOOLEAN = DrawBoolean("Boolean", Storage.DEBUG_BOOLEAN);
+                MenuSettings.ESP_Player.Value = DrawBoolean("Player ESP", MenuSettings.ESP_Player.Value);
+                MenuSettings.ESP_Enemy.Value = DrawBoolean("Enemy ESP", MenuSettings.ESP_Enemy.Value);
+                MenuSettings.ESP_Valuable.Value = DrawBoolean("Valuable ESP", MenuSettings.ESP_Valuable.Value);
+                MenuSettings.ESP_Extractions.Value = DrawBoolean("Extraction ESP", MenuSettings.ESP_Extractions.Value);
 
                 if (DrawButton("Button"))
                     Entry.Log($"Debug button clicked!");

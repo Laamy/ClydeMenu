@@ -35,6 +35,8 @@ internal class MenuSettings
     public static Setting<bool> ESP_Valuable { get; set; } = new("ESP_Valuable", true);
     public static Setting<bool> ESP_Extractions { get; set; } = new("ESP_Extractions", false);
 
+    public static Setting<bool> VISUAL_MAPINFO { get; set; } = new("VISUAL_MAPINFO", true);
+
     public static Setting<bool> AccountSpoofer { get; set; } = new("AccountSpoofer", false);
     public static Setting<bool> PingSpoofer { get; set; } = new("PingSpoofer", false);
 
