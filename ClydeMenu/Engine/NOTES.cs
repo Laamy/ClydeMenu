@@ -39,3 +39,6 @@
 
 // [Keystrokes]
 // Everyone loves a good old keystrokes module
+
+// [Freelook]
+// Hold alt to freeze the camera direction and rotate it freely without effecting the movement vectors

@@ -1,14 +1,13 @@
 ﻿namespace ClydeMenu.Engine;
 
-using System;
-
 using UnityEngine;
 
 using ClydeMenu.Engine.Menu;
 using ClydeMenu.Engine.Commands;
 using ClydeMenu.Engine.Components;
 using ClydeMenu.Engine.Settings;
-using System.Collections.Generic;
+using System;
+using UnityEngine.InputSystem.OnScreen;
 
 public class ClientComponent : BaseComponent
 {
@@ -87,6 +86,52 @@ public class ClientComponent : BaseComponent
                 mod.OnRender();
         }
 
+        RenderVisualThing();
+
+        try
+        {
+            SortNoiseCrap();
+            RenderNoiseCrap();
+        }
+        catch { }
+    }
+
+    const int padding = 6;
+    // TODO: move these to their own modules
+    private void RenderNoiseCrap()
+    {
+        lock (Patches.audioStack)
+        {
+            var y = 20 + padding;
+            foreach (var audio in Patches.audioStack)
+            {
+                if (audio.time < Time.time - 5f)
+                    continue;
+
+                var measure = RenderUtils.StringSize(audio.label, 16);
+                RenderUtils.DrawString(new Vector2(
+                    Screen.width - measure.x - padding,
+                    Screen.height - y
+                ), audio.label, Color.white, 16);
+                y += 20;
+            }
+        }
+    }
+
+    private void SortNoiseCrap()
+    {
+        lock (Patches.audioStack)
+        {
+            foreach (var audio in Patches.audioStack)
+            {
+                if (audio.time < Time.time - 5f)
+                    Patches.audioStack.Remove(audio);
+            }
+        }
+    }
+
+    private void RenderVisualThing()
+    {
         if (!MenuSettings.VISUAL_MAPINFO.Value)
             return;
 
@@ -101,7 +146,7 @@ public class ClientComponent : BaseComponent
         var curLevel = RunManager.instance.levelsCompleted;
         num *= quotaMultiply[Mathf.Clamp(curLevel, 0, quotaMultiply.Length - 1)];
 
-        RenderUtils.DrawString(new Vector2(10, 10), $"Min:{haulGoalMax} | Max:{(int)num}\r\nLvl:{curLevel+1}", Color.white, 20);
+        RenderUtils.DrawString(new Vector2(10, 10), $"Min:{haulGoalMax} | Max:{(int)num}\r\nLvl:{curLevel + 1}", Color.white, 20);
     }
 
     /*level 1: multiply quota by 3.57142851821014

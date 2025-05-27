@@ -6,6 +6,8 @@ using HarmonyLib;
 
 using ClydeMenu.Engine.Settings;
 using ClydeMenu.Engine.Menu;
+using System.Collections.Generic;
+using System;
 
 internal static class Patches
 {
@@ -140,18 +142,69 @@ internal static class Patches
         {
             if (!__instance.photonView.IsMine)
                 return;
-    
+
             if (!MenuSettings.AccountSpoofer.Value && !MenuSettings.PingSpoofer.Value)
                 return;
-    
+
             playerPingTimer -= Time.deltaTime;
             if (playerPingTimer <= 0f)
             {
-                playerPing = new System.Random().Next(20,22);//20,22
+                playerPing = new System.Random().Next(20, 22);//20,22
                 playerPingTimer = 6f;
             }
-    
+
             ClientInstance.SetFieldValue("playerPing", __instance, playerPing);
+        }
+    }
+
+    public class AudioInfo
+    {
+        public string label;
+        public Vector3 position;
+        public float time;
+        public float maxDistance = 20f;
+    }
+
+    public static List<AudioInfo> audioStack = new();
+    [HarmonyPatch(typeof(AudioSource), "Play", [])]
+    public static class Patches_AudioSrcLogger
+    {
+        public static bool Prefix(AudioSource __instance)
+        {
+            if (__instance.spatialBlend <= 0)
+                return true;
+
+            var localPlayer = ClientInstance.GetLocalPlayer();
+
+            if (localPlayer == null)
+                return true;
+
+            var obj = __instance.gameObject;
+            var pos = obj.transform.position;
+            if (Vector3.Distance(pos, localPlayer.transform.position) > __instance.maxDistance)
+                return true;
+
+            //Entry.Log(__instance.gameObject.name);
+            var info = new AudioInfo
+            {
+                label = SerilizeString(obj.name),
+                position = pos,
+                time = Time.time,
+                maxDistance = __instance.maxDistance,
+            };
+            lock (audioStack)
+            {
+                audioStack.RemoveAll(x => x.label == info.label);
+                audioStack.Add(info);
+            }
+            return true;
+        }
+
+        private static string SerilizeString(string name)
+        {
+            var i = name.Length - 1;
+            while (i >= 0 && char.IsDigit(name[i])) i--;
+            return name.Substring(0, i + 1);
         }
     }
 }
