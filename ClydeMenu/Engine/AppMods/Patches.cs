@@ -163,6 +163,10 @@ internal static class Patches
         public Vector3 position;
         public float time;
         public float maxDistance = 20f;
+
+        // animation crap
+        public float fadeInTimer = 0;
+        public bool isFadingIn = true;
     }
 
     public static List<AudioInfo> audioStack = new();
@@ -194,8 +198,12 @@ internal static class Patches
             };
             lock (audioStack)
             {
-                audioStack.RemoveAll(x => x.label == info.label);
-                audioStack.Add(info);
+                var oldClip = audioStack.Find(x => x.label == info.label);
+                if (oldClip != null && oldClip.time < Time.time - 1)
+                    audioStack.Remove(oldClip);
+
+                if (oldClip == null)
+                    audioStack.Add(info);
             }
             return true;
         }
