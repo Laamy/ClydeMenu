@@ -6,6 +6,9 @@ using UnityEngine;
 
 using ClydeMenu.Engine.Utils;
 using Photon.Pun;
+using Unity.VisualScripting;
+using Photon.Realtime;
+using System.Diagnostics;
 
 public class RenderWindow
 {
@@ -242,7 +245,6 @@ public class RenderUtils
         {4,5},{5,6},{6,7},{7,4},
         {0,4},{1,5},{2,6},{3,7}
     };
-
     public static void DrawAABB(Bounds bounds, Color colour, int maxDis = 1000)
     {
         Vector3 min = bounds.min, max = bounds.max;
@@ -256,12 +258,13 @@ public class RenderUtils
         float scaleX = (float)Screen.width / Camera.main.pixelWidth;
         float scaleY = (float)Screen.height / Camera.main.pixelHeight;
 
-        bool visible = false;
+        bool visible = true;
         Vector2[] sVertices = new Vector2[8];
         for (int i = 0; i < 8; i++)
         {
             Vector3 p = Camera.main.WorldToScreenPoint(vertices[i]);
-            if (p.z > 0 && p.z < maxDis) visible = true;
+            if (p.z <= 0 || p.z > 1000)
+                return;
             sVertices[i] = new(p.x * scaleX, Screen.height - (p.y * scaleY));
         }
 
@@ -277,6 +280,45 @@ public class RenderUtils
                 (end.x >= 0 && end.x <= Screen.width && end.y >= 0 && end.y <= Screen.height))
                 DrawLine(start, end, colour, 3);//grrr....
         }
+    }
+
+    public static void DrawWaypoint(Vector3 point, string label, Color color)
+    {
+        var localPlayer = ClientInstance.GetLocalPlayer();
+        if (localPlayer == null || localPlayer.gameObject == null)
+            return;
+        var plyrPos = localPlayer.gameObject.transform.position;
+
+        var distance = Vector3.Distance(plyrPos, point);
+
+        if (distance == 0)
+            distance = 1;
+
+        Vector3 p = Camera.main.WorldToScreenPoint(point);
+        if (p.z <= 0 || p.z > 1000)
+            return;
+
+        var scaleX = (float)Screen.width / Camera.main.pixelWidth;
+        var scaleY = (float)Screen.height / Camera.main.pixelHeight;
+
+        var scaleFactor = Mathf.Clamp(distance / 250, 0.02f, 0.08f);
+        var size = 2 / scaleFactor;
+        var border = size / 3;
+        Vector2 center = new Vector2((p.x - (size / 2)) * scaleX, Screen.height - (p.y - (size / 2)) * scaleY);
+
+        var orig = GUI.matrix;
+        GUIUtility.RotateAroundPivot(45, center);
+        DrawRect(center - new Vector2(border/2, border/2), new Vector2(size + border, size + border), new Color(color.r, color.g, color.b, 0.5f));
+        DrawRect(center, new Vector2(size, size), color);
+        GUI.matrix = orig;
+
+        // draw string at center of diamond tghank u game !
+        var disLabel = $"{Math.Floor(distance)}m";
+        var measure = StringSize(disLabel, 1 / scaleFactor);
+        DrawString(center - (measure/2) + new Vector2(0, size / 1.5f), disLabel, new Color(0.9f, 0.9f, 0.9f), 1 / scaleFactor);
+
+        measure = StringSize(label, 0.7f / scaleFactor);
+        DrawString(center - (measure / 2) + new Vector2(0, size / 1.5f - size*1.2f), label, new Color(0.9f, 0.9f, 0.9f), 0.7f / scaleFactor);
     }
 
     public static void SetCursorState(bool visible)

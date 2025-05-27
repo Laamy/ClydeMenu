@@ -1,12 +1,12 @@
-﻿// [Noise Logger]
-// Display nearby sounds as subtitles in the bottom-right corner of the screen.
-// Each subtitle includes:
-// - A short label (e.g. "Footsteps", "Robe Screams")
-// - A horizontal arrow indicating direction relative to the player's forward vector:
-//   - ← if sound is to the left
-//   - → if sound is to the right
-// Only log sounds actually heard by the local player (within audible range and volume threshold).
-// Subtitles fade out after a short duration (e.g. 3–5 seconds).
+﻿/// [Noise Logger]
+/// Display nearby sounds as subtitles in the bottom-right corner of the screen.
+/// Each subtitle includes:
+/// - A short label (e.g. "Footsteps", "Robe Screams")
+/// - A horizontal arrow indicating direction relative to the player's forward vector:
+///   - ← if sound is to the left
+///   - → if sound is to the right
+/// Only log sounds actually heard by the local player (within audible range and volume threshold).
+/// Subtitles fade out after a short duration (e.g. 3–5 seconds).
 
 // [Missed Room Alerts]
 // For each room, track whether the local player has entered it this round.

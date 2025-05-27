@@ -215,4 +215,15 @@ internal static class Patches
             return name.Substring(0, i + 1);
         }
     }
+
+    [HarmonyPatch(typeof(RunManager), "ChangeLevel")]
+    public static class Patches_ChangeLevel
+    {
+        public static bool Prefix(RunManager __instance)
+        {
+            Storage.WAYPOINTS_POINTS.Clear();
+
+            return true;
+        }
+    }
 }

@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.Linq;
 
 using ClydeMenu.Engine.Settings;
@@ -93,56 +94,6 @@ public class MainMenu : BaseMenu
 
     private ThemeConfig StyleTheme = new();
 
-    private Dictionary<string, ThemeConfig> StyleThemes = new()
-    {
-        { "Dark", new ThemeConfig() },
-        { "Light", ThemeConfig.Create(
-            new Color(0.9f, 0.9f, 0.95f),
-            new Color(0.8f, 0.8f, 0.9f),
-            new Color(0.5f, 0.4f, 1f),
-            new Color(0.1f, 0.1f, 0.2f),
-            new Color(0.3f, 0.3f, 0.4f),
-            new Color(1f, 1f, 1f),
-            new Color(0.95f, 0.95f, 0.98f)
-        )},
-        { "Red", ThemeConfig.Create(
-            new Color(0.4f, 0.1f, 0.1f),
-            new Color(0.6f, 0.2f, 0.2f),
-            new Color(1f, 0.3f, 0.3f),
-            new Color(1f, 0.9f, 0.9f),
-            new Color(0.9f, 0.7f, 0.7f),
-            new Color(0.15f, 0.05f, 0.05f),
-            new Color(0.2f, 0.1f, 0.1f)
-        )},
-        { "Blue", ThemeConfig.Create(
-            new Color(0.1f, 0.1f, 0.4f),
-            new Color(0.2f, 0.2f, 0.6f),
-            new Color(0.3f, 0.5f, 1f),
-            new Color(0.9f, 0.9f, 1f),
-            new Color(0.7f, 0.7f, 0.9f),
-            new Color(0.05f, 0.05f, 0.15f),
-            new Color(0.1f, 0.1f, 0.2f)
-        )},
-        { "Green", ThemeConfig.Create(
-            new Color(0.1f, 0.3f, 0.1f),
-            new Color(0.2f, 0.4f, 0.2f),
-            new Color(0.3f, 0.9f, 0.4f),
-            new Color(0.9f, 1f, 0.9f),
-            new Color(0.7f, 0.9f, 0.7f),
-            new Color(0.05f, 0.15f, 0.05f),
-            new Color(0.1f, 0.2f, 0.1f)
-        )},
-        { "Purple", ThemeConfig.Create(
-            new Color(0.2f, 0.1f, 0.3f),
-            new Color(0.3f, 0.2f, 0.5f),
-            new Color(0.6f, 0.3f, 1f),
-            new Color(0.95f, 0.9f, 1f),
-            new Color(0.85f, 0.8f, 0.95f),
-            new Color(0.08f, 0.05f, 0.1f),
-            new Color(0.12f, 0.08f, 0.18f)
-        )}
-    };
-
     private void DrawCategory()
     {
         if (MenuStorage.selectedCategory < 0 || MenuStorage.selectedCategory >= MenuStorage.renderActions.Length)
@@ -158,17 +109,18 @@ public class MainMenu : BaseMenu
         else
         {
             if (MenuSettings.GameTheme != null)
-                StyleTheme = StyleThemes[MenuSettings.GameTheme.Value];
+                StyleTheme = Storage.StyleThemes[MenuSettings.GameTheme.Value];
             else
-                StyleTheme = StyleThemes["Dark"];
+                StyleTheme = Storage.StyleThemes["Dark"];
         }
-        Storage.SETTINGS_Theme = Array.IndexOf(StyleThemes.Keys.ToArray(), MenuSettings.GameTheme.Value);
+        Storage.SETTINGS_Theme = Array.IndexOf(Storage.StyleThemes.Keys.ToArray(), MenuSettings.GameTheme.Value);
 
         MenuStorage.renderNames =
         [
             "Visual",
             "Player",
             "Server",
+            "Waypoints",
             "DebugTab",
             "Settings"
         ];
@@ -379,6 +331,46 @@ public class MainMenu : BaseMenu
                 }
             },
             () => {
+                DrawSettingLabel("Waypoints");
+
+                var waypoints = Storage.WAYPOINTS_POINTS.Select(wp => wp.Label).ToArray();
+                var newEnum = DrawEnum("Waypoints", waypoints, Storage.WAYPOINTS_POINT);
+                if (newEnum != Storage.WAYPOINTS_POINT)
+                    Storage.WAYPOINTS_POINT = newEnum;
+
+                if (DrawButton("Delete"))
+                    Storage.WAYPOINTS_POINTS.RemoveAt(Storage.WAYPOINTS_POINT);
+
+                if (DrawExpandBox("Configure"))
+                {
+                    var _newEnum = DrawEnum("Add Colour", ["Red", "Green", "Blue"], Storage.WAYPOINTS_COLOR);
+                    if (_newEnum  != Storage.WAYPOINTS_COLOR)
+                        Storage.WAYPOINTS_COLOR = _newEnum;
+
+                    Storage.WAYPOINTS_NAME = DrawTextField("Waypoint Name", Storage.WAYPOINTS_NAME);
+
+                    if (DrawButton("Add"))
+                    {
+                        Color colour = Storage.WAYPOINTS_COLOR switch
+                        {
+                            0 => new Color(0.9f, 0.15f, 0.15f),
+                            1 => new Color(0.15f, 0.9f, 0.15f),
+                            2 => new Color(0.15f, 0.15f, 0.9f),
+                            _ => Color.yellow
+                        };
+
+                        var newPoint = new Storage.WaypointInfo
+                        {
+                            Label = Storage.WAYPOINTS_NAME,
+                            Position = ClientInstance.GetLocalPlayer().gameObject.transform.position + new Vector3(0,1.5f,0),
+                            Color = colour
+                        };
+                        Storage.WAYPOINTS_POINTS.Add(newPoint);
+                        Storage.WAYPOINTS_POINT = Storage.WAYPOINTS_POINTS.Count - 1;
+                    }
+                }
+            },
+            () => {
                 DrawSettingLabel("Debug");
                 DrawSettingLabel("NOTE: this tab will NOT be exposed in release mode");
 
@@ -410,13 +402,13 @@ public class MainMenu : BaseMenu
                 DrawSettingLabel("Settings");
 
                 //StyleThemes.Keys.ToArray()
-                var newTheme = DrawEnum("Theme", StyleThemes.Keys.ToArray(), Storage.SETTINGS_Theme);
+                var newTheme = DrawEnum("Theme", Storage.StyleThemes.Keys.ToArray(), Storage.SETTINGS_Theme);
                 if (newTheme != Storage.SETTINGS_Theme)
                 {
                     Storage.SETTINGS_Theme = newTheme;
-                    StyleTheme = StyleThemes[StyleThemes.Keys.ToArray()[newTheme]];
+                    StyleTheme = Storage.StyleThemes[Storage.StyleThemes.Keys.ToArray()[newTheme]];
                     Storage.InternalThemeStyle = StyleTheme;
-                    MenuSettings.GameTheme.Value = StyleThemes.Keys.ToArray()[newTheme];
+                    MenuSettings.GameTheme.Value = Storage.StyleThemes.Keys.ToArray()[newTheme];
                 }
             }
         ];
@@ -592,8 +584,11 @@ public class MainMenu : BaseMenu
         DrawSettingLabel(label);
 
         Rect labelRect = new Rect(contentStart.x, yCursor, boxWidth, labelHeight);
-        RenderUtils.DrawRect(labelRect.position, labelRect.size, StyleTheme.ContentBox);
-        RenderUtils.DrawString(labelRect.position + new Vector2(4, 2), enums[selection], StyleTheme.MenuText);
+        if (enums.Length > 0)
+        {
+            RenderUtils.DrawRect(labelRect.position, labelRect.size, StyleTheme.ContentBox);
+            RenderUtils.DrawString(labelRect.position + new Vector2(4, 2), enums[selection], StyleTheme.MenuText);
+        }
 
         var cur = Event.current;
         Vector2 mousePos = cur.mousePosition;

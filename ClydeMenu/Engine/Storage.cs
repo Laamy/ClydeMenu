@@ -128,6 +128,84 @@ internal class Storage
         get;
         internal set;
     } = "Text here";
+    public static int WAYPOINTS_POINT
+    {
+        get;
+        internal set;
+    } = 0;
+    public static int WAYPOINTS_COLOR
+    {
+        get;
+        internal set;
+    } = 0;
+
+    public class WaypointInfo
+    {
+        public Color Color { get; set; }
+        public string Label { get; set; }
+        public Vector3 Position { get; set; }
+    }
+    public static List<WaypointInfo> WAYPOINTS_POINTS
+    {
+        get;
+        internal set;
+    } = new();
+    public static string WAYPOINTS_NAME
+    {
+        get;
+        internal set;
+    } = "Waypoint 1";
+
+    // NOT A SETTING
+    internal static Dictionary<string, ThemeConfig> StyleThemes = new()
+    {
+        { "Dark", new ThemeConfig() },
+        { "Light", ThemeConfig.Create(
+            new Color(0.9f, 0.9f, 0.95f),
+            new Color(0.8f, 0.8f, 0.9f),
+            new Color(0.5f, 0.4f, 1f),
+            new Color(0.1f, 0.1f, 0.2f),
+            new Color(0.3f, 0.3f, 0.4f),
+            new Color(1f, 1f, 1f),
+            new Color(0.95f, 0.95f, 0.98f)
+        )},
+        { "Red", ThemeConfig.Create(
+            new Color(0.4f, 0.1f, 0.1f),
+            new Color(0.6f, 0.2f, 0.2f),
+            new Color(1f, 0.3f, 0.3f),
+            new Color(1f, 0.9f, 0.9f),
+            new Color(0.9f, 0.7f, 0.7f),
+            new Color(0.15f, 0.05f, 0.05f),
+            new Color(0.2f, 0.1f, 0.1f)
+        )},
+        { "Blue", ThemeConfig.Create(
+            new Color(0.1f, 0.1f, 0.4f),
+            new Color(0.2f, 0.2f, 0.6f),
+            new Color(0.3f, 0.5f, 1f),
+            new Color(0.9f, 0.9f, 1f),
+            new Color(0.7f, 0.7f, 0.9f),
+            new Color(0.05f, 0.05f, 0.15f),
+            new Color(0.1f, 0.1f, 0.2f)
+        )},
+        { "Green", ThemeConfig.Create(
+            new Color(0.1f, 0.3f, 0.1f),
+            new Color(0.2f, 0.4f, 0.2f),
+            new Color(0.3f, 0.9f, 0.4f),
+            new Color(0.9f, 1f, 0.9f),
+            new Color(0.7f, 0.9f, 0.7f),
+            new Color(0.05f, 0.15f, 0.05f),
+            new Color(0.1f, 0.2f, 0.1f)
+        )},
+        { "Purple", ThemeConfig.Create(
+            new Color(0.2f, 0.1f, 0.3f),
+            new Color(0.3f, 0.2f, 0.5f),
+            new Color(0.6f, 0.3f, 1f),
+            new Color(0.95f, 0.9f, 1f),
+            new Color(0.85f, 0.8f, 0.95f),
+            new Color(0.08f, 0.05f, 0.1f),
+            new Color(0.12f, 0.08f, 0.18f)
+        )}
+    };
 
     public static class Network
     {

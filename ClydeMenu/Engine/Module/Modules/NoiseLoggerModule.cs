@@ -17,6 +17,9 @@ public class NoiseLoggerModule : BaseModule
     const int padding = 6;
     public override void OnRender()
     {
+        if (!MenuSettings.VISUAL_NOISELOGGER.Value)
+            return;
+
         lock (Patches.audioStack)
         {
             var y = 20 + padding;
@@ -33,7 +36,7 @@ public class NoiseLoggerModule : BaseModule
                 }
                 else
                 {
-                    if (audio.time < Time.time - 4f)
+                    if (audio.time < Time.time - 4.5f)
                         audio.fadeInTimer = Mathf.Clamp(audio.fadeInTimer - Time.deltaTime, 0, 1);
                 }
 

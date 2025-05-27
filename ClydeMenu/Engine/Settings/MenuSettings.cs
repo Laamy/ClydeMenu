@@ -30,15 +30,17 @@ internal class MenuSettings
 
     public static Setting<string> GameTheme { get; set; } = new("GameTheme", "Dark");
 
-    public static Setting<bool> ESP_Player { get; set; } = new("ESP_Player", true);
-    public static Setting<bool> ESP_Enemy { get; set; } = new("ESP_Enemy", true);
-    public static Setting<bool> ESP_Valuable { get; set; } = new("ESP_Valuable", true);
-    public static Setting<bool> ESP_Extractions { get; set; } = new("ESP_Extractions", false);
-
     public static Setting<bool> VISUAL_MAPINFO { get; set; } = new("VISUAL_MAPINFO", true);
+    public static Setting<bool> VISUAL_NOISELOGGER { get; set; } = new("VISUAL_NOISELOGGER", true);
 
     public static Setting<bool> AccountSpoofer { get; set; } = new("AccountSpoofer", false);
     public static Setting<bool> PingSpoofer { get; set; } = new("PingSpoofer", false);
+
+    // debugging. do not use in release
+    public static Setting<bool> ESP_Player { get; set; } = new("ESP_Player", false);
+    public static Setting<bool> ESP_Enemy { get; set; } = new("ESP_Enemy", false);
+    public static Setting<bool> ESP_Valuable { get; set; } = new("ESP_Valuable", false);
+    public static Setting<bool> ESP_Extractions { get; set; } = new("ESP_Extractions", false);
 
     public static Timer _saveTimer;
 
