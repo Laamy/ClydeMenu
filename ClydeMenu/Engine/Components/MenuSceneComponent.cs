@@ -10,7 +10,7 @@ using ClydeMenu.Engine.Components;
 
 internal class MenuSceneComponent : BaseComponent
 {
-    public static MenuSceneComponent Instance { get; private set; }
+    public static MenuSceneComponent Instance { get; private set; } //= new MenuSceneComponent(); // gets overwritten its just so it stops spammin errors
 
     public MenuSceneComponent()
     {
