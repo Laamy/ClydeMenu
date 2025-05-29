@@ -18,6 +18,11 @@ public class HotReloadBehaviour : MonoBehaviour
         if (Entry.isLoaded)
             Entry.modUpdate?.Invoke(null, null);
     }
+    public void LateUpdate()
+    {
+        if (Entry.isLoaded)
+            Entry.modLateUpdate?.Invoke(null, null);
+    }
 
     public void FixedUpdate()
     {

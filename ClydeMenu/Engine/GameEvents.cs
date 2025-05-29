@@ -1,8 +1,10 @@
 ﻿namespace ClydeMenu.Engine;
 
 using System;
-using SingularityGroup.HotReload;
+
 using UnityEngine;
+
+using static ClydeMenu.Engine.Patches;
 
 internal class GameEvents
 {
@@ -12,6 +14,9 @@ internal class GameEvents
     public static event Action? OnLobbyLeft;
     public static event Action? OnBanned;
     public static event Action? OnKicked;
+
+    // actual event hooks
+    public static event Action<ChangeLevelInfo>? OnLevelChanged;
 
     public static void Start()
     {
@@ -63,5 +68,10 @@ internal class GameEvents
 
         if (logString.Contains("You were kicked by the server."))
             OnKicked?.Invoke();
+    }
+
+    internal static void TriggerLevelChanged(ChangeLevelInfo changeLevelInfo)
+    {
+        OnLevelChanged?.Invoke(changeLevelInfo);
     }
 }

@@ -17,14 +17,14 @@ internal static class Patches
         public class Patches_RayCheck
         {
             public static bool Prefix(bool _grab)
-                => MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.HasMenuByType<MainMenu>();
+                => MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.IsFocused();
         }
 
         [HarmonyPatch(typeof(SpectateCamera), "PlayerSwitch")]
         public static class Patches_PlayerSwitch
         {
             public static bool Prefix(bool _next)
-                => MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.HasMenuByType<MainMenu>();
+                => MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.IsFocused();
         }
 
         // bro...
@@ -32,63 +32,63 @@ internal static class Patches
         public static class Patches_MenuButtonUpdate
         {
             public static bool Prefix()
-                => MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.HasMenuByType<MainMenu>();
+                => MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.IsFocused();
         }
 
         [HarmonyPatch(typeof(MenuElementServer), "Update")]
         public static class Patches_MenuElementServerUpdate
         {
             public static bool Prefix()
-                => MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.HasMenuByType<MainMenu>();
+                => MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.IsFocused();
         }
 
         [HarmonyPatch(typeof(MenuElementSaveFile), "Update")]
         public static class Patches_MenuElementSaveFileUpdate
         {
             public static bool Prefix()
-                => MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.HasMenuByType<MainMenu>();
+                => MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.IsFocused();
         }
 
         [HarmonyPatch(typeof(MenuElementRegion), "Update")]
         public static class Patches_MenuElementRegionUpdate
         {
             public static bool Prefix()
-                => MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.HasMenuByType<MainMenu>();
+                => MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.IsFocused();
         }
 
         [HarmonyPatch(typeof(MenuSlider), "Update")]
         public static class Patches_MenuSliderUpdate
         {
             public static bool Prefix()
-                => MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.HasMenuByType<MainMenu>();
+                => MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.IsFocused();
         }
 
         [HarmonyPatch(typeof(MenuScrollBox), "Update")]
         public static class Patches_MenuScrollBoxUpdate
         {
             public static bool Prefix()
-                => MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.HasMenuByType<MainMenu>();
+                => MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.IsFocused();
         }
 
         [HarmonyPatch(typeof(MenuManager), "Update")]
         public static class Patches_MenuManagerUpdate
         {
             public static bool Prefix()
-                => MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.HasMenuByType<MainMenu>();
+                => MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.IsFocused();
         }
 
         [HarmonyPatch(typeof(MenuButtonArrow), "Update")]
         public static class Patches_MenuButtonArrowUpdate
         {
             public static bool Prefix()
-                => MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.HasMenuByType<MainMenu>();
+                => MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.IsFocused();
         }
 
         [HarmonyPatch(typeof(MenuElementHover), "Update")]
         public static class Patches_MenuElementHoverUpdate
         {
             public static bool Prefix()
-                => MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.HasMenuByType<MainMenu>();
+                => MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.IsFocused();
         }
 
         // block the chat keybind stuff
@@ -96,7 +96,34 @@ internal static class Patches
         public static class Patches_StateInactive
         {
             public static bool Prefix()
-                => MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.HasMenuByType<MainMenu>();
+                => MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.IsFocused();
+        }
+
+        // BRO THIS IS DRIIVINGH ME INSANE WTF DID IB REAK
+        // annoying cursor crap
+        [HarmonyPatch(typeof(CursorManager), "Update")]
+        public static class Patches_CursorManager
+        {
+            public static bool Prefix()
+            {
+                if (MenuSceneComponent.Instance == null || MenuSceneComponent.Instance.IsFocused())
+                {
+                    RenderUtils.SetCursorState(true);
+                    return false;
+                }
+                return true;
+            }
+        }
+        
+        [HarmonyPatch(typeof(CursorManager), "Unlock")]
+        public static class Patches_CursorManagerUnlock
+        {
+            public static bool Prefix(float _time)
+            {
+                if (MenuSceneComponent.Instance == null || MenuSceneComponent.Instance.IsFocused())
+                    return false;
+                return true;
+            }
         }
     }
 
@@ -133,6 +160,7 @@ internal static class Patches
         }
     }
 
+    [ClydeChange("New PingSpoof(er) for privacy in lobbies", ClydeVersion.Release_v1_0)]
     [HarmonyPatch(typeof(PlayerAvatar), "FixedUpdate")]
     public static class Patches_PingSpoof
     {
@@ -216,12 +244,28 @@ internal static class Patches
         }
     }
 
+    public class ChangeLevelInfo
+    {
+        public RunManager __Instance;
+        public bool completedLevel;
+        public bool levelFailed;
+        public RunManager.ChangeLevelType changeLevelType;
+        public ChangeLevelInfo(RunManager instance, bool completed, bool failed, RunManager.ChangeLevelType changeType)
+        {
+            __Instance = instance;
+            completedLevel = completed;
+            levelFailed = failed;
+            changeLevelType = changeType;
+        }
+    }
     [HarmonyPatch(typeof(RunManager), "ChangeLevel")]
     public static class Patches_ChangeLevel
     {
-        public static bool Prefix(RunManager __instance)
+        public static bool Prefix(RunManager __instance, bool _completedLevel, bool _levelFailed, RunManager.ChangeLevelType _changeLevelType = RunManager.ChangeLevelType.Normal)
         {
             Storage.WAYPOINTS_POINTS.Clear();
+
+            GameEvents.TriggerLevelChanged(new ChangeLevelInfo(__instance, _completedLevel, _levelFailed, _changeLevelType));
 
             return true;
         }

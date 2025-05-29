@@ -1,9 +1,10 @@
 ﻿namespace ClydeMenu.Engine.Commands;
 
-using ClydeMenu.Engine.Settings;
-using UnityEngine;
-using Random = System.Random;
+using System;
 
+using ClydeMenu.Engine.Settings;
+
+[ClydeChange("New Waypoint module To mark important spots in the map", ClydeVersion.Release_v1_0)]
 public class WaypointModule : BaseModule
 {
     public WaypointModule() : base("Waypoint", "Waypoints for the map", "Visual") {}
@@ -11,7 +12,12 @@ public class WaypointModule : BaseModule
     public override void Initialize()
     {
         IsEnabled = true;
+
+        //GameEvents.OnLevelChanged += OnLevelChanged;
     }
+
+    //private void OnLevelChanged(Patches.ChangeLevelInfo info)
+    //    => Storage.WAYPOINTS_POINTS.Clear();
 
     public override void OnRender()
     {

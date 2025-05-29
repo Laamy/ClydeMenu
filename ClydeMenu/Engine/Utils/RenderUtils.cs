@@ -330,16 +330,10 @@ public class RenderUtils
             return;
 
         if (visible)
-        {
             info.SetValue(InputManager.instance, 0.1f);
-            CursorManager.instance.Unlock(-0.1f);//hides orange cursor
-        }
 
-        if (Cursor.visible == visible)
-            return;
-
-        Cursor.visible = visible;
         Cursor.lockState = visible ? CursorLockMode.None : CursorLockMode.Locked;
+        Cursor.visible = visible;
     }
 
     public static RenderWindow Window(string v, Rect rect) => new(rect, v, CurrentTheme);

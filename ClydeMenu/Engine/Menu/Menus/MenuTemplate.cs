@@ -29,5 +29,6 @@ public class MenuTemplate : BaseMenu
 
     public override void Render()
     {
+
     }
 }

@@ -6,8 +6,7 @@ using ClydeMenu.Engine.Menu;
 using ClydeMenu.Engine.Commands;
 using ClydeMenu.Engine.Components;
 using ClydeMenu.Engine.Settings;
-using System;
-using UnityEngine.InputSystem.OnScreen;
+using ClydeMenu.Engine.Menu.Menus;
 
 public class ClientComponent : BaseComponent
 {
@@ -15,6 +14,9 @@ public class ClientComponent : BaseComponent
 
     public ClientComponent()
     {
+        if (MenuSettings.ChangeLogVersion.Value != ClydeVersion.Current)
+            MenuSceneComponent.Instance.PushOrPopMenuByType<ChangeLogMenu>();
+
         //RenderUtils.Init();
         Entry.Log("ClydeMenu initialized");
     }
@@ -71,6 +73,12 @@ public class ClientComponent : BaseComponent
             {
                 foreach (var valuable in ClientInstance.GetValuableList())
                     RenderUtils.DrawAABB(ClientInstance.GetActiveColliderBounds(valuable.gameObject), Color.yellow);
+
+                //foreach (var valuable in ClientInstance.GetValuableList())
+                //{
+                //    var bounds = ClientInstance.GetActiveColliderBounds(valuable.gameObject);
+                //    RenderUtils.DrawWaypoint(valuable.gameObject.transform.position + (bounds.size/2), valuable.gameObject.name, Color.yellow);
+                //}
             }
 
             if (MenuSettings.ESP_Extractions.Value)

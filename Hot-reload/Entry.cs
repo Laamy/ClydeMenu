@@ -18,6 +18,7 @@ public class Entry
 
     public static bool isLoaded = false;
     public static MethodInfo modUpdate;
+    public static MethodInfo modLateUpdate;
     public static MethodInfo modFixedUpdate;
     public static MethodInfo modOnGUI;
 
@@ -106,6 +107,7 @@ public class Entry
             modLoad = type?.GetMethod("Load", BindingFlags.Public | BindingFlags.Static);
             modUnload = type?.GetMethod("Unload", BindingFlags.Public | BindingFlags.Static);
             modUpdate = type?.GetMethod("Update", BindingFlags.Public | BindingFlags.Static);
+            modLateUpdate = type?.GetMethod("LateUpdate", BindingFlags.Public | BindingFlags.Static);
             modFixedUpdate = type?.GetMethod("FixedUpdate", BindingFlags.Public | BindingFlags.Static);
             modOnGUI = type?.GetMethod("OnGUI", BindingFlags.Public | BindingFlags.Static);
 

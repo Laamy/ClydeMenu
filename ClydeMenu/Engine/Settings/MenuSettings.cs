@@ -42,6 +42,9 @@ internal class MenuSettings
     public static Setting<bool> ESP_Valuable { get; set; } = new("ESP_Valuable", false);
     public static Setting<bool> ESP_Extractions { get; set; } = new("ESP_Extractions", false);
 
+    // cache stuff
+    public static Setting<uint> ChangeLogVersion { get; set; } = new("ChangeLogVersion", 0);
+
     public static Timer _saveTimer;
 
     public static void Save()

@@ -78,6 +78,8 @@ class ThemeConfig
     }
 }
 
+[ClydeChange("New ClydeMenu (RightShift) clickgui with 6 themes", ClydeVersion.Release_v1_0)]
+[ClydeChange("New MapStealer (Aka map downloader) useful for when your friends fall asleep as host", ClydeVersion.Release_v1_0)]
 public class MainMenu : BaseMenu
 {
     public override void OnPop() { }
@@ -118,11 +120,11 @@ public class MainMenu : BaseMenu
         MenuStorage.renderNames =
         [
             "Visual",
-            "Player",
+            "Privacy",
             "Server",
             "Waypoints",
+            "Settings",
             "DebugTab",
-            "Settings"
         ];
 
         MenuStorage.renderActions =
@@ -138,6 +140,7 @@ public class MainMenu : BaseMenu
             () => {
                 DrawSettingLabel("Visual");
                 MenuSettings.VISUAL_MAPINFO.Value = DrawBoolean("MapInfo (Lvl & maxHaul)", MenuSettings.VISUAL_MAPINFO.Value);
+                MenuSettings.VISUAL_NOISELOGGER.Value = DrawBoolean("NoiseLogger", MenuSettings.VISUAL_NOISELOGGER.Value);
                 //Storage.DEBUGBOX = DrawNumberField("DebugBox", Storage.DEBUGBOX);
             },
             // might expose this tab if localhost
@@ -313,7 +316,7 @@ public class MainMenu : BaseMenu
             //    }
             //},
             () => {
-                DrawSettingLabel("Player");
+                DrawSettingLabel("Privacy");
 
                 // these stay
                 MenuSettings.AccountSpoofer.Value = DrawBoolean("AccountSpoofer", MenuSettings.AccountSpoofer.Value);
@@ -371,34 +374,6 @@ public class MainMenu : BaseMenu
                 }
             },
             () => {
-                DrawSettingLabel("Debug");
-                DrawSettingLabel("NOTE: this tab will NOT be exposed in release mode");
-
-                var newEnum = DrawEnum("Enum", ["Option1","Sex2","Piggy3"], Storage.DEBUG_ENUM);
-                if (newEnum != Storage.DEBUG_ENUM)
-                    Storage.DEBUG_ENUM = newEnum;
-
-                MenuSettings.ESP_Player.Value = DrawBoolean("Player ESP", MenuSettings.ESP_Player.Value);
-                MenuSettings.ESP_Enemy.Value = DrawBoolean("Enemy ESP", MenuSettings.ESP_Enemy.Value);
-                MenuSettings.ESP_Valuable.Value = DrawBoolean("Valuable ESP", MenuSettings.ESP_Valuable.Value);
-                MenuSettings.ESP_Extractions.Value = DrawBoolean("Extraction ESP", MenuSettings.ESP_Extractions.Value);
-
-                if (DrawButton("Button"))
-                    Entry.Log($"Debug button clicked!");
-
-                if (DrawExpandBox("ExpandBox")) {
-                    DrawSettingLabel("ExpandBox Content here");
-                    DrawSettingLabel("ExpandBox Content second");
-                }
-
-                Storage.DEBUG_NUMBERFIELD = DrawNumberField("NumberField", Storage.DEBUG_NUMBERFIELD);
-                Storage.DEBUG_TEXTFIELD = DrawTextField("TextField", Storage.DEBUG_TEXTFIELD);
-
-                Storage.DEBUG_PLAYERSELECT = DrawPlayerSelect("PlayerSelect", Storage.DEBUG_PLAYERSELECT);
-
-                Storage.DEBUG_SLIDER = DrawSlider("Slider", Storage.DEBUG_SLIDER);
-            },
-            () => {
                 DrawSettingLabel("Settings");
 
                 //StyleThemes.Keys.ToArray()
@@ -410,7 +385,36 @@ public class MainMenu : BaseMenu
                     Storage.InternalThemeStyle = StyleTheme;
                     MenuSettings.GameTheme.Value = Storage.StyleThemes.Keys.ToArray()[newTheme];
                 }
-            }
+            },
+            () => {
+                DrawSettingLabel("Debug");
+                DrawSettingLabel("NOTE: this tab will NOT be exposed in release mode");
+
+                var newEnum = DrawEnum("Enum", ["Option1", "Sex2", "Piggy3"], Storage.DEBUG_ENUM);
+                if (newEnum != Storage.DEBUG_ENUM)
+                    Storage.DEBUG_ENUM = newEnum;
+
+                MenuSettings.ESP_Player.Value = DrawBoolean("Player ESP", MenuSettings.ESP_Player.Value);
+                MenuSettings.ESP_Enemy.Value = DrawBoolean("Enemy ESP", MenuSettings.ESP_Enemy.Value);
+                MenuSettings.ESP_Valuable.Value = DrawBoolean("Valuable ESP", MenuSettings.ESP_Valuable.Value);
+                MenuSettings.ESP_Extractions.Value = DrawBoolean("Extraction ESP", MenuSettings.ESP_Extractions.Value);
+
+                if (DrawButton("Button"))
+                    Entry.Log($"Debug button clicked!");
+
+                if (DrawExpandBox("ExpandBox"))
+                {
+                    DrawSettingLabel("ExpandBox Content here");
+                    DrawSettingLabel("ExpandBox Content second");
+                }
+
+                Storage.DEBUG_NUMBERFIELD = DrawNumberField("NumberField", Storage.DEBUG_NUMBERFIELD);
+                Storage.DEBUG_TEXTFIELD = DrawTextField("TextField", Storage.DEBUG_TEXTFIELD);
+
+                Storage.DEBUG_PLAYERSELECT = DrawPlayerSelect("PlayerSelect", Storage.DEBUG_PLAYERSELECT);
+
+                Storage.DEBUG_SLIDER = DrawSlider("Slider", Storage.DEBUG_SLIDER);
+            },
         ];
     }
 
@@ -466,7 +470,7 @@ public class MainMenu : BaseMenu
         RenderUtils.DrawRect(new Vector2(0, 0), MenuStorage.menuSize, StyleTheme.ContentBoxBackground);
 
         RenderUtils.DrawRect(new Vector2(0, 0), new Vector2(MenuStorage.menuSize.x, titleBarHeight), StyleTheme.Titlebar);
-        RenderUtils.DrawString(new Vector2(12, 6), "clickgui debug", StyleTheme.TitlebarText);
+        RenderUtils.DrawString(new Vector2(12, 6), $"ClydeMenu {ClydeVersion.ToVersionString(ClydeVersion.Current)}", StyleTheme.TitlebarText);
         RenderUtils.DrawRect(new Vector2(MenuStorage.menuSize.x - 17, 6), new Vector2(12, 12), StyleTheme.TitlebarCloseButton);
 
         if (LabelPressed("TitlebarCloseButton", new Rect(MenuStorage.menuSize.x - 17, 6, 12, 12)))
@@ -537,7 +541,6 @@ public class MainMenu : BaseMenu
         Vector2 mousePos = cur.mousePosition;
         if (cur.type == EventType.MouseDrag && sliderHolderRect.Contains(mousePos))
         {
-            Entry.Log("Slider clicked");
             percent = Mathf.Clamp01((mousePos.x - sliderX) / barWidth);
             cur.Use();
         }

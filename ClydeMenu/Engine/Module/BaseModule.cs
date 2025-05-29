@@ -1,7 +1,5 @@
 ﻿namespace ClydeMenu.Engine.Commands;
 
-using Photon.Pun;
-
 public abstract class BaseModule
 {
     public string Name { get; set; }

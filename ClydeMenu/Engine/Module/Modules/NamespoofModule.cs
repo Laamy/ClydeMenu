@@ -1,16 +1,15 @@
 ﻿namespace ClydeMenu.Engine.Commands;
 
-using System;
 using ClydeMenu.Engine.Settings;
-using ExitGames.Client.Photon;
 
+using ExitGames.Client.Photon;
 
 using Photon.Pun;
 using Photon.Realtime;
 
-using UnityEngine;
 using Random = System.Random;
 
+[ClydeChange("New AccountSpoof module that allows you to \"spoof\" your \"account\" to something random", ClydeVersion.Release_v1_0)]
 public class NamespoofModule : BaseModule
 {
     public NamespoofModule() : base("Namespoof", "Spoof your username to random crap", "Misc") { }
@@ -37,7 +36,7 @@ public class NamespoofModule : BaseModule
         "White", "Xiong", "Yates", "Zuniga", "Adams", "Bishop", "Caldwell", "Dixon",
         "Edwards", "Floyd", "Gordon", "Harrison", "Ibarra", "Jordan", "Klein", "Lamb",
         "Mason", "Nash", "O'Connor", "Peters", "Quinlan", "Ramos", "Sullivan", "Tate",
-        "Ullman", "Vaughn", "Wagner", "Alvarez", "Adolf", "Hitler", "Shock", "Lilly", "Alex",
+        "Ullman", "Vaughn", "Wagner", "Alvarez", "Shock", "Lilly", "Alex",
         "Confusion", "Seth", "Rambo", "Random", "Olvera"
     ];
 

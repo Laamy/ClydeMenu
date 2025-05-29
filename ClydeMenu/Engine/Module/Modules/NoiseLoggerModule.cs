@@ -1,10 +1,10 @@
 ﻿namespace ClydeMenu.Engine.Commands;
 
-using System.Security.Cryptography.Pkcs;
-using ClydeMenu.Engine.Settings;
 using UnityEngine;
-using Random = System.Random;
 
+using ClydeMenu.Engine.Settings;
+
+[ClydeChange("New NoiseLogger module that allows you to use minecraft subtitles in R.E.P.O", ClydeVersion.Release_v1_0)]
 public class NoiseLoggerModule : BaseModule
 {
     public NoiseLoggerModule() : base("NoiseLogger", "Minecraft subtitles ported to REPO", "Visual") { }

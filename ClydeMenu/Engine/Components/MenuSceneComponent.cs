@@ -7,6 +7,7 @@ using System.Linq;
 using UnityEngine;
 
 using ClydeMenu.Engine.Components;
+using System.Runtime.InteropServices;
 
 internal class MenuSceneComponent : BaseComponent
 {
@@ -25,7 +26,7 @@ internal class MenuSceneComponent : BaseComponent
 
     private readonly List<BaseMenu> baseMenus = [];
 
-    public BaseMenu FocusedMenu { get; private set; }
+    public bool IsFocused() => baseMenus.Count > 0;
 
     public bool HasMenuByType(Type menu) => baseMenus.Any(m => m.GetType() == menu);
     public bool HasMenuByType<T>() where T : BaseMenu => baseMenus.Any(m => m.GetType() == typeof(T));
@@ -52,28 +53,29 @@ internal class MenuSceneComponent : BaseComponent
         baseMenus.Add(menu);
         Entry.Log($"Pushed menu: {menu?.GetType().Name}");
 
-        FocusedMenu = menu;
-
         RenderUtils.SetCursorState(true);
     }
 
     public void PopMenu(BaseMenu menu)
     {
-        if (menu == FocusedMenu)
-            FocusedMenu = baseMenus.Count > 1 ? baseMenus[baseMenus.Count - 2] : null;
-
         baseMenus.Remove(menu);
 
-        if (baseMenus.Count == 0)
+        if (!IsFocused())
             RenderUtils.SetCursorState(false);
+    }
+
+    public override void LateUpdate()
+    {
+        if (IsFocused())
+            RenderUtils.SetCursorState(true);
     }
 
     public override void Update()
     {
-        if (baseMenus.Count != 0)
+        if (IsFocused())
             RenderUtils.SetCursorState(true);
 
-        for (int i = baseMenus.Count - 1; i >= 0; i--)
+        for (var i = baseMenus.Count - 1; i >= 0; i--)
         {
             BaseMenu menu = baseMenus[i];
             menu.OnUpdate();
@@ -96,7 +98,7 @@ internal class MenuSceneComponent : BaseComponent
             menu.Render();
         }
 
-        if (baseMenus.Count != 0)
+        if (IsFocused())
         {
             var curEvent = Event.current;
             Vector2 mousePos = curEvent.mousePosition;

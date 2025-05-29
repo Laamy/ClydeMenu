@@ -37,15 +37,12 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Engine\Command\Commands\GiveUpgradeCommand.cs" />
-    <Compile Include="Engine\Command\Commands\KickCommand.cs" />
-    <Compile Include="Engine\Command\Commands\MessageSpoofCommand.cs" />
-    <Compile Include="Engine\Command\Commands\StableSpawnCommand.cs" />
     <Compile Include="Engine\Components\BaseComponent.cs" />
     <Compile Include="Engine\AppMods\Extensions.cs" />
     <Compile Include="Engine\GameEvents.cs" />
     <Compile Include="Engine\Menu\BaseMenu.cs" />
     <Compile Include="Engine\Components\MenuSceneComponent.cs" />
+    <Compile Include="Engine\Menu\Menus\ChangeLogMenu.cs" />
     <Compile Include="Engine\Menu\Menus\MainMenu.cs" />
     <Compile Include="Engine\Menu\Menus\MenuTemplate.cs" />
     <Compile Include="Engine\Module\BaseModule.cs" />
@@ -60,12 +57,6 @@
     <Compile Include="Engine\Settings\MenuSettings.cs" />
     <Compile Include="Engine\ClientInstance.cs" />
     <Compile Include="Engine\Components\ClientComponent.cs" />
-    <Compile Include="Engine\Components\CmdBarComponent.cs" />
-    <Compile Include="Engine\Command\BaseCommand.cs" />
-    <Compile Include="Engine\Command\Commands\CmdCommand.cs" />
-    <Compile Include="Engine\Command\CmdHandler.cs" />
-    <Compile Include="Engine\Command\Commands\ExitCommand.cs" />
-    <Compile Include="Engine\Command\Commands\SpawnCommand.cs" />
     <Compile Include="Engine\Storage.cs" />
     <Compile Include="Engine\Utils\ItemUtils.cs" />
     <Compile Include="Engine\Utils\RenderUtils.cs" />

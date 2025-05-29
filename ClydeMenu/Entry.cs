@@ -49,7 +49,6 @@ public class Entry
             InitModule<MenuSceneComponent>("MenuScene"); // menu stack stuff for other components to use
 
             InitModule<ClientComponent>("ClydeMenu");
-            InitModule<CmdBarComponent>("CmdBar");
         }
         catch (Exception e)
         {
@@ -89,6 +88,12 @@ public class Entry
     {
         foreach (var comp in loadedComps)
             comp.Update();
+    }
+
+    public static void LateUpdate()
+    {
+        foreach (var comp in loadedComps)
+            comp.LateUpdate();
     }
 
     public static void FixedUpdate()

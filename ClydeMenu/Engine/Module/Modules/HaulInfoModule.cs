@@ -1,9 +1,10 @@
 ﻿namespace ClydeMenu.Engine.Commands;
 
 using ClydeMenu.Engine.Settings;
-using UnityEngine;
-using Random = System.Random;
 
+using UnityEngine;
+
+[ClydeChange("New HaulInfo module that displays the current haul info (min-max & level)", ClydeVersion.Release_v1_0)]
 public class HaulInfoModule : BaseModule
 {
     public HaulInfoModule() : base("HualInfo", "Information about the scene (lvl & estimated possible haul)", "Visual") { }
