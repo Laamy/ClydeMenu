@@ -73,7 +73,7 @@
     <Compile Include="Engine\AppMods\Patches.cs" />
     <Compile Include="Engine\Module\Modules\NoiseLoggerModule.cs" />
     <Compile Include="Engine\Module\Modules\WaypointModule.cs" />
-    <Compile Include="Engine\NOTES.cs" />
+    <Compile Include="Content\NOTES.cs" />
     <Compile Include="Engine\Settings\MenuSettings.cs" />
     <Compile Include="Engine\ClientInstance.cs" />
     <Compile Include="Engine\Components\ClientComponent.cs" />
@@ -434,6 +434,10 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Content\dependencies\0Harmony.dll" />
+    <Content Include="Content\v1.0\ClydeMenu.dll" />
+    <Content Include="Content\v1.0\Hot-reload.dll" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
