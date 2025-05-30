@@ -36,6 +36,9 @@ public class Entry
 
     public static void Load()
     {
+        if (!injFolder.Exists)
+            injFolder.Create();
+
         foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
         {
             if (assembly.GetName().Name == "BepInEx")
@@ -77,10 +80,12 @@ public class Entry
         Log("Mod successfully loaded");
     }
 
+    private static DirectoryInfo injFolder = new($"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\\.Clyde");
+
     public static void InitDependencies()
     {
         // executable patching live ig
-        var dllPath = @"C:\build\r.e.p.o\0Harmony.dll";
+        var dllPath = Path.Combine(injFolder.FullName, "0Harmony.dll");
         var bytes = File.ReadAllBytes(dllPath);
         Assembly.Load(bytes);
     }
@@ -99,7 +104,7 @@ public class Entry
             GC.Collect();
             GC.WaitForPendingFinalizers();
 
-            var dllPath = @"C:\build\r.e.p.o\ClydeMenu.dll";
+            var dllPath = Path.Combine(injFolder.FullName, "ClydeMenu.dll");
             var bytes = File.ReadAllBytes(dllPath);
             modAssembly = Assembly.Load(bytes);
 
