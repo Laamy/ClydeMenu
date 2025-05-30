@@ -80,9 +80,10 @@ class ClydeChangeEntry
 
 static class ClydeVersion
 {
-    public const uint Release_v1_0 = 0x01000000;//latest
+    public const uint Release_v1_0 = 0x01000000;
+    public const uint Release_v1_1 = 0x01010000;//latest
 
-    public const uint Current = Release_v1_0;
+    public const uint Current = Release_v1_1;
 
     public static string ToVersionString(uint version)
     {
@@ -125,4 +126,10 @@ static class ClydeVersion
         changesByVersion.TryGetValue(version, out var list) ? list : Array.Empty<ClydeChangeEntry>();
 
     public static IEnumerable<uint> AllVersions => changesByVersion.Keys;
+
+    public static bool IsDebug
+    {
+        get;
+        internal set;
+    } = false;
 }

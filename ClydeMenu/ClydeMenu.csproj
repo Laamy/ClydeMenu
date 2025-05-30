@@ -19,7 +19,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\ClydeInjector\bin\Debug\build\</OutputPath>
+    <OutputPath>..\..\..\..\AppData\Roaming\.Clyde\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -438,6 +438,7 @@
     <Content Include="Content\dependencies\0Harmony.dll" />
     <Content Include="Content\v1.0\ClydeMenu.dll" />
     <Content Include="Content\v1.0\Hot-reload.dll" />
+    <Content Include="Content\v1.1\Hot-reload.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing.Printing;
 using System.Linq;
 
 using ClydeMenu.Engine.Settings;
@@ -124,8 +123,15 @@ public class MainMenu : BaseMenu
             "Server",
             "Waypoints",
             "Settings",
-            "DebugTab",
+            //"DebugTab",
         ];
+
+        if (ClydeVersion.IsDebug)
+        {
+            var old = MenuStorage.renderNames.ToList();
+            old.Add("Debug (DEV");
+            MenuStorage.renderNames = old.ToArray();
+        }
 
         MenuStorage.renderActions =
         [
