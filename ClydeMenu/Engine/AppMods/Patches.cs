@@ -277,13 +277,14 @@ internal static class Patches
     }
 
     public static bool isInFreelook = false;
+
+    [ClydeChange("Added Freelook mode when ALT is held (Toggle in clickgui)", ClydeVersion.Release_v1_3)]
     [HarmonyPatch(typeof(CameraAim), "Update")]
     public static class Patches_CameraAim
     {
         static bool oldHeld = false;
         static Quaternion originalRotation;
         static float lerpProgress = 0f;
-        static bool shouldLerpBack = false;
         static float yaw = 0f;
         static float pitch = 0f;
         static bool initialized = false;

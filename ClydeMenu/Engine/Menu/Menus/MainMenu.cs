@@ -130,7 +130,7 @@ public class MainMenu : BaseMenu
         if (ClydeVersion.IsDebug)
         {
             var old = MenuStorage.renderNames.ToList();
-            old.Add("Debug (DEV");
+            old.Add("Debug");
             MenuStorage.renderNames = old.ToArray();
         }
 
