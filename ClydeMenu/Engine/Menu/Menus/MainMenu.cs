@@ -53,6 +53,7 @@ class ThemeConfig
         Color textPrimary,
         Color textSecondary,
         Color background,
+        Color sidebarBackground,
         Color altBackground)
     {
         return new ThemeConfig
@@ -63,7 +64,7 @@ class ThemeConfig
             TitlebarCloseButton = Color.Lerp(baseAccent, new Color(1, 0, 0), 0.4f),
             Titlebar = basePrimary,
             TitlebarText = textPrimary,
-            Sidebar = background,
+            Sidebar = sidebarBackground,
             SidebarButton = baseSecondary,
             SidebarButtonSelected = Color.Lerp(baseSecondary, basePrimary, 0.3f),
             ContentBoxBackground = background,

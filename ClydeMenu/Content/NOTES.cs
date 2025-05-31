@@ -82,8 +82,8 @@ class ClydeChangeEntry
 static class ClydeVersion
 {
     public const uint Release_v1_0 = 0x01000000;
-    public const uint Release_v1_1 = 0x01010000;
-    public const uint Release_v1_2 = 0x01020000;//latest
+    public const uint Release_v1_1 = 0x01010000;//latest
+    public const uint Release_v1_2 = 0x01020000;
 
     public const uint Current = Release_v1_2;
 
