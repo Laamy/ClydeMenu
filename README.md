@@ -1,3 +1,7 @@
+# Suggestions/requests
+
+go ahead and give me suggestions/requests in the issues and i'll try my best to implement them
+
 # ClydeMenu
 
 ![image](https://github.com/user-attachments/assets/e5d6c4af-b13e-4596-b04b-46e9a1918dcc)
