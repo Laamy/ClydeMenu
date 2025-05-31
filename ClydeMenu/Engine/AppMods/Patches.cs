@@ -1,13 +1,10 @@
 ﻿namespace ClydeMenu.Engine;
 
-using UnityEngine;
-
-using HarmonyLib;
-
-using ClydeMenu.Engine.Settings;
-using ClydeMenu.Engine.Menu;
 using System.Collections.Generic;
-using System;
+using ClydeMenu.Engine.Menu;
+using ClydeMenu.Engine.Settings;
+using HarmonyLib;
+using UnityEngine;
 
 internal static class Patches
 {
@@ -326,8 +323,16 @@ internal static class Patches
                     initialized = true;
                 }
 
-                var mouseX = Input.GetAxis("Mouse X") * 2.5f;
-                var mouseY = Input.GetAxis("Mouse Y") * 2.5f;
+                var aimSens = ClientInstance.FetchFieldValue<float, GameplayManager>("aimSensitivity", GameplayManager.instance);
+                var aimSensDefault = ClientInstance.FetchFieldValue<int, DataDirector>("aimSensitivityDefault", DataDirector.instance);
+                var defaultSetAmt = ClientInstance.FetchFieldValue<float, CameraAim>("defaultSettingAmount", __instance);
+
+                // i give up
+                var sens = Mathf.Lerp(aimSens / 100f, aimSensDefault / 100f, defaultSetAmt);
+                sens *= 4;
+
+                var mouseX = Input.GetAxis("Mouse X") * sens;
+                var mouseY = Input.GetAxis("Mouse Y") * sens;
 
                 yaw += mouseX;
                 pitch -= mouseY;
