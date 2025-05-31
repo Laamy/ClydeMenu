@@ -8,9 +8,3 @@ go ahead and give me suggestions/requests in the issues and i'll try my best to 
 ![image](https://github.com/user-attachments/assets/7ad61658-767c-4079-ae21-fb53a922596f)
 ![image](https://github.com/user-attachments/assets/46ffa143-e346-40ea-b9ad-035ba21a9491)
 ![image](https://github.com/user-attachments/assets/4be9235e-41fd-4243-9bb8-12dff6fd1eb8)
-
-# Has this released?
-
-a debug build has released with basic ESP (But these wont be included in the actual release cuz its just a debug tool and i plan to have this be a legit client > cheat client)
-
-soon
