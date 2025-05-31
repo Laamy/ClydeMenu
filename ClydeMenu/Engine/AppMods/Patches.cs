@@ -17,7 +17,11 @@ internal static class Patches
         public class Patches_RayCheck
         {
             public static bool Prefix(bool _grab)
-                => MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.IsFocused();
+            {
+                if (isInFreelook)
+                    return false;
+                return MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.IsFocused();
+            }
         }
 
         [HarmonyPatch(typeof(SpectateCamera), "PlayerSwitch")]
@@ -267,6 +271,79 @@ internal static class Patches
             Storage.WAYPOINTS_POINTS.Clear();
 
             GameEvents.TriggerLevelChanged(new ChangeLevelInfo(__instance, _completedLevel, _levelFailed, _changeLevelType));
+
+            return true;
+        }
+    }
+
+    public static bool isInFreelook = false;
+    [HarmonyPatch(typeof(CameraAim), "Update")]
+    public static class Patches_CameraAim
+    {
+        static bool oldHeld = false;
+        static Quaternion originalRotation;
+        static float lerpProgress = 0f;
+        static bool shouldLerpBack = false;
+        static float yaw = 0f;
+        static float pitch = 0f;
+        static bool initialized = false;
+        static bool lockInput = false;
+
+        public static bool Prefix(CameraAim __instance)
+        {
+            if (!MenuSettings.VISUAL_FreeLook.Value)
+                return true;
+
+            if (lockInput)
+            {
+                lerpProgress += Time.deltaTime * 5f;
+                Quaternion target = Quaternion.Euler(originalRotation.eulerAngles.x, originalRotation.eulerAngles.y, 0f);
+                Camera.main.transform.rotation = Quaternion.Slerp(Camera.main.transform.rotation, target, lerpProgress);
+                if (lerpProgress >= 1f)
+                {
+                    lockInput = false;
+                }
+                return false;
+            }
+
+            var held = Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt);
+
+            if (held)
+            {
+                if (!initialized)
+                {
+                    Vector3 euler = Camera.main.transform.eulerAngles;
+                    originalRotation = Quaternion.Euler(euler.x, euler.y, 0f);
+                    yaw = euler.y;
+                    pitch = euler.x > 180f ? euler.x - 360f : euler.x;
+                    initialized = true;
+                }
+
+                var mouseX = Input.GetAxis("Mouse X") * 2.5f;
+                var mouseY = Input.GetAxis("Mouse Y") * 2.5f;
+
+                yaw += mouseX;
+                pitch -= mouseY;
+
+                pitch = Mathf.Clamp(pitch, -60f, 60f);
+                var yawDelta = Mathf.DeltaAngle(originalRotation.eulerAngles.y, yaw);
+                yaw = Mathf.Clamp(yawDelta, -90f, 90f) + originalRotation.eulerAngles.y;
+
+                Camera.main.transform.rotation = Quaternion.Euler(pitch, yaw, 0f);
+
+                isInFreelook = true;
+                oldHeld = true;
+                return false;
+            }
+
+            if (oldHeld)
+            {
+                isInFreelook = false;
+                lerpProgress = 0f;
+                oldHeld = false;
+                initialized = false;
+                lockInput = true;
+            }
 
             return true;
         }

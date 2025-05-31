@@ -43,8 +43,8 @@
 // probably gonna write a new renderutil window based on the other one i never ended up using
 // its also probably best if i make noise subtitles & haul info one of these draggable windows
 
-// [Freelook]
-// Hold alt to freeze the camera direction and rotate it freely without effecting the movement vectors
+/// [Freelook]
+/// Hold alt to freeze the camera direction and rotate it freely without effecting the movement vectors
 
 namespace ClydeMenu.Engine;
 

@@ -32,6 +32,7 @@ internal class MenuSettings
 
     public static Setting<bool> VISUAL_MAPINFO { get; set; } = new("VISUAL_MAPINFO", true);
     public static Setting<bool> VISUAL_NOISELOGGER { get; set; } = new("VISUAL_NOISELOGGER", true);
+    public static Setting<bool> VISUAL_FreeLook { get; set; } = new("VISUAL_FreeLook", false);
 
     public static Setting<bool> AccountSpoofer { get; set; } = new("AccountSpoofer", false);
     public static Setting<bool> PingSpoofer { get; set; } = new("PingSpoofer", false);
