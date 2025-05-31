@@ -258,6 +258,7 @@ internal static class Patches
             changeLevelType = changeType;
         }
     }
+
     [HarmonyPatch(typeof(RunManager), "ChangeLevel")]
     public static class Patches_ChangeLevel
     {
@@ -270,4 +271,6 @@ internal static class Patches
             return true;
         }
     }
+
+    // might add options to groom UraniumScript's functionality and other crap
 }

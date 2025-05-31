@@ -7,6 +7,8 @@ using ClydeMenu.Engine.Commands;
 using ClydeMenu.Engine.Components;
 using ClydeMenu.Engine.Settings;
 using ClydeMenu.Engine.Menu.Menus;
+using System.Runtime.InteropServices;
+using System;
 
 public class ClientComponent : BaseComponent
 {
@@ -16,6 +18,10 @@ public class ClientComponent : BaseComponent
     {
         if (MenuSettings.ChangeLogVersion.Value != ClydeVersion.Current)
             MenuSceneComponent.Instance.PushOrPopMenuByType<ChangeLogMenu>();
+
+        var win = WindowManager.FindWindow(null, "R.E.P.O.");
+        if (win != null)
+            WindowManager.SetWindowText(WindowManager.FindWindow(null, "R.E.P.O."), $"R.E.P.O. {BuildManager.instance.version.title}    |    ClydeMenu {ClydeVersion.ToVersionString(ClydeVersion.Current)}");
 
         //RenderUtils.Init();
         Entry.Log("ClydeMenu initialized");
