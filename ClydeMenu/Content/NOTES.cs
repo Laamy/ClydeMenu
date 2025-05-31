@@ -81,9 +81,11 @@ class ClydeChangeEntry
 [ClydeChange("Updated for R.E.P.O v0.1.2.37_beta", Release_v1_2, isDebug: false)]
 static class ClydeVersion
 {
+    public static readonly bool IsDebug = false;
+
     public const uint Release_v1_0 = 0x01000000;
-    public const uint Release_v1_1 = 0x01010000;//latest
-    public const uint Release_v1_2 = 0x01020000;
+    public const uint Release_v1_1 = 0x01010000;
+    public const uint Release_v1_2 = 0x01020000;//latest
 
     public const uint Current = Release_v1_2;
 
@@ -128,10 +130,4 @@ static class ClydeVersion
         changesByVersion.TryGetValue(version, out var list) ? list : Array.Empty<ClydeChangeEntry>();
 
     public static IEnumerable<uint> AllVersions => changesByVersion.Keys;
-
-    public static bool IsDebug
-    {
-        get;
-        internal set;
-    } = true;
 }
