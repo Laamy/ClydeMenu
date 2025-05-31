@@ -32,12 +32,10 @@ internal class ClydeUpdater
         if (!injFolder.Exists)
             injFolder.Create();
 
-        var client = new WebClient();
-
         var harmony = Path.Combine(injFolder.FullName, "0Harmony.dll");
         if (!File.Exists(harmony))
         {
-            client.DownloadFile($"{TargetUri}/dependencies/0Harmony.dll", harmony);
+            DownloadFile($"{TargetUri}/dependencies/0Harmony.dll", harmony);
             Program.Log("Downloaded client dependencies");
         }
 
@@ -69,7 +67,7 @@ internal class ClydeUpdater
             if (File.Exists(target))
                 File.Delete(target);
 
-            client.DownloadFile(targetUri , target);
+            DownloadFile(targetUri, target);
             Program.Log($"Successfully downloaded {lib} ({i}/{coreLibs.Length})");
             i++;
         }
@@ -81,10 +79,9 @@ internal class ClydeUpdater
 
     private static string LatestFolder()
     {
-        var client = new WebClient();
-        var notes = client.DownloadString($"{TargetUri}/NOTES.cs");
+        var notes = DownloadString($"{TargetUri}/NOTES.cs");
 
-        foreach (var note in notes.Split('\r'))
+        foreach (var note in notes.Split('\n'))
         {
             if (note.Contains("//latest"))
             {
@@ -94,9 +91,34 @@ internal class ClydeUpdater
 
                 uint versionId = Convert.ToUInt32(pattern.Value, 16);
                 var version = ToVersionString(versionId);
+                Console.WriteLine(version);
                 return version;
             }
         }
         return null;
+    }
+
+    static void DownloadFile(string url, string path)
+    {
+        var request = (HttpWebRequest)WebRequest.Create(url);
+        request.Method = "GET";
+        request.CachePolicy = new System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.NoCacheNoStore);
+
+        using var response = (HttpWebResponse)request.GetResponse();
+        using var stream = response.GetResponseStream();
+        using var file = File.Create(path);
+        stream.CopyTo(file);
+    }
+
+    static string DownloadString(string url)
+    {
+        var request = (HttpWebRequest)WebRequest.Create(url);
+        request.Method = "GET";
+        request.CachePolicy = new System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.NoCacheNoStore);
+
+        using var response = (HttpWebResponse)request.GetResponse();
+        using var stream = response.GetResponseStream();
+        using var reader = new StreamReader(stream);
+        return reader.ReadToEnd();
     }
 }
