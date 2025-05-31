@@ -292,6 +292,7 @@ internal static class Patches
 
         public static bool Prefix(CameraAim __instance)
         {
+
             if (!MenuSettings.VISUAL_FreeLook.Value)
                 return true;
 
@@ -308,6 +309,11 @@ internal static class Patches
             }
 
             var held = Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt);
+
+            if (SemiFunc.MenuLevel() ||
+                ClientInstance.FetchFieldValue<float, InputManager>("disableAimingTimer", InputManager.instance) > 0 ||
+                ClientInstance.FetchFieldValue<bool, CameraAim>("overrideAimStop", CameraAim.Instance))
+                held = false;
 
             if (held)
             {
