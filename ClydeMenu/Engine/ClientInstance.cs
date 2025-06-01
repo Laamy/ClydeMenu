@@ -224,6 +224,21 @@ internal class ClientInstance
         return resultBounds;
     }
 
+    internal static bool IsHolding<T>()
+    {
+        var grabObj = PlayerController.instance.physGrabObject;
+        var isGrabbing = PlayerController.instance.physGrabActive;
+
+        if (grabObj == null || !isGrabbing)
+            return false;
+
+        var grabber = grabObj.GetComponent<T>();
+        if (grabber == null)
+            return false;
+
+        return true;
+    }
+
     // new MasterAndOwnerOnlyRPC & MasterOnlyRPC func groomed these
     //internal static void SpoofMsg(PlayerAvatar avatar, string msg) => avatar.photonView.RPC("ChatMessageSendRPC", RpcTarget.All, msg, false);
     //internal static void RevivePlayer(PlayerAvatar avatar)

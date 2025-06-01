@@ -1,5 +1,6 @@
 ﻿namespace ClydeMenu.Engine;
 
+using System;
 using System.Collections.Generic;
 using ClydeMenu.Engine.Menu;
 using ClydeMenu.Engine.Settings;
@@ -273,7 +274,29 @@ internal static class Patches
         }
     }
 
+    // all of this just for freelook
+    [HarmonyPatch(typeof(SpiralOnScreen))]
+    public static class Patches_SpiralFade
+    {
+        [HarmonyPatch("FadeIn")]
+        [HarmonyPrefix]
+        public static bool Prefix_FadeIn()
+        {
+            overrideFreelook = true;
+            return true;
+        }
+
+        [HarmonyPatch("FadeOut")]
+        [HarmonyPrefix]
+        public static bool Prefix_FadeOut()
+        {
+            overrideFreelook = false;
+            return true;
+        }
+    }
+
     public static bool isInFreelook = false;
+    public static bool overrideFreelook = false;
     [ClydeChange("Added Freelook mode when ALT is held (Toggle in clickgui)", ClydeVersion.Release_v1_3)]
     [HarmonyPatch(typeof(CameraAim), "Update")]
     public static class Patches_CameraAim
@@ -288,10 +311,6 @@ internal static class Patches
 
         public static bool Prefix(CameraAim __instance)
         {
-
-            if (!MenuSettings.VISUAL_FreeLook.Value)
-                return true;
-
             if (lockInput)
             {
                 lerpProgress += Time.deltaTime * 5f;
@@ -306,9 +325,19 @@ internal static class Patches
 
             var held = Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt);
 
-            if (SemiFunc.MenuLevel() ||
+            //var targetObj = ClientInstance.FetchFieldValue<GameObject, CameraAim>("AimTargetObject", __instance);
+            //if (targetObj != null)
+            //    Entry.Log($""onent<EnemyUpscream>() == null);
+
+            if (
+                SemiFunc.MenuLevel() ||
                 ClientInstance.FetchFieldValue<float, InputManager>("disableAimingTimer", InputManager.instance) > 0 ||
-                ClientInstance.FetchFieldValue<bool, CameraAim>("overrideAimStop", CameraAim.Instance))
+                ClientInstance.FetchFieldValue<bool, CameraAim>("overrideAimStop", CameraAim.Instance) ||
+                overrideFreelook ||
+                !MenuSettings.VISUAL_FreeLook.Value ||
+                ClientInstance.IsHolding<ValuableBoombox>() ||
+                ClientInstance.IsHolding<MusicBoxTrap>()
+            )
                 held = false;
 
             if (held)
