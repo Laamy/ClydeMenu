@@ -359,6 +359,7 @@ internal static class Patches
                 ClientInstance.FetchFieldValue<bool, CameraAim>("overrideAimStop", CameraAim.Instance) ||
                 overrideFreelook ||
                 !MenuSettings.VISUAL_FreeLook.Value ||
+                ClientInstance.IsHolding<GumballValuable>() ||
                 ClientInstance.IsHolding<ValuableBoombox>() ||
                 ClientInstance.IsHolding<MusicBoxTrap>()
             )
