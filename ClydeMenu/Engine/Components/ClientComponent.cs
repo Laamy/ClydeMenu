@@ -9,6 +9,7 @@ using ClydeMenu.Engine.Settings;
 using ClydeMenu.Engine.Menu.Menus;
 using System.Runtime.InteropServices;
 using System;
+using System.Collections.Generic;
 
 public class ClientComponent : BaseComponent
 {
@@ -29,11 +30,11 @@ public class ClientComponent : BaseComponent
 
     public void HandleInputs()
     {
-        //if (Input.GetKeyDown(KeyCode.Delete))
-        //{
-        //    MenuSceneComponent.Instance.PushOrPopMenuByType<DebugMenu>();
-        //    Entry.Log($"Menu is now {(MenuSceneComponent.Instance.HasMenuByType<DebugMenu>() ? "shown" : "hidden")}");
-        //}
+        if (Input.GetKeyDown(KeyCode.F2))
+        {
+            //private List<EnemySetup> enemyList
+            //var enemyList = ClientInstance.GetEnemyList();
+        }
         
         if (Input.GetKeyDown(KeyCode.RightShift))
         {

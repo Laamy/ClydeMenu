@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.EnterpriseServices.Internal;
 using ClydeMenu.Engine.Menu;
 using ClydeMenu.Engine.Settings;
 using HarmonyLib;
@@ -274,6 +275,26 @@ internal static class Patches
         }
     }
 
+    // debugging features!!!
+    [HarmonyPatch(typeof(EnemyDirector), "PickEnemies")]
+    public static class Patches_PickEnemies
+    {
+        public static bool Prefix(EnemyDirector __instance, List<EnemySetup> _enemiesList)
+        {
+            var enemyList = ClientInstance.FetchFieldValue<List<EnemySetup>, EnemyDirector>("enemyList", __instance);
+            foreach (var enemy in _enemiesList)
+            {
+                // private List<EnemySetup> enemyList = new List<EnemySetup>();
+                if (enemy.name.Contains("Ceiling Eye"))
+                {
+                    for (var i = 0; i < 5; ++i)
+                        enemyList.Add(enemy);
+                }
+            }
+            return false;
+        }
+    }
+
     // all of this just for freelook
     [HarmonyPatch(typeof(SpiralOnScreen))]
     public static class Patches_SpiralFade
@@ -297,6 +318,7 @@ internal static class Patches
 
     public static bool isInFreelook = false;
     public static bool overrideFreelook = false;
+    public static bool _1TickDisable = false;
     [ClydeChange("Added Freelook mode when ALT is held (Toggle in clickgui)", ClydeVersion.Release_v1_3)]
     [HarmonyPatch(typeof(CameraAim), "Update")]
     public static class Patches_CameraAim
@@ -325,9 +347,11 @@ internal static class Patches
 
             var held = Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt);
 
-            //var targetObj = ClientInstance.FetchFieldValue<GameObject, CameraAim>("AimTargetObject", __instance);
-            //if (targetObj != null)
-            //    Entry.Log($""onent<EnemyUpscream>() == null);
+            var targetObj = ClientInstance.FetchFieldValue<GameObject, CameraAim>("AimTargetObject", __instance);
+            if (targetObj != null && __instance.AimTargetActive && targetObj.GetComponent<EnemyCeilingEye>() == true)
+            {
+                held = false;//FSDJHJSFDHSDFHFSDNH
+            }
 
             if (
                 SemiFunc.MenuLevel() ||
@@ -338,7 +362,9 @@ internal static class Patches
                 ClientInstance.IsHolding<ValuableBoombox>() ||
                 ClientInstance.IsHolding<MusicBoxTrap>()
             )
+            {
                 held = false;
+            }
 
             if (held)
             {
