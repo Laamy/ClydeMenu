@@ -81,7 +81,8 @@ class ClydeChangeEntry
     }
 }
 
-[ClydeChange("Updated for R.E.P.O v0.1.2.37_beta", Release_v1_2, isDebug: false)]
+[ClydeChange("Updated for R.E.P.O v0.1.2.37_beta", Release_v1_2)]
+[ClydeChange("Updated for R.E.P.O v0.1.2.38_beta", Release_v1_3)] // hello?? bro??
 static class ClydeVersion
 {
     public static readonly bool IsDebug = true;
