@@ -11,6 +11,7 @@ using ClydeMenu.Engine.Settings;
 
 using HarmonyLib;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 public class Entry
 {
@@ -73,6 +74,11 @@ public class Entry
         Storage.harmony.UnpatchAll("com.clyde_menu");
 
         loadedComps.Clear();
+
+        foreach (var comp in Storage.CompsStorage)
+            comp.Dispose();
+
+        Storage.CompsStorage.Clear();
 
         MenuSettings._saveTimer?.Stop();
         MenuSettings._saveTimer?.Dispose();

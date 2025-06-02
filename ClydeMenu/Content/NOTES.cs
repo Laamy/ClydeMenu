@@ -45,6 +45,7 @@
 
 /// [Freelook]
 /// Hold alt to freeze the camera direction and rotate it freely without effecting the movement vectors
+// make a disableTimer for freelook so i can set the disable timer up by .1 when a peeper has touched u!
 
 namespace ClydeMenu.Engine;
 

@@ -3,7 +3,7 @@
 using System.Collections.Generic;
 
 using ClydeMenu.Engine.Menu;
-
+using ClydeMenu.Engine.Rendering;
 using HarmonyLib;
 
 using UnityEngine;
@@ -158,6 +158,8 @@ internal class Storage
         get;
         internal set;
     } = "Waypoint 1";
+
+    public static List<ClydeMonoBehaviour> CompsStorage = new();
 
     // NOT A SETTING
     internal static Dictionary<string, ThemeConfig> StyleThemes = new()

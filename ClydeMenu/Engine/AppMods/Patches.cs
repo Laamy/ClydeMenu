@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.EnterpriseServices.Internal;
 using ClydeMenu.Engine.Menu;
+using ClydeMenu.Engine.Rendering;
 using ClydeMenu.Engine.Settings;
 using HarmonyLib;
 using UnityEngine;
@@ -276,24 +277,24 @@ internal static class Patches
     }
 
     // debugging features!!!
-    [HarmonyPatch(typeof(EnemyDirector), "PickEnemies")]
-    public static class Patches_PickEnemies
-    {
-        public static bool Prefix(EnemyDirector __instance, List<EnemySetup> _enemiesList)
-        {
-            var enemyList = ClientInstance.FetchFieldValue<List<EnemySetup>, EnemyDirector>("enemyList", __instance);
-            foreach (var enemy in _enemiesList)
-            {
-                // private List<EnemySetup> enemyList = new List<EnemySetup>();
-                if (enemy.name.Contains("Ceiling Eye"))
-                {
-                    for (var i = 0; i < 5; ++i)
-                        enemyList.Add(enemy);
-                }
-            }
-            return false;
-        }
-    }
+    //[HarmonyPatch(typeof(EnemyDirector), "PickEnemies")]
+    //public static class Patches_PickEnemies
+    //{
+    //    public static bool Prefix(EnemyDirector __instance, List<EnemySetup> _enemiesList)
+    //    {
+    //        var enemyList = ClientInstance.FetchFieldValue<List<EnemySetup>, EnemyDirector>("enemyList", __instance);
+    //        foreach (var enemy in _enemiesList)
+    //        {
+    //            // private List<EnemySetup> enemyList = new List<EnemySetup>();
+    //            if (enemy.name.Contains("Ceiling Eye"))
+    //            {
+    //                for (var i = 0; i < 5; ++i)
+    //                    enemyList.Add(enemy);
+    //            }
+    //        }
+    //        return false;
+    //    }
+    //}
 
     // all of this just for freelook
     [HarmonyPatch(typeof(SpiralOnScreen))]

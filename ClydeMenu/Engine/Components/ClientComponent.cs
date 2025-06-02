@@ -10,6 +10,8 @@ using ClydeMenu.Engine.Menu.Menus;
 using System.Runtime.InteropServices;
 using System;
 using System.Collections.Generic;
+using UnityEngine.Video;
+using ClydeMenu.Engine.Rendering;
 
 public class ClientComponent : BaseComponent
 {
@@ -34,6 +36,8 @@ public class ClientComponent : BaseComponent
         {
             //private List<EnemySetup> enemyList
             //var enemyList = ClientInstance.GetEnemyList();
+
+            // private GameObject physGrabPointVisual1;
         }
         
         if (Input.GetKeyDown(KeyCode.RightShift))
