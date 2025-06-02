@@ -86,7 +86,7 @@ class ClydeChangeEntry
 [ClydeChange("Updated for R.E.P.O v0.1.2.38_beta", Release_v1_3)] // hello?? bro??
 static class ClydeVersion
 {
-    public static readonly bool IsDebug = true;
+    public static readonly bool IsDebug = false;
 
     public const uint Release_v1_0 = 0x01000000;
     public const uint Release_v1_1 = 0x01010000;
