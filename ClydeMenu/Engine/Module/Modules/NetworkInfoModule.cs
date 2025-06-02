@@ -8,7 +8,7 @@ using UnityEngine;
 using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using System.Diagnostics;
 
-[ClydeChange("Added NetworkInfo module for ping display", ClydeVersion.Release_v1_3)]
+[ClydeChange("Added NetworkInfo module for ping & jitter alerts", ClydeVersion.Release_v1_3)]
 public class NetworkInfoModule : BaseModule
 {
     private List<Action> renderActions;
