@@ -361,7 +361,8 @@ public class MainMenu : BaseMenu
 
                     Storage.WAYPOINTS_NAME = DrawTextField("Waypoint Name", Storage.WAYPOINTS_NAME);
 
-                    if (DrawButton("Add"))
+                    var localPlyr = ClientInstance.GetLocalPlayer();
+                    if (DrawButton("Add") &&localPlyr != null)
                     {
                         Color colour = Storage.WAYPOINTS_COLOR switch
                         {
@@ -371,10 +372,11 @@ public class MainMenu : BaseMenu
                             _ => Color.yellow
                         };
 
+
                         var newPoint = new Storage.WaypointInfo
                         {
                             Label = Storage.WAYPOINTS_NAME,
-                            Position = ClientInstance.GetLocalPlayer().gameObject.transform.position + new Vector3(0,1.5f,0),
+                            Position = localPlyr.gameObject.transform.position + new Vector3(0,1.5f,0),
                             Color = colour
                         };
                         Storage.WAYPOINTS_POINTS.Add(newPoint);
