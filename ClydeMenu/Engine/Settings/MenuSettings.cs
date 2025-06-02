@@ -31,6 +31,7 @@ internal class MenuSettings
     public static Setting<string> GameTheme { get; set; } = new("GameTheme", "Dark");
 
     public static Setting<bool> VISUAL_MAPINFO { get; set; } = new("VISUAL_MAPINFO", true);
+    public static Setting<bool> VISUAL_NETNFO { get; set; } = new("VISUAL_NETNFO", true);
     public static Setting<bool> VISUAL_NOISELOGGER { get; set; } = new("VISUAL_NOISELOGGER", true);
     public static Setting<bool> VISUAL_FreeLook { get; set; } = new("VISUAL_FreeLook", false);
 

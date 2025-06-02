@@ -21,7 +21,7 @@
 // this could be seen as unfair
 
 // [Visual Indicators]
-// Packets - Display ping packet loss and other misc things that are higher then normal
+/// Packets - Display ping packet loss and other misc things that are higher then normal
 // Helper - subtle screen effects for if a player drops an item nearby (and loses value)
 // Helper - arrows on the side of the screen to indicate a player is nearby (or a cart)
 // Helper - this could also loop back around to subtitles for sounds ^

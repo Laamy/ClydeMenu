@@ -148,6 +148,7 @@ public class MainMenu : BaseMenu
                 DrawSettingLabel("Visual");
                 MenuSettings.VISUAL_MAPINFO.Value = DrawBoolean("MapInfo (Lvl & maxHaul)", MenuSettings.VISUAL_MAPINFO.Value);
                 MenuSettings.VISUAL_NOISELOGGER.Value = DrawBoolean("NoiseLogger", MenuSettings.VISUAL_NOISELOGGER.Value);
+                MenuSettings.VISUAL_NETNFO.Value = DrawBoolean("NetworkkInfo (Ping/alerts)", MenuSettings.VISUAL_NETNFO.Value);
                 MenuSettings.VISUAL_FreeLook.Value = DrawBoolean("Freelook (Hold ALT)", MenuSettings.VISUAL_FreeLook.Value);
                 //Storage.DEBUGBOX = DrawNumberField("DebugBox", Storage.DEBUGBOX);
             },

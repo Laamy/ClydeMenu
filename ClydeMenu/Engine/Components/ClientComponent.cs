@@ -65,11 +65,11 @@ public class ClientComponent : BaseComponent
     {
         if (!isInitialized)
         {
-            GUI.skin.font = Font.CreateDynamicFontFromOSFont("Consolas", 48);
+            GUI.skin.font = Font.CreateDynamicFontFromOSFont("Consolas", 48); // might switch to Segoe UI
             isInitialized = true;
         }
 
-        // esps
+        // esps (DEBUGGING!)
         {
             if (MenuSettings.ESP_Player.Value)
                 RenderPlayerESP();

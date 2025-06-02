@@ -71,6 +71,7 @@
     <Compile Include="Engine\Module\Modules\HaulInfoModule.cs" />
     <Compile Include="Engine\Module\Modules\NamespoofModule.cs" />
     <Compile Include="Engine\AppMods\Patches.cs" />
+    <Compile Include="Engine\Module\Modules\NetworkInfoModule.cs" />
     <Compile Include="Engine\Module\Modules\NoiseLoggerModule.cs" />
     <Compile Include="Engine\Module\Modules\WaypointModule.cs" />
     <Compile Include="Content\NOTES.cs" />
