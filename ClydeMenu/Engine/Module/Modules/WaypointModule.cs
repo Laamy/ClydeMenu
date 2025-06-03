@@ -33,7 +33,7 @@ public class WaypointModule : BaseModule
             return;
 
         foreach (var waypoint in Storage.WAYPOINTS_POINTS)
-            RenderUtils.DrawWaypoint(waypoint.Position, waypoint.Label, waypoint.Color);
+            RenderUtils.DrawWaypoint(waypoint);
 
         //RenderUtils.DrawWaypoint(new Vector3(0,0,2), "Green", new Color(0.15f, 0.5f, 0.15f));
         //RenderUtils.DrawWaypoint(new Vector3(0,0,0), "Red", new Color(0.5f, 0.15f, 0.15f));

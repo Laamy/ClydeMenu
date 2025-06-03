@@ -21,7 +21,7 @@ class MenuStorage
     public static Vector2 menuSize = new(400, 400);
 }
 
-class ThemeConfig
+public class ThemeConfig
 {
     public Color MenuTextDark = new(0.8f, 0.8f, 0.8f);
     public Color MenuText = new(1, 1, 1);

@@ -5,6 +5,7 @@ using System;
 using UnityEngine;
 
 using ClydeMenu.Engine.Utils;
+using System.Collections.Generic;
 
 public class RenderUtils
 {
@@ -118,8 +119,17 @@ public class RenderUtils
         }
     }
 
-    public static void DrawWaypoint(Vector3 point, string label, Color color)
+    private static Dictionary<int, float> fadeTimer = new();
+    public static void DrawWaypoint(Storage.WaypointInfo waypoint)
     {
+        var point = waypoint.Position;
+        var label = waypoint.Label;
+        var color = waypoint.Color;
+        var id = waypoint.GetId(); // unique per waypoint
+
+        if (!fadeTimer.ContainsKey(id))
+            fadeTimer[id] = 0;
+
         var localPlayer = ClientInstance.GetLocalPlayer();
         if (localPlayer == null || localPlayer.gameObject == null)
             return;
@@ -129,6 +139,8 @@ public class RenderUtils
 
         if (distance == 0)
             distance = 1;
+
+        var realDis = distance;
 
         Vector3 p = Camera.main.WorldToScreenPoint(point);
         if (p.z <= 0 || p.z > 1000)
@@ -147,16 +159,17 @@ public class RenderUtils
         //if (!nearCursor)
         //    baseAlpha -= 0.3f;
         var scaleFactor = Mathf.Clamp(distance / 250, 0.02f, 0.08f);
+        var nearCursor = Vector2.Distance(pos, scaledScreen / 2) < 4 / scaleFactor;
 
-        var _center = (scaledScreen / 2);
-        
-        var nearCursor = Vector2.Distance(pos, _center) < 4 / scaleFactor;
-        var baseAlpha = color.a;
-        if (!nearCursor)
-        {
-            baseAlpha -= 0.3f;
-            distance *= 1.2f;
-        }
+        var speed = 3;
+        fadeTimer[id] = Mathf.Clamp01(fadeTimer[id] + (nearCursor ? -(Time.deltaTime * speed) : Time.deltaTime * speed));
+
+        var baseAlpha = Mathf.Lerp(1.0f, 0.7f, fadeTimer[id]);
+
+        var distanceScale = Mathf.Lerp(1.0f, 1.2f, fadeTimer[id]);
+        distance *= distanceScale;
+        scaleFactor = Mathf.Clamp(distance / 250, 0.02f, 0.08f);
+
         //DrawString(new Vector2(p.x, 20 + Screen.height - p.y), $"Center: {_center}\r\nPos: {pos}\r\nDis: {Vector2.Distance(pos, _center)}", new Color(0.9f, 0.9f, 0.9f), 16);
 
         var size = 2 / scaleFactor;
@@ -170,7 +183,7 @@ public class RenderUtils
         GUI.matrix = orig;
 
         // draw string at center of diamond tghank u game !
-        var disLabel = $"{Math.Floor(distance)}m";
+        var disLabel = $"{Math.Floor(realDis)}m";
         var measure = StringSize(disLabel, 1 / scaleFactor);
         DrawString(center - (measure/2) + new Vector2(0, size / 1.5f), disLabel, new Color(0.9f, 0.9f, 0.9f, baseAlpha), 1 / scaleFactor);
 
