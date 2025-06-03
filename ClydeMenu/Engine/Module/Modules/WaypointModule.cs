@@ -3,6 +3,7 @@
 using System;
 
 using ClydeMenu.Engine.Settings;
+using UnityEngine;
 
 [ClydeChange("New Waypoint module To mark important spots in the map", ClydeVersion.Release_v1_0)]
 public class WaypointModule : BaseModule
@@ -12,6 +13,13 @@ public class WaypointModule : BaseModule
     public override void Initialize()
     {
         IsEnabled = true;
+
+        Storage.WAYPOINTS_POINTS.Add(new Storage.WaypointInfo()
+        {
+            Color = new Color(0.15f, 0.5f, 0.15f),
+            Label = "Green",
+            Position = new Vector3(0, 2, 0)
+        });
 
         //GameEvents.OnLevelChanged += OnLevelChanged;
     }

@@ -441,7 +441,6 @@
     <Content Include="Content\dependencies\0Harmony.dll" />
     <Content Include="Content\v1.0\ClydeMenu.dll" />
     <Content Include="Content\v1.0\Hot-reload.dll" />
-    <Content Include="Content\v1.1\Hot-reload.dll" />
     <Content Include="Content\v1.2\ClydeMenu.dll" />
     <Content Include="Content\v1.2\Hot-reload.dll" />
     <Content Include="Content\v1.3\ClydeMenu.dll" />

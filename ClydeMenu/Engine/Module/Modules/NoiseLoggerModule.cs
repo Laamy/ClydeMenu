@@ -14,23 +14,13 @@ public class NoiseLoggerModule : BaseModule
         IsEnabled = true;
     }
 
-    /*
-
-    (LOG) [Exception] NullReferenceException: Object reference not set to an instance of an object
-    (STACKTRACE) [Exception] ClydeMenu.Engine.Commands.NoiseLoggerModule.OnRender () (at <b548ff4422ef4b41b7cb9adc8be37e3c>:0)
-    ClydeMenu.Engine.ClientComponent.OnGUI () (at <b548ff4422ef4b41b7cb9adc8be37e3c>:0)
-    ClydeMenu.Entry.OnGUI () (at <b548ff4422ef4b41b7cb9adc8be37e3c>:0)
-    System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) (at <4b234520e36749be9cf6b053d911690f>:0)
-    Rethrow as TargetInvocationException: Exception has been thrown by the target of an invocation.
-    System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) (at <4b234520e36749be9cf6b053d911690f>:0)
-    System.Reflection.MethodBase.Invoke (System.Object obj, System.Object[] parameters) (at <4b234520e36749be9cf6b053d911690f>:0)
-    Hot_reload.Components.HotReloadBehaviour.OnGUI () (at <268968d3c2a04898a0d180aacdeb083d>:0)
-
-    */
     const int padding = 6;
     public override void OnRender()
     {
         if (!MenuSettings.VISUAL_NOISELOGGER.Value)
+            return;
+
+        if (Camera.main == null)
             return;
 
         lock (Patches.audioStack)

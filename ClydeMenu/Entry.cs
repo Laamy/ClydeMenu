@@ -10,8 +10,8 @@ using ClydeMenu.Engine.Components;
 using ClydeMenu.Engine.Settings;
 
 using HarmonyLib;
+
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 public class Entry
 {

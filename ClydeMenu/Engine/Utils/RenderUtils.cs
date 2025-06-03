@@ -5,179 +5,6 @@ using System;
 using UnityEngine;
 
 using ClydeMenu.Engine.Utils;
-using Photon.Pun;
-using Unity.VisualScripting;
-using Photon.Realtime;
-using System.Diagnostics;
-
-public class RenderWindow
-{
-    public const float TitlebarHeight = 16;
-    public const float TabHeight = 45;
-
-    public RenderWindow(Rect location, string title, GUIStyle style)
-    {
-        Location = location;
-        Title = title;
-
-        MainStyle = style;
-
-        var invert = style.normal.background.GetPixel(0, 0);
-        Color color = new Color(1 - invert.r, 1 - invert.g, 1 - invert.b, invert.a);
-
-        InvertStyle = new GUIStyle(style)
-        {
-            normal = {
-                background = TextureUtils.CreateSolid(color),
-                textColor = style.normal.textColor
-            }
-        };
-    }
-
-    public Rect Location { get; set; }
-    public string Title { get; set; }
-
-    public GUIStyle MainStyle { get; set; }
-    public GUIStyle InvertStyle { get; set; }
-
-    #region Drawing utils
-
-    public void Box(Rect rect, string v)
-    {
-        rect = MakeRelative(rect);
-        GUI.Box(rect, v, MainStyle);
-    }
-
-    private void ErrorHandle(Action action)
-    {
-        try
-        {
-            action?.Invoke();
-        }
-        catch (Exception e)
-        {
-            Entry.Log($"Error in GUI: {e.Message}");
-        }
-    }
-
-    public Vector2 MeasureString(string v)
-        => MainStyle.CalcSize(new GUIContent(v));
-
-    public void Button(Vector2 pos, string v, Action action)
-    {
-        int padding = 5;
-
-        Vector2 size = MeasureString(v);
-        Rect rect = new Rect(pos.x, pos.y, size.x + (padding * 2), size.y + (padding * 2));
-        rect = MakeRelative(rect);
-
-        if (GUI.Button(rect, v, MainStyle))
-            ErrorHandle(() => action?.Invoke());
-    }
-
-    public void Toggle(Vector2 pos, string v, bool state, Action<bool> action)
-    {
-        int padding = 5;
-        Vector2 size = MeasureString(v);
-        Rect rect = new Rect(pos.x, pos.y, size.x + (padding * 2), size.y + (padding * 2));
-        rect = MakeRelative(rect);
-        if (GUI.Button(rect, v, state ? InvertStyle : MainStyle))
-            ErrorHandle(() => action?.Invoke(!state));
-    }
-
-    private int currentTab = 0;
-    public void Tabs(string[] names, Action[] drawActions)
-    {
-        // im gonna assume that if this is called that the window wont have anything in it
-        if (names.Length != drawActions.Length)
-            throw new ArgumentException("Tabs names and actions must be the same length");
-
-        var oldLoc = Location;
-        Location = new Rect(Location.x, Location.y + TitlebarHeight, Location.width, Location.height - TitlebarHeight);
-
-        float tabWidth = Location.width / names.Length;
-        for (int i = 0; i < names.Length; i++)
-        {
-            Rect tabRect = new Rect(Location.x + (i * tabWidth), Location.y, tabWidth, TabHeight);
-            if (GUI.Button(tabRect, names[i], MainStyle))
-                currentTab = i;
-        }
-
-        Location = new Rect(Location.x, Location.y + TabHeight, Location.width, Location.height - TabHeight);
-
-        ErrorHandle(() => drawActions[currentTab].Invoke());
-
-        Location = oldLoc;
-    }
-
-    #endregion
-
-    #region Functional
-
-    public Rect MakeRelative(Rect rect)
-    {
-        rect.x += Location.x;
-        rect.y += Location.y + TitlebarHeight;
-        return rect;
-    }
-
-    private void SetWinRect(Rect rect)
-    {
-        rect.x = Mathf.Clamp(rect.x, 0, Screen.width - rect.width);
-        rect.y = Mathf.Clamp(rect.y, 0, Screen.height - rect.height);
-        Location = rect;
-    }
-
-    private Vector2 oldMouse;
-    private bool isDragging = false;
-    public void HandleBorder(bool events = true)
-    {
-        GUI.Box(Location, "", MainStyle);
-        GUI.Box(new Rect(Location.x, Location.y, Location.width, TitlebarHeight), "", MainStyle);// unity does some dogshit clipping
-
-        if (!events)
-            return;
-
-        // handle mouse dragging
-        var curEvent = Event.current;
-        Vector2 mousePos = curEvent.mousePosition;
-
-        Rect titleBarRect = new Rect(Location.x, Location.y, Location.width, TitlebarHeight);
-
-        switch (curEvent.type)
-        {
-            case EventType.MouseDown:
-                if (titleBarRect.Contains(mousePos))
-                {
-                    isDragging = true;
-                    oldMouse = mousePos;
-                    curEvent.Use();
-                }
-                break;
-            case EventType.MouseDrag:
-                if (isDragging)
-                {
-                    Vector2 delta = mousePos - oldMouse;
-                    Rect newRect = new Rect(Location.x + delta.x, Location.y + delta.y, Location.width, Location.height);
-                    SetWinRect(newRect);
-                    oldMouse = mousePos;
-                    curEvent.Use();
-                }
-                break;
-            case EventType.MouseUp:
-                if (isDragging)
-                {
-                    isDragging = false;
-                    curEvent.Use();
-                }
-                break;
-        }
-    }
-
-    internal void Toggle(Vector2 vector2, string v, object antiKick, Action<bool> value) => throw new NotImplementedException();
-
-    #endregion
-}
 
 public class RenderUtils
 {
@@ -201,6 +28,15 @@ public class RenderUtils
     {
         GUI.color = color;
         GUI.DrawTexture(new Rect(pos.x, pos.y, size.x, size.y), Texture2D.whiteTexture);
+    }
+
+    public static void DrawRectBorder(Vector2 pos, Vector2 size, Color color, int width = 1)
+    {
+        GUI.color = color;
+        GUI.DrawTexture(new Rect(pos.x, pos.y, size.x, width), Texture2D.whiteTexture);
+        GUI.DrawTexture(new Rect(pos.x, pos.y + size.y - width, size.x, width), Texture2D.whiteTexture);
+        GUI.DrawTexture(new Rect(pos.x, pos.y, width, size.y), Texture2D.whiteTexture);
+        GUI.DrawTexture(new Rect(pos.x + size.x - width, pos.y, width, size.y), Texture2D.whiteTexture);
     }
 
     public static Vector2 StringSize(string text, float size = 16)
@@ -298,27 +134,48 @@ public class RenderUtils
         if (p.z <= 0 || p.z > 1000)
             return;
 
+        Vector2 pos = new Vector2(p.x,  p.y);
+
         var scaleX = (float)Screen.width / Camera.main.pixelWidth;
         var scaleY = (float)Screen.height / Camera.main.pixelHeight;
+        Vector2 scaledScreen = new Vector2(Camera.main.pixelWidth, Camera.main.pixelHeight);
 
+        //Console.WriteLine($"{Vector2.Distance(center, scaledScreen)}");
+        //var nearCursor = Vector2.Distance(center, scaledScreen) < 50;
+        //var baseAlpha = color.a;
+        //
+        //if (!nearCursor)
+        //    baseAlpha -= 0.3f;
         var scaleFactor = Mathf.Clamp(distance / 250, 0.02f, 0.08f);
+
+        var _center = (scaledScreen / 2);
+        
+        var nearCursor = Vector2.Distance(pos, _center) < 4 / scaleFactor;
+        var baseAlpha = color.a;
+        if (!nearCursor)
+        {
+            baseAlpha -= 0.3f;
+            distance *= 1.2f;
+        }
+        //DrawString(new Vector2(p.x, 20 + Screen.height - p.y), $"Center: {_center}\r\nPos: {pos}\r\nDis: {Vector2.Distance(pos, _center)}", new Color(0.9f, 0.9f, 0.9f), 16);
+
         var size = 2 / scaleFactor;
         var border = size / 3;
-        Vector2 center = new Vector2((p.x - (size / 2)) * scaleX, Screen.height - (p.y - (size / 2)) * scaleY);
+        Vector2 center = new Vector2(p.x * scaleX, Screen.height - p.y * scaleY);
 
         var orig = GUI.matrix;
         GUIUtility.RotateAroundPivot(45, center);
-        DrawRect(center - new Vector2(border/2, border/2), new Vector2(size + border, size + border), new Color(color.r, color.g, color.b, 0.5f));
-        DrawRect(center, new Vector2(size, size), color);
+        DrawRect(center - new Vector2(border/2, border/2), new Vector2(size + border, size + border), new Color(color.r, color.g, color.b, baseAlpha-0.3f));
+        DrawRect(center, new Vector2(size, size), new Color(color.r, color.g, color.b, baseAlpha));
         GUI.matrix = orig;
 
         // draw string at center of diamond tghank u game !
         var disLabel = $"{Math.Floor(distance)}m";
         var measure = StringSize(disLabel, 1 / scaleFactor);
-        DrawString(center - (measure/2) + new Vector2(0, size / 1.5f), disLabel, new Color(0.9f, 0.9f, 0.9f), 1 / scaleFactor);
+        DrawString(center - (measure/2) + new Vector2(0, size / 1.5f), disLabel, new Color(0.9f, 0.9f, 0.9f, baseAlpha), 1 / scaleFactor);
 
         measure = StringSize(label, 0.7f / scaleFactor);
-        DrawString(center - (measure / 2) + new Vector2(0, size / 1.5f - size*1.2f), label, new Color(0.9f, 0.9f, 0.9f), 0.7f / scaleFactor);
+        DrawString(center - (measure / 2) + new Vector2(0, size / 1.5f - size*1.2f), label, new Color(0.9f, 0.9f, 0.9f, baseAlpha), 0.7f / scaleFactor);
     }
 
     public static void SetCursorState(bool visible)
@@ -336,5 +193,31 @@ public class RenderUtils
         Cursor.visible = visible;
     }
 
-    public static RenderWindow Window(string v, Rect rect) => new(rect, v, CurrentTheme);
+    public static class Window
+    {
+        /// <summary>
+        /// Creates a clipping bounds with a visual draggable component for HUD editors
+        /// </summary>
+        /// <returns>Position the window ends up at (if draggable is specified)</returns>
+        public static Vector2 Start(bool draggable, Rect window)
+        {
+            GUI.BeginClip(window);
+
+            if (draggable)
+            {
+                // draw simple bounds
+                DrawRect(window.position, window.size, new Color(0.2f, 0.2f, 0.2f, 0.5f));
+                DrawRectBorder(window.position, window.size, new Color(0.5f, 0.5f, 0.5f, 0.5f), 2);
+
+                return window.position; // placeholder for dragging code
+            }
+
+            return window.position;
+        }
+
+        public static void End()
+        {
+            GUI.EndClip();
+        }
+    }
 }
