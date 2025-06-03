@@ -59,18 +59,20 @@ internal class ClydeUpdater
 
         Program.Log("Attempting to update/repair clydemenu");
 
-        var i = 1;
-        foreach (var lib in coreLibs)
+        for (var i = 0; i < coreLibs.Length; i++)
         {
+            var lib = coreLibs[i];
             var targetUri = $"{TargetUri}/{version}/{lib}";
             var target = $"{injFolder.FullName}/{lib}";
             if (File.Exists(target))
                 File.Delete(target);
 
             DownloadFile(targetUri, target);
-            Program.Log($"Successfully downloaded {lib} ({i}/{coreLibs.Length})");
-            i++;
+            var progress = (i + 1f) / coreLibs.Length;
+            Program.ProgressBar(progress);
         }
+        Program.ProgressBarEnd();
+        Program.Log("Successfully updated ClydeMenu (Disable your antivirus if this didnt fix clyde)");
 
         if (File.Exists(versionPath))
             File.Delete(versionPath);
@@ -91,7 +93,7 @@ internal class ClydeUpdater
 
                 uint versionId = Convert.ToUInt32(pattern.Value, 16);
                 var version = ToVersionString(versionId);
-                Console.WriteLine(version);
+                Program.Log($"Checking for ClydeMenu {version}");
                 return version;
             }
         }
