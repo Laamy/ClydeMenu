@@ -21,6 +21,9 @@ public class RainbowPlayerModule : BaseModule
         if (!MenuSettings.VISUAL_RAINBOW.Value)
             return;
 
+        if (ClientInstance.GetLocalAvatar() == null)
+            return;
+
         if (watch == null || watch.ElapsedMilliseconds > (1000 / 5))
         {
             ClientInstance.GetLocalAvatar().PlayerAvatarSetColor(curColor++);
