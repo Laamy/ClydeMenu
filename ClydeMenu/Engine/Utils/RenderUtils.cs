@@ -127,7 +127,7 @@ public class RenderUtils
         var point = waypoint.Position;
         var label = waypoint.Label;
         var color = waypoint.Color;
-        var id = waypoint.GetId(); // unique per waypoint
+        var id = waypoint.GetId();
 
         if (!fadeTimer.ContainsKey(id))
             fadeTimer[id] = 0;
@@ -160,17 +160,17 @@ public class RenderUtils
         //
         //if (!nearCursor)
         //    baseAlpha -= 0.3f;
-        var scaleFactor = Mathf.Clamp(distance / 250, 0.02f, 0.08f);
+        var scaleFactor = Mathf.Clamp(distance / 250, 0.02f, 0.05f);
         var nearCursor = Vector2.Distance(pos, scaledScreen / 2) < 4 / scaleFactor;
 
         var speed = 3;
         fadeTimer[id] = Mathf.Clamp01(fadeTimer[id] + (nearCursor ? -(Time.deltaTime * speed) : Time.deltaTime * speed));
 
-        var baseAlpha = Mathf.Lerp(1.0f, 0.7f, fadeTimer[id]);
+        var baseAlpha = Mathf.Lerp(0.8f, 0.5f, fadeTimer[id]);
 
         var distanceScale = Mathf.Lerp(1.0f, 1.2f, fadeTimer[id]);
         distance *= distanceScale;
-        scaleFactor = Mathf.Clamp(distance / 250, 0.02f, 0.08f);
+        scaleFactor = Mathf.Clamp(distance / 250, 0.02f, 0.05f);
 
         //DrawString(new Vector2(p.x, 20 + Screen.height - p.y), $"Center: {_center}\r\nPos: {pos}\r\nDis: {Vector2.Distance(pos, _center)}", new Color(0.9f, 0.9f, 0.9f), 16);
 

@@ -120,6 +120,7 @@ public class MainMenu : BaseMenu
         MenuStorage.renderNames =
         [
             "Visual",
+            "Fun",
             "Privacy",
             "Server",
             "Waypoints",
@@ -150,6 +151,11 @@ public class MainMenu : BaseMenu
                 MenuSettings.VISUAL_NOISELOGGER.Value = DrawBoolean("NoiseLogger", MenuSettings.VISUAL_NOISELOGGER.Value);
                 MenuSettings.VISUAL_NETNFO.Value = DrawBoolean("NetworkkInfo (Ping/alerts)", MenuSettings.VISUAL_NETNFO.Value);
                 MenuSettings.VISUAL_FreeLook.Value = DrawBoolean("Freelook (Hold ALT)", MenuSettings.VISUAL_FreeLook.Value);
+                //Storage.DEBUGBOX = DrawNumberField("DebugBox", Storage.DEBUGBOX);
+            },
+            () => {
+                DrawSettingLabel("Fun");
+                MenuSettings.VISUAL_RAINBOW.Value = DrawBoolean("Rainbow Skincolour", MenuSettings.VISUAL_RAINBOW.Value);
                 //Storage.DEBUGBOX = DrawNumberField("DebugBox", Storage.DEBUGBOX);
             },
             // might expose this tab if localhost
@@ -366,12 +372,11 @@ public class MainMenu : BaseMenu
                     {
                         Color colour = Storage.WAYPOINTS_COLOR switch
                         {
-                            0 => new Color(0.9f, 0.15f, 0.15f),
-                            1 => new Color(0.15f, 0.9f, 0.15f),
-                            2 => new Color(0.15f, 0.15f, 0.9f),
+                            0 => new Color(0.5f, 0.15f, 0.15f),
+                            1 => new Color(0.15f, 0.5f, 0.15f),
+                            2 => new Color(0.15f, 0.15f, 0.5f),
                             _ => Color.yellow
                         };
-
 
                         var newPoint = new Storage.WaypointInfo
                         {
