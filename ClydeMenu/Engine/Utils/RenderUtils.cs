@@ -120,6 +120,8 @@ public class RenderUtils
     }
 
     private static Dictionary<int, float> fadeTimer = new();
+
+    [ClydeChange("Waypoints now fade in/out when cursor is near or over it", ClydeVersion.Release_v1_4)]
     public static void DrawWaypoint(Storage.WaypointInfo waypoint)
     {
         var point = waypoint.Position;
