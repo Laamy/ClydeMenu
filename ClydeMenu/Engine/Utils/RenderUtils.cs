@@ -166,9 +166,9 @@ public class RenderUtils
         var speed = 3;
         fadeTimer[id] = Mathf.Clamp01(fadeTimer[id] + (nearCursor ? -(Time.deltaTime * speed) : Time.deltaTime * speed));
 
-        var baseAlpha = Mathf.Lerp(0.8f, 0.5f, fadeTimer[id]);
+        var baseAlpha = Mathf.Lerp(0.8f, 0.3f, fadeTimer[id]);
 
-        var distanceScale = Mathf.Lerp(1.0f, 1.2f, fadeTimer[id]);
+        var distanceScale = Mathf.Lerp(0.8f, 1.2f, fadeTimer[id]);
         distance *= distanceScale;
         scaleFactor = Mathf.Clamp(distance / 250, 0.02f, 0.05f);
 
@@ -180,7 +180,10 @@ public class RenderUtils
 
         var orig = GUI.matrix;
         GUIUtility.RotateAroundPivot(45, center);
-        DrawRect(center - new Vector2(border/2, border/2), new Vector2(size + border, size + border), new Color(color.r, color.g, color.b, baseAlpha-0.3f));
+        var modAlpha = baseAlpha - 0.3f;
+        if (modAlpha <= 0)
+            modAlpha = 0.1f;
+        DrawRect(center - new Vector2(border/2, border/2), new Vector2(size + border, size + border), new Color(color.r, color.g, color.b, modAlpha));
         DrawRect(center, new Vector2(size, size), new Color(color.r, color.g, color.b, baseAlpha));
         GUI.matrix = orig;
 
