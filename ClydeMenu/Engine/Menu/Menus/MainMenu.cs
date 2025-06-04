@@ -88,9 +88,9 @@ public class MainMenu : BaseMenu
     public override void OnUpdate() { }
 
     // ui comps
-    private float sidebarWidth = 110f;
-    private float titleBarHeight = 28f;
-    private float padding = 4f;
+    private readonly float sidebarWidth = 110f;
+    private readonly float titleBarHeight = 28f;
+    private readonly float padding = 4f;
 
     private Vector2 contentStart = Vector2.zero;
     private float yCursor = 0;
