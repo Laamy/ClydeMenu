@@ -5,9 +5,10 @@ using ClydeMenu.Engine.Settings;
 using UnityEngine;
 
 [ClydeChange("New HaulInfo module that displays the current haul info (min-max & level)", ClydeVersion.Release_v1_0)]
+[ClydeChange("Fixed divided by zero error when in disposal level", ClydeVersion.Release_v1_5)]
 public class HaulInfoModule : BaseModule
 {
-    public HaulInfoModule() : base("HualInfo", "Information about the scene (lvl & estimated possible haul)", "Visual") { }
+    public HaulInfoModule() : base("HaulInfo", "Information about the scene (lvl & estimated possible haul)", "Visual") { }
 
     public override void Initialize()
     {

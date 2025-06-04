@@ -1,11 +1,9 @@
 ﻿namespace ClydeMenu.Engine.Commands;
 
-using System;
-
 using ClydeMenu.Engine.Settings;
-using UnityEngine;
 
 [ClydeChange("New Waypoint module To mark important spots in the map", ClydeVersion.Release_v1_0)]
+[ClydeChange("Fixed debug waypoint showing up in release build", ClydeVersion.Release_v1_5)]
 public class WaypointModule : BaseModule
 {
     public WaypointModule() : base("Waypoint", "Waypoints for the map", "Visual") {}
