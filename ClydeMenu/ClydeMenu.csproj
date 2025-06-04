@@ -446,6 +446,8 @@
     <Content Include="Content\v1.2\Hot-reload.dll" />
     <Content Include="Content\v1.3\ClydeMenu.dll" />
     <Content Include="Content\v1.3\Hot-reload.dll" />
+    <Content Include="Content\v1.4\ClydeMenu.dll" />
+    <Content Include="Content\v1.4\Hot-reload.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

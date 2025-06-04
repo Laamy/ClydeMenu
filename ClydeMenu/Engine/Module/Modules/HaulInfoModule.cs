@@ -37,9 +37,10 @@ public class HaulInfoModule : BaseModule
             return;
 
         var haulGoalMax = ClientInstance.FetchFieldValue<int, RoundDirector>("haulGoal", RoundDirector.instance);
-        if (haulGoalMax == 0)
+        var extractionPoints = ClientInstance.FetchFieldValue<int, RoundDirector>("extractionPoints", RoundDirector.instance)
+        if (haulGoalMax == 0 || extractionPoints == 0)
             return;
-        float num = haulGoalMax / ClientInstance.FetchFieldValue<int, RoundDirector>("extractionPoints", RoundDirector.instance);
+        float num = haulGoalMax / extractionPoints;
 
         var curLevel = RunManager.instance.levelsCompleted;
         num *= quotaMultiply[Mathf.Clamp(curLevel, 0, quotaMultiply.Length - 1)];
