@@ -76,7 +76,7 @@
     <Compile Include="Engine\Module\Modules\RainbowPlayerModule.cs" />
     <Compile Include="Engine\Module\Modules\WaypointModule.cs" />
     <Compile Include="Content\NOTES.cs" />
-    <Compile Include="Engine\Rendering\ClydeMonoBehaviour.cs" />
+    <Compile Include="Engine\Rendering\ClydeBehaviour.cs" />
     <Compile Include="Engine\Rendering\WallCharmHighlight.cs" />
     <Compile Include="Engine\Settings\MenuSettings.cs" />
     <Compile Include="Engine\ClientInstance.cs" />

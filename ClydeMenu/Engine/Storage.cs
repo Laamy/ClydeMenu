@@ -169,7 +169,7 @@ public class Storage
         internal set;
     } = "Waypoint 1";
 
-    public static List<ClydeMonoBehaviour> CompsStorage = new();
+    public static List<ClydeBehaviour> CompsStorage = new();
 
     // NOT A SETTING
     internal static Dictionary<string, ThemeConfig> StyleThemes = new()

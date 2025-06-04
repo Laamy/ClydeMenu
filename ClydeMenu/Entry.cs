@@ -12,6 +12,7 @@ using ClydeMenu.Engine.Settings;
 using HarmonyLib;
 
 using UnityEngine;
+using ClydeMenu.Engine.Rendering;
 
 public class Entry
 {
@@ -94,23 +95,52 @@ public class Entry
     {
         foreach (var comp in loadedComps)
             comp.Update();
+
+        CallBehaviourEvent("Update");
     }
 
     public static void LateUpdate()
     {
         foreach (var comp in loadedComps)
             comp.LateUpdate();
+
+        CallBehaviourEvent("LateUpdate");
     }
 
     public static void FixedUpdate()
     {
         foreach (var comp in loadedComps)
             comp.FixedUpdate();
+
+        CallBehaviourEvent("FixedUpdate");
     }
 
     public static void OnGUI()
     {
         foreach (var comp in loadedComps)
             comp.OnGUI();
+
+        CallBehaviourEvent("OnGUI");
+    }
+
+    public static void CallBehaviourEvent(string name, params object[] args)
+    {
+        foreach (var objInfo in ClydeBehaviour.instances)
+        {
+            foreach (var behaviour in objInfo.Value)
+            {
+                if (behaviour != null && !behaviour.IsAlive)
+                    behaviour.Dispose();
+
+                if (behaviour != null && behaviour.IsAlive)
+                {
+                    var method = behaviour.GetType().GetMethod(name);
+                    if (method != null)
+                    {
+                        method.Invoke(behaviour, args);
+                    }
+                }
+            }
+        }
     }
 }

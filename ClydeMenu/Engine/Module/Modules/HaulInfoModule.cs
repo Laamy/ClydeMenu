@@ -38,7 +38,7 @@ public class HaulInfoModule : BaseModule
             return;
 
         var haulGoalMax = ClientInstance.FetchFieldValue<int, RoundDirector>("haulGoal", RoundDirector.instance);
-        var extractionPoints = ClientInstance.FetchFieldValue<int, RoundDirector>("extractionPoints", RoundDirector.instance)
+        var extractionPoints = ClientInstance.FetchFieldValue<int, RoundDirector>("extractionPoints", RoundDirector.instance);
         if (haulGoalMax == 0 || extractionPoints == 0)
             return;
         float num = haulGoalMax / extractionPoints;

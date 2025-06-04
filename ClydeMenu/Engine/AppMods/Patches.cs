@@ -276,6 +276,19 @@ internal static class Patches
         }
     }
 
+    [HarmonyPatch(typeof(RunManager), "LeaveToMainMenu")]
+    public static class Patches_LeaveToMainMenu
+    {
+        public static bool Prefix(RunManager __instance)
+        {
+            Storage.WAYPOINTS_POINTS.Clear();
+
+            GameEvents.TriggerLevelChanged(new ChangeLevelInfo(__instance, true, false, RunManager.ChangeLevelType.MainMenu));
+
+            return true;
+        }
+    }
+
     // debugging features!!!
     //[HarmonyPatch(typeof(EnemyDirector), "PickEnemies")]
     //public static class Patches_PickEnemies
