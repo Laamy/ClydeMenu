@@ -163,6 +163,11 @@ public class Storage
         get;
         internal set;
     } = new();
+    public static List<WaypointInfo> TMP_WAYPOINTS_POINTS
+    {
+        get;
+        internal set;
+    } = new();
     public static string WAYPOINTS_NAME
     {
         get;

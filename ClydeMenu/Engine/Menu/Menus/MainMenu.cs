@@ -7,7 +7,7 @@ using System.Linq;
 using ClydeMenu.Engine.Settings;
 
 using Photon.Pun;
-
+using Sirenix.Utilities;
 using UnityEngine;
 
 class MenuStorage
@@ -80,6 +80,7 @@ public class ThemeConfig
 
 [ClydeChange("New ClydeMenu (RightShift) clickgui with 6 themes", ClydeVersion.Release_v1_0)]
 [ClydeChange("New MapStealer (Aka map downloader) useful for when your friends fall asleep as host", ClydeVersion.Release_v1_0)]
+[ClydeChange("New waypoint macros & slightly improved visuals for waypoints", ClydeVersion.Release_v1_5)]
 public class MainMenu : BaseMenu
 {
     public override void OnPop() { }
@@ -349,7 +350,9 @@ public class MainMenu : BaseMenu
                 }
             },
             () => {
-                DrawSettingLabel("Waypoints");
+                //if (Storage.WAYPOINTS_POINTS.Count 
+                if (Storage.WAYPOINTS_POINT < 0 || Storage.WAYPOINTS_POINT >= Storage.WAYPOINTS_POINTS.Count)
+                    Storage.WAYPOINTS_POINT = Mathf.Clamp(Storage.WAYPOINTS_POINT, 0, Storage.WAYPOINTS_POINTS.Count - 1);
 
                 var waypoints = Storage.WAYPOINTS_POINTS.Select(wp => wp.Label).ToArray();
                 var newEnum = DrawEnum("Waypoints", waypoints, Storage.WAYPOINTS_POINT);
@@ -357,7 +360,31 @@ public class MainMenu : BaseMenu
                     Storage.WAYPOINTS_POINT = newEnum;
 
                 if (DrawButton("Delete"))
-                    Storage.WAYPOINTS_POINTS.RemoveAt(Storage.WAYPOINTS_POINT);
+                {
+                    if (Storage.WAYPOINTS_POINTS.Count > 0)
+                        Storage.WAYPOINTS_POINTS.RemoveAt(Storage.WAYPOINTS_POINT);
+                }
+
+                var localPlyr = ClientInstance.GetLocalPlayer();
+                if (DrawExpandBox("Waypoint Macros", true))
+                {
+                    foreach (var tmpWp in Storage.TMP_WAYPOINTS_POINTS)
+                    {
+                        if (DrawButton($"New {tmpWp.Label}"))
+                        {
+                            if (localPlyr != null)
+                            {
+                                var newPoint = new Storage.WaypointInfo {
+                                    Label = tmpWp.Label,
+                                    Color = tmpWp.Color,
+                                    Position = localPlyr.gameObject.transform.position + new Vector3(0,1.5f,0)
+                                };
+                                Storage.WAYPOINTS_POINTS.Add(newPoint);
+                                Storage.WAYPOINTS_POINT = Storage.WAYPOINTS_POINTS.Count - 1;
+                            }
+                        }
+                    }
+                }
 
                 if (DrawExpandBox("Configure"))
                 {
@@ -367,8 +394,7 @@ public class MainMenu : BaseMenu
 
                     Storage.WAYPOINTS_NAME = DrawTextField("Waypoint Name", Storage.WAYPOINTS_NAME);
 
-                    var localPlyr = ClientInstance.GetLocalPlayer();
-                    if (DrawButton("Add") &&localPlyr != null)
+                    Storage.WaypointInfo CreateWaypoint()
                     {
                         Color colour = Storage.WAYPOINTS_COLOR switch
                         {
@@ -381,11 +407,24 @@ public class MainMenu : BaseMenu
                         var newPoint = new Storage.WaypointInfo
                         {
                             Label = Storage.WAYPOINTS_NAME,
-                            Position = localPlyr.gameObject.transform.position + new Vector3(0,1.5f,0),
                             Color = colour
                         };
+                        return newPoint;
+                    }
+
+                    if (DrawButton("Add") && localPlyr != null)
+                    {
+                        var newPoint = CreateWaypoint();
+                        newPoint.Position = localPlyr.gameObject.transform.position + new Vector3(0,1.5f,0);
                         Storage.WAYPOINTS_POINTS.Add(newPoint);
                         Storage.WAYPOINTS_POINT = Storage.WAYPOINTS_POINTS.Count - 1;
+                    }
+
+                    DrawSettingLabel("Reload to clear (F12 to reload)");
+                    if (DrawButton("Add Waypoint Macro"))
+                    {
+                        Storage.TMP_WAYPOINTS_POINTS.Add(CreateWaypoint());
+                        //TMP_WAYPOINTS_POINTS
                     }
                 }
             },
@@ -608,6 +647,20 @@ public class MainMenu : BaseMenu
             RenderUtils.DrawRect(labelRect.position, labelRect.size, StyleTheme.ContentBox);
             RenderUtils.DrawString(labelRect.position + new Vector2(4, 2), enums[selection], StyleTheme.MenuText);
         }
+
+        /*
+(LOG) [Exception] IndexOutOfRangeException: Index was outside the bounds of the array.
+(STACKTRACE) [Exception] ClydeMenu.Engine.Menu.MainMenu.DrawEnum (System.String label, System.String[] enums, System.Int32 selection) (at C:/Users/yeemi/source/repos/ClydeMenu/ClydeMenu/Engine/Menu/Menus/MainMenu.cs:640)
+ClydeMenu.Engine.Menu.MainMenu.<.ctor>b__10_4 () (at C:/Users/yeemi/source/repos/ClydeMenu/ClydeMenu/Engine/Menu/Menus/MainMenu.cs:353)
+ClydeMenu.Engine.Menu.MainMenu.DrawCategory () (at C:/Users/yeemi/source/repos/ClydeMenu/ClydeMenu/Engine/Menu/Menus/MainMenu.cs:104)
+ClydeMenu.Engine.Menu.MainMenu.Render () (at C:/Users/yeemi/source/repos/ClydeMenu/ClydeMenu/Engine/Menu/Menus/MainMenu.cs:562)
+ClydeMenu.Engine.Menu.MenuSceneComponent.OnGUI () (at C:/Users/yeemi/source/repos/ClydeMenu/ClydeMenu/Engine/Components/MenuSceneComponent.cs:98)
+ClydeMenu.Entry.OnGUI () (at C:/Users/yeemi/source/repos/ClydeMenu/ClydeMenu/Entry.cs:121)
+System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) (at <4b234520e36749be9cf6b053d911690f>:0)
+Rethrow as TargetInvocationException: Exception has been thrown by the target of an invocation.
+System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) (at <4b234520e36749be9cf6b053d911690f>:0)
+System.Reflection.MethodBase.Invoke (System.Object obj, System.Object[] parameters) (at <4b234520e36749be9cf6b053d911690f>:0)
+Hot_reload.Components.HotReloadBehaviour.OnGUI () (at <268968d3c2a04898a0d180aacdeb083d>:0)*/
 
         var cur = Event.current;
         Vector2 mousePos = cur.mousePosition;
