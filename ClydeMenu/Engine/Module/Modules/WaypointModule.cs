@@ -14,12 +14,12 @@ public class WaypointModule : BaseModule
     {
         IsEnabled = true;
 
-        Storage.WAYPOINTS_POINTS.Add(new Storage.WaypointInfo()
-        {
-            Color = new Color(0.15f, 0.5f, 0.15f),
-            Label = "Green",
-            Position = new Vector3(0, 2, 0)
-        });
+        //Storage.WAYPOINTS_POINTS.Add(new Storage.WaypointInfo()
+        //{
+        //    Color = new Color(0.15f, 0.5f, 0.15f),
+        //    Label = "Green",
+        //    Position = new Vector3(0, 2, 0)
+        //});
 
         //GameEvents.OnLevelChanged += OnLevelChanged;
     }
