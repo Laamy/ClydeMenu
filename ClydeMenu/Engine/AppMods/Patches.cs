@@ -484,13 +484,12 @@ internal static class Patches
         }
     }
 
-    public static float inMainMenu = 0;
     [HarmonyPatch(typeof(MenuPageMain), "Update")]
     public class Patches_MainMenuUpdate
     {
         public static bool Prefix(MenuPageMain __instance)
         {
-            inMainMenu = 0.05f;
+            Clocks.Reset("MainMenuUpdate");
 
             return true;
         }

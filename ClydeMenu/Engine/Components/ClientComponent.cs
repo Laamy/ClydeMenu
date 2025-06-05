@@ -101,6 +101,8 @@ public class ClientComponent : BaseComponent
     public override void Update()
     {
         HandleInputs();
+
+        Clocks.Tick();
     }
 
     public bool isInitialized = false;
@@ -165,12 +167,8 @@ public class ClientComponent : BaseComponent
 
         SortNoiseCrap();
 
-        if (Patches.inMainMenu != 0)
-        {
+        if (Clocks.IsAlive("MainMenuUpdate"))
             MainMenuController.Render();
-        }
-
-        Patches.inMainMenu = Mathf.Clamp(Patches.inMainMenu - Time.deltaTime, 0, 1);
     }
 
     private void SortNoiseCrap()
