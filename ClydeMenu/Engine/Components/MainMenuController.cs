@@ -37,8 +37,6 @@ internal class MainMenuController
 
     internal static void Render()
     {
-        UpdateBtns();
-
         var currency = $"{MenuSettings.Currency.Value}K";
         var pos = new Vector2(Screen.width - 110, 10);
         var size = new Vector2(100, 30);
