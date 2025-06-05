@@ -180,15 +180,16 @@ public class Storage
     internal static Dictionary<string, ThemeConfig> StyleThemes = new()
     {
         { "Dark", new ThemeConfig() },
-        { "Light", ThemeConfig.Create( // i dont care for lightmode enough to make it look good
-            new Color(0.9f, 0.9f, 0.95f),
-            new Color(0.9f, 0.9f, 0.9f),
-            new Color(0.5f, 0.4f, 1f),
-            new Color(0.3f, 0.3f, 0.4f),
-            new Color(0.5f, 0.5f, 0.6f),
+        { "Light", ThemeConfig.Create(
             new Color(1f, 1f, 1f),
-            new Color(0.95f, 0.95f, 0.95f),
-            new Color(0.95f, 0.95f, 0.98f)
+            new Color(0.98f, 0.98f, 0.98f),
+            new Color(0.6f, 0.5f, 1f),
+            new Color(0.15f, 0.15f, 0.2f),
+            new Color(0.3f, 0.3f, 0.4f),
+            new Color(1f, 1f, 1f),
+            new Color(0.97f, 0.97f, 0.97f),
+            new Color(0.9f, 0.9f, 1f),
+            new Color(0.843137f, 0.776471f, 0.956863f)
         )},
         { "Red", ThemeConfig.Create(
             new Color(0.4f, 0.1f, 0.1f),

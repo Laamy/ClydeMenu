@@ -86,7 +86,8 @@ internal class MenuSceneComponent : BaseComponent
 
     public override void OnGUI()
     {
-        foreach (var menu in baseMenus)
+        var menus = new List<BaseMenu>(baseMenus);
+        foreach (var menu in menus)
         {
             if (menu.ShouldDarkenBackground)
             {

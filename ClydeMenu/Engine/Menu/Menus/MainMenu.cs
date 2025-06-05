@@ -54,14 +54,15 @@ public class ThemeConfig
         Color textSecondary,
         Color background,
         Color sidebarBackground,
-        Color altBackground)
+        Color altBackground,
+        Color? exitBtn = null)
     {
         return new ThemeConfig
         {
             MenuTextDark = textSecondary,
             MenuText = textPrimary,
             MenuTextSelected = Color.Lerp(textPrimary, baseAccent, 0.2f),
-            TitlebarCloseButton = Color.Lerp(baseAccent, new Color(1, 0, 0), 0.4f),
+            TitlebarCloseButton = exitBtn == null ? Color.Lerp(baseAccent, new Color(1, 0, 0), 0.4f) : exitBtn.Value,
             Titlebar = basePrimary,
             TitlebarText = textPrimary,
             Sidebar = sidebarBackground,
