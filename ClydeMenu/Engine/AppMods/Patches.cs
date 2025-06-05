@@ -8,6 +8,7 @@ using ClydeMenu.Engine.Menu;
 using ClydeMenu.Engine.Rendering;
 using ClydeMenu.Engine.Settings;
 using HarmonyLib;
+using Unity.VisualScripting;
 using UnityEngine;
 
 internal static class Patches
@@ -503,6 +504,11 @@ internal static class Patches
     {
         public static void Postfix(MenuPageMain __instance)
         {
+            if (MenuSettings.FastIntro.Value)
+            {
+                ClientInstance.SetFieldValue("waitTimer", __instance, 3*MenuSettings.FastIntroSpeed.Value);
+            }
+
             MainMenuController.Prepare(__instance);
         }
     }

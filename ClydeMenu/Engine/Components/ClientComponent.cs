@@ -9,6 +9,7 @@ using ClydeMenu.Engine.Settings;
 using ClydeMenu.Engine.Menu.Menus;
 using System;
 using Object = UnityEngine.Object;
+using UnityEngine.SceneManagement;
 
 public static class MonoBehaviourCache
 {
@@ -42,6 +43,13 @@ public class ClientComponent : BaseComponent
         var win = WindowManager.FindWindow(null, "R.E.P.O.");
         if (win != null)
             WindowManager.SetWindowText(WindowManager.FindWindow(null, "R.E.P.O."), $"R.E.P.O. {BuildManager.instance.version.title}    |    ClydeMenu {ClydeVersion.ToVersionString(ClydeVersion.Current)}");
+
+        // refresh the button crap
+        if (SemiFunc.IsMainMenu())
+        {
+            //RunManager.instance.ChangeLevel(true, false, RunManager.ChangeLevelType.MainMenu);
+            SceneManager.LoadSceneAsync("Main");
+        }
 
         //RenderUtils.Init();
         Entry.Log("ClydeMenu initialized");

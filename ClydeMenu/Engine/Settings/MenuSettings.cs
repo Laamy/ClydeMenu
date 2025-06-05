@@ -10,7 +10,20 @@ public class Setting<T>
 
     public T Value
     {
-        get => (T)MenuSettings.SaveData[_key];
+        get
+        {
+            try
+            {
+                if (!MenuSettings.SaveData.ContainsKey(_key))// bro..?
+                    MenuSettings.SaveData[_key] = default(T);
+
+                return (T)MenuSettings.SaveData[_key];
+            }
+            catch
+            {
+                return default(T);
+            }
+        }
         set => MenuSettings.SaveData[_key] = value;
     }
 
@@ -39,6 +52,9 @@ internal class MenuSettings
     public static Setting<bool> AccountSpoofer { get; set; } = new("AccountSpoofer", false);
     public static Setting<bool> PingSpoofer { get; set; } = new("PingSpoofer", false);
 
+    public static Setting<bool> FastIntro { get; set; } = new("FastIntro", true);
+    public static Setting<float> FastIntroSpeed { get; set; } = new("FastIntroSpeed", 0.8f);
+
     // debugging. do not use in release
     public static Setting<bool> ESP_Player { get; set; } = new("ESP_Player", false);
     public static Setting<bool> ESP_Enemy { get; set; } = new("ESP_Enemy", false);
@@ -47,6 +63,7 @@ internal class MenuSettings
 
     // cache stuff
     public static Setting<uint> ChangeLogVersion { get; set; } = new("ChangeLogVersion", 0);
+    public static Setting<bool> OpenedShop { get; set; } = new("OpenedShop", false);
 
     internal static Setting<uint> Currency { get; set; } = new("FreeCurrency", 0);
 

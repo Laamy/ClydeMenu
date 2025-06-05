@@ -68,6 +68,7 @@
     <Compile Include="Engine\Menu\Menus\ChangeLogMenu.cs" />
     <Compile Include="Engine\Menu\Menus\MainMenu.cs" />
     <Compile Include="Engine\Menu\Menus\MenuTemplate.cs" />
+    <Compile Include="Engine\Menu\Menus\ShopMenu.cs" />
     <Compile Include="Engine\Module\BaseModule.cs" />
     <Compile Include="Engine\Module\ModuleHandler.cs" />
     <Compile Include="Engine\Module\Modules\ClickGuiModule.cs" />

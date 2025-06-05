@@ -7,10 +7,17 @@ using ClydeMenu.Engine.Settings;
 using System;
 using static UnityEngine.UI.Image;
 using UnityEngine.UI;
+using ClydeMenu.Engine.Menu;
+using ClydeMenu.Engine.Menu.Menus;
 
+// TODO: adjust with screen pixelated setting
+[ClydeChange("Experimental shop button (Edit money in settings file) dont take serious", ClydeVersion.Release_v1_5)]
 internal class MainMenuController
 {
     static MenuButton shop;
+    static bool shopButtonBlinkActive = false;
+    static bool shopButtonBlink;
+    static float shopButtonTimer;
     internal static void Prepare(MenuPageMain __instance)
     {
         shop = GameObject.Instantiate(__instance.tutorialButton, __instance.tutorialButton.transform.parent);
@@ -27,16 +34,59 @@ internal class MainMenuController
         typeof(MenuButton).GetMethod("Awake", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
             ?.Invoke(shop, null);
 
+        void ResetShopColours()
+        {
+            shop.customColors = true;
+            shop.colorHover = Color.white;
+            shop.colorClick = new Color(1f, 0.55f, 0f);
+            shop.colorNormal = new Color(0.7f, 0.7f, 0.7f);
+        }
+
         shop.GetComponent<Button>().onClick = new Button.ButtonClickedEvent();
         shop.GetComponent<Button>().onClick.AddListener(() => {
-            // some kind of menu
+            MenuSettings.OpenedShop.Value = true;
+            shopButtonBlinkActive = false;
+            ResetShopColours();
+
+            MenuSceneComponent.Instance.PushMenu(new ShopMenu());
         });
+
+        if (!MenuSettings.OpenedShop.Value)
+        {
+            shopButtonBlinkActive = true;
+            shop.customColors = true;
+            shop.colorNormal = new Color(1f, 0.55f, 0f);
+            shop.colorHover = Color.white;
+            shop.colorClick = new Color(1f, 0.55f, 0f);
+        }
+        else ResetShopColours();
 
         Console.WriteLine("Clyde Menu button created in main menu");
     }
 
     internal static void Render()
     {
+        if (shopButtonBlinkActive)
+        {
+            if (shopButtonTimer <= 0f)
+            {
+                shopButtonTimer = 0.5f;
+                shopButtonBlink = !shopButtonBlink;
+                if (shopButtonBlink)
+                {
+                    shop.colorNormal = Color.white;
+                }
+                else
+                {
+                    shop.colorNormal = new Color(1f, 0.55f, 0f);
+                }
+            }
+            else
+            {
+                shopButtonTimer -= Time.deltaTime;
+            }
+        }
+
         var currency = $"{MenuSettings.Currency.Value}K";
         var pos = new Vector2(Screen.width - 110, 10);
         var size = new Vector2(100, 30);

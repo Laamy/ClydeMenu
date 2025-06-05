@@ -9,6 +9,7 @@ using ClydeMenu.Engine.Settings;
 using Photon.Pun;
 using Sirenix.Utilities;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 class MenuStorage
 {
@@ -82,6 +83,7 @@ public class ThemeConfig
 [ClydeChange("New ClydeMenu (RightShift) clickgui with 6 themes", ClydeVersion.Release_v1_0)]
 [ClydeChange("New MapStealer (Aka map downloader) useful for when your friends fall asleep as host", ClydeVersion.Release_v1_0)]
 [ClydeChange("New waypoint macros & slightly improved visuals for waypoints", ClydeVersion.Release_v1_5)]
+[ClydeChange("New FastIntro to speed up the annoyingly slow intro (With speed slider)", ClydeVersion.Release_v1_5)]
 public class MainMenu : BaseMenu
 {
     public override void OnPop() { }
@@ -153,6 +155,15 @@ public class MainMenu : BaseMenu
                 MenuSettings.VISUAL_NOISELOGGER.Value = DrawBoolean("NoiseLogger", MenuSettings.VISUAL_NOISELOGGER.Value);
                 MenuSettings.VISUAL_NETNFO.Value = DrawBoolean("NetworkkInfo (Ping/alerts)", MenuSettings.VISUAL_NETNFO.Value);
                 MenuSettings.VISUAL_FreeLook.Value = DrawBoolean("Freelook (Hold ALT)", MenuSettings.VISUAL_FreeLook.Value);
+                MenuSettings.FastIntro.Value = DrawBoolean("Fast Intro (Fast buttons)", MenuSettings.FastIntro.Value);
+                if (MenuSettings.FastIntro.Value) {
+                    var speed = DrawSlider("Intro Speed", MenuSettings.FastIntroSpeed.Value);
+                    if (speed != MenuSettings.FastIntroSpeed.Value)
+                    {
+                        MenuSettings.FastIntroSpeed.Value = (float)Math.Round(speed * 100f) / 100f;
+                        //mgiht dosmth here idk yet
+                    }
+                }
                 //Storage.DEBUGBOX = DrawNumberField("DebugBox", Storage.DEBUGBOX);
             },
             () => {
