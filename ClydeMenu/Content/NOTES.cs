@@ -9,7 +9,7 @@
 /// Subtitles fade out after a short duration (e.g. 3–5 seconds).
 
 // [Missed Room Alerts]
-// For each room, track whether the local player has entered it this round.
+// For each room, track whether the local player has entered it this round. (A counter of sorts and markers)
 // Unexplored rooms are outlined in orange (on the map or HUD).
 
 // [Team Tracker]

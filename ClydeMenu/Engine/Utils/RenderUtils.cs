@@ -77,6 +77,17 @@ public class RenderUtils
         DrawLine(pos1, pos2, color, width);
     }
 
+    public static void TranslateDrawLine(Vector3 start, Vector3 end, Color color, float width = 1)
+    {
+        Vector3 pos1 = Camera.main.WorldToScreenPoint(start);
+        Vector3 pos2 = Camera.main.WorldToScreenPoint(end);
+        pos1.y = Screen.height - pos1.y;
+        pos2.y = Screen.height - pos2.y;
+        if (pos1.z <= 0 || pos2.z <= 0 || pos1.z > 10 || pos2.z > 10)
+            return;
+        DrawLine(new Vector2(pos1.x, pos1.y), new Vector2(pos2.x, pos2.y), color, width);
+    }
+
     private static int[,] cubeEdges = {
         {0,1},{1,2},{2,3},{3,0},
         {4,5},{5,6},{6,7},{7,4},
@@ -92,12 +103,12 @@ public class RenderUtils
             new(max.x, max.y, max.z), new(min.x, max.y, max.z)
         };
 
-        float scaleX = (float)Screen.width / Camera.main.pixelWidth;
-        float scaleY = (float)Screen.height / Camera.main.pixelHeight;
+        var scaleX = (float)Screen.width / Camera.main.pixelWidth;
+        var scaleY = (float)Screen.height / Camera.main.pixelHeight;
 
-        bool visible = true;
+        var visible = true;
         Vector2[] sVertices = new Vector2[8];
-        for (int i = 0; i < 8; i++)
+        for (var i = 0; i < 8; i++)
         {
             Vector3 p = Camera.main.WorldToScreenPoint(vertices[i]);
             if (p.z <= 0 || p.z > 1000)
@@ -108,7 +119,7 @@ public class RenderUtils
         if (!visible)
             return;
 
-        for (int i = 0; i < 12; i++)
+        for (var i = 0; i < 12; i++)
         {
             Vector2 start = sVertices[cubeEdges[i, 0]];
             Vector2 end = sVertices[cubeEdges[i, 1]];

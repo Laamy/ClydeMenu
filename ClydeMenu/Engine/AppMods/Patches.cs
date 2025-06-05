@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.EnterpriseServices.Internal;
 using ClydeMenu.Engine.Menu;
 using ClydeMenu.Engine.Rendering;
@@ -276,6 +277,17 @@ internal static class Patches
         }
     }
 
+    [HarmonyPatch(typeof(Gizmos), "DrawLine")]
+    public static class Patches_DrawLine
+    {
+        public static bool Prefix(Gizmos __instance, Vector3 from, Vector3 to)
+        {
+            RenderUtils.TranslateDrawLine(from, to, Color.yellow);
+
+            return true;
+        }
+    }
+
     [HarmonyPatch(typeof(RunManager), "LeaveToMainMenu")]
     public static class Patches_LeaveToMainMenu
     {
@@ -427,6 +439,40 @@ internal static class Patches
             }
 
             return true;
+        }
+    }
+
+    public static bool isDebugWorld = false;
+    [HarmonyPatch(typeof(TutorialDirector), "Update")]
+    public class Patches_TutorialStart
+    {
+        public static void Postfix(TutorialDirector __instance)
+        {
+            if (isDebugWorld)
+            {
+                Entry.Log("DebugWorld loaded successfully");
+
+                for (int i = 0; i < 17; i++)
+                    __instance.NextPage();
+            }
+        }
+    }
+
+    [HarmonyPatch(typeof(PlayerController), "Start")]
+    public class Patches_PlayerStart
+    {
+        public static void Postfix(PlayerController __instance)
+        {
+            if (isDebugWorld)
+            {
+                isDebugWorld = false;
+
+                PlayerController.instance.EnergyStart = 420;
+                PlayerController.instance.EnergyCurrent = 69;
+                PlayerController.instance.EnergySprintDrain = 0;
+
+                PlayerController.instance.SprintSpeed = 10;
+            }
         }
     }
 

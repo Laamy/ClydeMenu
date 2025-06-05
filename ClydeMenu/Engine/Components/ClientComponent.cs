@@ -7,11 +7,26 @@ using ClydeMenu.Engine.Commands;
 using ClydeMenu.Engine.Components;
 using ClydeMenu.Engine.Settings;
 using ClydeMenu.Engine.Menu.Menus;
-using System.Runtime.InteropServices;
-using System;
-using System.Collections.Generic;
-using UnityEngine.Video;
-using ClydeMenu.Engine.Rendering;
+
+public static class MonoBehaviourCache
+{
+    private static MonoBehaviour[] cache;
+    private static float lastUpdateTime = -1f;
+    private static readonly float updateInterval = 0.5f;
+
+    public static MonoBehaviour[] All
+    {
+        get
+        {
+            if (cache == null || Time.realtimeSinceStartup - lastUpdateTime > updateInterval)
+            {
+                cache = Object.FindObjectsOfType<MonoBehaviour>();
+                lastUpdateTime = Time.realtimeSinceStartup;
+            }
+            return cache;
+        }
+    }
+}
 
 public class ClientComponent : BaseComponent
 {
@@ -32,14 +47,36 @@ public class ClientComponent : BaseComponent
 
     public void HandleInputs()
     {
-        if (Input.GetKeyDown(KeyCode.F2))
+        if (Input.GetKeyDown(KeyCode.F8))
         {
-            //private List<EnemySetup> enemyList
-            //var enemyList = ClientInstance.GetEnemyList();
-
-            // private GameObject physGrabPointVisual1;
+            if (SemiFunc.MenuLevel())
+            {
+                DebugWorld.Load();
+            }
         }
-        
+
+        if (Input.GetKeyDown(KeyCode.F5))
+        {
+            GameObject go = new GameObject("TopLine");
+            LineRenderer lr = go.AddComponent<LineRenderer>();
+
+            lr.positionCount = 2;
+            lr.startWidth = 0.05f;
+            lr.endWidth = 0.05f;
+            lr.useWorldSpace = true;
+
+            Material mat = new Material(Shader.Find("Hidden/Internal-Colored"));
+            mat.hideFlags = HideFlags.HideAndDontSave;
+            mat.SetInt("_ZWrite", 0);
+            mat.SetInt("_ZTest", (int)UnityEngine.Rendering.CompareFunction.Always);
+            mat.renderQueue = 5000;
+            mat.SetColor("_Color", Color.red);
+
+            lr.SetPosition(0, new Vector3(0, 0, 0));
+            lr.SetPosition(1, new Vector3(100, 100, 100));
+
+        }
+
         if (Input.GetKeyDown(KeyCode.RightShift))
         {
             MenuSceneComponent.Instance.PushOrPopMenuByType<MainMenu>();
@@ -68,6 +105,16 @@ public class ClientComponent : BaseComponent
             GUI.skin.font = Font.CreateDynamicFontFromOSFont("Consolas", 48); // might switch to Segoe UI
             isInitialized = true;
         }
+
+        //foreach (MonoBehaviour mb in MonoBehaviourCache.All)
+        //{
+        //    var method = mb.GetType().GetMethod("OnDrawGizmos",
+        //        System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public);
+        //    if (method != null)
+        //    {
+        //        method.Invoke(mb, null);
+        //    }
+        //}
 
         // esps (DEBUGGING!)
         {

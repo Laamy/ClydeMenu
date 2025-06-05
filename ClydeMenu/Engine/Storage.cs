@@ -1,7 +1,7 @@
 ﻿namespace ClydeMenu.Engine;
 
 using System.Collections.Generic;
-
+using System.Reflection;
 using ClydeMenu.Engine.Menu;
 using ClydeMenu.Engine.Rendering;
 using HarmonyLib;
@@ -231,6 +231,7 @@ public class Storage
             new Color(0.12f, 0.08f, 0.18f)
         )}
     };
+    public static List<(MonoBehaviour mb, MethodInfo mi)> gizmoCache = new();
 
     public static class Network
     {
