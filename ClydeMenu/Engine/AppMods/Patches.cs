@@ -11,6 +11,7 @@ using HarmonyLib;
 using Unity.VisualScripting;
 using UnityEngine;
 
+[ClydeChange("Fixed several bugs with the menu & modules", ClydeVersion.Release_v1_5)]
 internal static class Patches
 {
     public static class Patches_MenuSceneCrap

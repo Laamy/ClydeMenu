@@ -5,6 +5,7 @@ using HarmonyLib;
 
 using UnityEngine.SceneManagement;
 
+[ClydeChange("Added DebugWorld so you can experiment easily (F8)", ClydeVersion.Release_v1_5)]
 internal class DebugWorld
 {
     internal static void Load()

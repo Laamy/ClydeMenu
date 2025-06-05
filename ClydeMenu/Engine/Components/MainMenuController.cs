@@ -11,7 +11,7 @@ using ClydeMenu.Engine.Menu;
 using ClydeMenu.Engine.Menu.Menus;
 
 // TODO: adjust with screen pixelated setting
-[ClydeChange("Experimental shop button (Edit money in settings file) dont take serious", ClydeVersion.Release_v1_5)]
+//[ClydeChange("Experimental shop button (Edit money in settings file) dont take serious", ClydeVersion.Release_v1_5)]
 internal class MainMenuController
 {
     static MenuButton shop;
