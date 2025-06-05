@@ -11,7 +11,7 @@ this list wont be updated actively so i'd recommend checking the releases instea
 - NoiseLogger - minecraft subtitles ported over to repo in its most basic form
 - NetworkInfo - get jitter or ping alerts in the top right corner (IN VERY SMALL TEXT SO ITS NOT ANNOYING)
 - Freelook - rust freelook ported to repo (it disables if your camera is controlled by something or your holding a trap)
-- FastIntro - speed up how long it takes for the buttons to appear on screen on the intro screen (its annoying as fuck!)
+- FastIntro - speed up how long it takes for the buttons to appear on the intro screen (its annoying as fuck!)
 - Steal/Download map - ever had that one friend who hosts then falls asleep? now you can download the map from them and host it
 - Waypoints - complex waypoints that fade in/out that you can place manually (resets every level change)
 - Waypoint macros - lets you create a pre-defined template for a waypoint that you can just click to place
