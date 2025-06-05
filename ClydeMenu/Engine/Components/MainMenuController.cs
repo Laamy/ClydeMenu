@@ -1,12 +1,61 @@
 ﻿namespace ClydeMenu.Engine;
 
-using ClydeMenu.Engine.Settings;
 using UnityEngine;
+
+using ClydeMenu.Engine.Settings;
+
+using System;
+using static UnityEngine.UI.Image;
+using UnityEngine.UI;
 
 internal class MainMenuController
 {
+    static MenuButton shop;
+    internal static void Prepare(MenuPageMain __instance)
+    {
+        shop = GameObject.Instantiate(__instance.tutorialButton, __instance.tutorialButton.transform.parent);
+        shop.buttonTextString = "Clyde Shop";
+        shop.gameObject.SetActive(true);
+        var rect = shop.GetComponent<RectTransform>();
+        var originalRect = __instance.tutorialButton.GetComponent<RectTransform>();
+
+        rect.anchorMin = originalRect.anchorMin;
+        rect.anchorMax = originalRect.anchorMax;
+        rect.pivot = originalRect.pivot;
+        rect.anchoredPosition = originalRect.anchoredPosition + new Vector2(500, 0);
+
+        typeof(MenuButton).GetMethod("Awake", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
+            ?.Invoke(shop, null);
+
+        shop.GetComponent<Button>().onClick = new Button.ButtonClickedEvent();
+        shop.GetComponent<Button>().onClick.AddListener(() => {
+            // some kind of menu
+        });
+
+        Console.WriteLine("Clyde Menu button created in main menu");
+    }
+
+    private static void CopyHoverBehavior(MenuButton original, MenuButton clone)
+    {
+        var originalHover = original.GetComponent<MenuButtonPopUp>();
+        if (originalHover == null) return;
+        var hoverCopy = clone.gameObject.AddComponent<MenuButtonPopUp>();
+        var type = typeof(MenuButtonPopUp);
+        foreach (var field in type.GetFields(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic))
+        {
+            field.SetValue(hoverCopy, field.GetValue(originalHover));
+        }
+    }
+
+    private static void UpdateBtns()
+    {
+    
+    }
+
     internal static void Render()
     {
+        UpdateBtns();
+
         var currency = $"{MenuSettings.Currency.Value}K";
         var pos = new Vector2(Screen.width - 110, 10);
         var size = new Vector2(100, 30);

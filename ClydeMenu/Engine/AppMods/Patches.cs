@@ -211,6 +211,9 @@ internal static class Patches
             if (__instance.spatialBlend <= 0)
                 return true;
 
+            if (Clocks.IsAlive("MainMenuUpdate"))
+                return true;
+
             var localPlayer = ClientInstance.GetLocalPlayer();
 
             if (localPlayer == null)
@@ -492,6 +495,15 @@ internal static class Patches
             Clocks.Reset("MainMenuUpdate");
 
             return true;
+        }
+    }
+
+    [HarmonyPatch(typeof(MenuPageMain), "Start")]
+    public class Patches_MainMenuStart
+    {
+        public static void Postfix(MenuPageMain __instance)
+        {
+            MainMenuController.Prepare(__instance);
         }
     }
 

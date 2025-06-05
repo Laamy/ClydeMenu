@@ -7,7 +7,6 @@ using System.Linq;
 using UnityEngine;
 
 using ClydeMenu.Engine.Components;
-using System.Runtime.InteropServices;
 
 internal class MenuSceneComponent : BaseComponent
 {
@@ -105,7 +104,7 @@ internal class MenuSceneComponent : BaseComponent
             Vector2 mousePos = curEvent.mousePosition;
 
             // basic debug cursor
-            int size = 2;
+            var size = 2;
             GUI.color = Color.black;
             GUI.DrawTexture(new Rect(mousePos.x - size - 2, mousePos.y - size - 2, size * 2 + 4, size * 2 + 4), Texture2D.whiteTexture);
             GUI.color = Color.white;
