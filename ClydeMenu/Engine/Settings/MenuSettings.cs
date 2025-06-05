@@ -53,7 +53,7 @@ internal class MenuSettings
     public static Setting<bool> PingSpoofer { get; set; } = new("PingSpoofer", false);
 
     public static Setting<bool> FastIntro { get; set; } = new("FastIntro", true);
-    public static Setting<float> FastIntroSpeed { get; set; } = new("FastIntroSpeed", 0.8f);
+    public static Setting<float> FastIntroSpeed { get; set; } = new("FastIntroSpeed", 0.99f);
 
     // debugging. do not use in release
     public static Setting<bool> ESP_Player { get; set; } = new("ESP_Player", false);

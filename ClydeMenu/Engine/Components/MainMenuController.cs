@@ -20,6 +20,7 @@ internal class MainMenuController
     static float shopButtonTimer;
     internal static void Prepare(MenuPageMain __instance)
     {
+        return;
         shop = GameObject.Instantiate(__instance.tutorialButton, __instance.tutorialButton.transform.parent);
         shop.buttonTextString = "Clyde Shop";
         shop.gameObject.SetActive(true);
@@ -66,6 +67,7 @@ internal class MainMenuController
 
     internal static void Render()
     {
+        return;
         if (shopButtonBlinkActive)
         {
             if (shopButtonTimer <= 0f)
