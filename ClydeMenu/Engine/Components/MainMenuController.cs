@@ -35,23 +35,6 @@ internal class MainMenuController
         Console.WriteLine("Clyde Menu button created in main menu");
     }
 
-    private static void CopyHoverBehavior(MenuButton original, MenuButton clone)
-    {
-        var originalHover = original.GetComponent<MenuButtonPopUp>();
-        if (originalHover == null) return;
-        var hoverCopy = clone.gameObject.AddComponent<MenuButtonPopUp>();
-        var type = typeof(MenuButtonPopUp);
-        foreach (var field in type.GetFields(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic))
-        {
-            field.SetValue(hoverCopy, field.GetValue(originalHover));
-        }
-    }
-
-    private static void UpdateBtns()
-    {
-    
-    }
-
     internal static void Render()
     {
         UpdateBtns();
