@@ -7,6 +7,8 @@ using ClydeMenu.Engine.Commands;
 using ClydeMenu.Engine.Components;
 using ClydeMenu.Engine.Settings;
 using ClydeMenu.Engine.Menu.Menus;
+using System;
+using Object = UnityEngine.Object;
 
 public static class MonoBehaviourCache
 {
@@ -55,6 +57,12 @@ public class ClientComponent : BaseComponent
             }
         }
 
+        if (Input.GetKeyDown(KeyCode.F2))
+        {
+            MenuSettings.Currency.Value += 1;
+            Console.WriteLine($"Currency increased to {MenuSettings.Currency.Value}k");
+        }
+
         if (Input.GetKeyDown(KeyCode.F5))
         {
             GameObject go = new GameObject("TopLine");
@@ -66,10 +74,9 @@ public class ClientComponent : BaseComponent
             lr.useWorldSpace = true;
 
             Material mat = new Material(Shader.Find("Hidden/Internal-Colored"));
-            mat.hideFlags = HideFlags.HideAndDontSave;
             mat.SetInt("_ZWrite", 0);
             mat.SetInt("_ZTest", (int)UnityEngine.Rendering.CompareFunction.Always);
-            mat.renderQueue = 5000;
+
             mat.SetColor("_Color", Color.red);
 
             lr.SetPosition(0, new Vector3(0, 0, 0));
@@ -129,8 +136,12 @@ public class ClientComponent : BaseComponent
 
             if (MenuSettings.ESP_Valuable.Value)
             {
-                foreach (var valuable in ClientInstance.GetValuableList())
-                    RenderUtils.DrawAABB(ClientInstance.GetActiveColliderBounds(valuable.gameObject), Color.yellow);
+                try
+                {
+                    foreach (var valuable in ClientInstance.GetValuableList())
+                        RenderUtils.DrawAABB(ClientInstance.GetActiveColliderBounds(valuable.gameObject), Color.yellow);
+                }
+                catch { }
 
                 //foreach (var valuable in ClientInstance.GetValuableList())
                 //{

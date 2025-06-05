@@ -48,6 +48,8 @@ internal class MenuSettings
     // cache stuff
     public static Setting<uint> ChangeLogVersion { get; set; } = new("ChangeLogVersion", 0);
 
+    internal static Setting<uint> Currency { get; set; } = new("FreeCurrency", 0);
+
     public static Timer _saveTimer;
 
     public static void Save()
