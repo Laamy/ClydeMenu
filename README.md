@@ -1,8 +1,9 @@
-# Suggestions/requests
+**ClydeMenu**  
+- This is not a cheat, it’s a legit client with quality-of-life changes
+- Any errors in console? Report them to **"yeemi"** on Discord or in the Issues tab
 
-go ahead and give me suggestions/requests in the issues and i'll try my best to implement them
-
-# ClydeMenu
+# Suggestions/Requests  
+Go ahead and give me suggestions/requests in the issues(or dms) and I'll try my best to implement them
 
 ![image](https://github.com/user-attachments/assets/0de14659-3d6e-4ea9-a218-744372fe61a5)
 ![image](https://github.com/user-attachments/assets/ca6c2c2e-757f-458a-92a4-d0512592135f)
