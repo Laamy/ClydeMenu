@@ -457,7 +457,7 @@ internal static class Patches
         }
     }
 
-    static List<int> completed = new();
+    private static readonly List<int> completed = new();
     [HarmonyPatch(typeof(ExtractionPoint), "StateComplete")]
     public class Patches_StateComplete
     {
@@ -472,7 +472,7 @@ internal static class Patches
                 if (extractionHaul <= 1000)
                     return;
 
-                extractionHaul = Mathf.CeilToInt(extractionHaul/1000);
+                extractionHaul = Mathf.CeilToInt(extractionHaul / 1000);
 
                 if (!completed.Contains(__instance.GetInstanceID()))
                 {
@@ -481,6 +481,18 @@ internal static class Patches
                     Entry.Log($"Extraction point {__instance.GetInstanceID()} completed, user now has {MenuSettings.Currency.Value}.");
                 }
             }
+        }
+    }
+
+    public static float inMainMenu = 0;
+    [HarmonyPatch(typeof(MenuPageMain), "Update")]
+    public class Patches_MainMenuUpdate
+    {
+        public static bool Prefix(MenuPageMain __instance)
+        {
+            inMainMenu = 0.05f;
+
+            return true;
         }
     }
 

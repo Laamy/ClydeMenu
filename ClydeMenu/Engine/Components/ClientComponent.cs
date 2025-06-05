@@ -164,6 +164,13 @@ public class ClientComponent : BaseComponent
         }
 
         SortNoiseCrap();
+
+        if (Patches.inMainMenu != 0)
+        {
+            MainMenuController.Render();
+        }
+
+        Patches.inMainMenu = Mathf.Clamp(Patches.inMainMenu - Time.deltaTime, 0, 1);
     }
 
     private void SortNoiseCrap()
