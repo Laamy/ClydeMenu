@@ -102,11 +102,11 @@ static class ClydeVersion
     {
         var major = (byte)((version >> 24) & 0xFF);
         var minor = (byte)((version >> 16) & 0xFF);
-        var debug = (byte)((version >> 8) & 0xFF);
+        var build = (byte)((version >> 8) & 0xFF);
 
-        var result = $"v{major}.{minor}";
-        if (debug != 0)
-            result += $".{debug} Dev";
+        var result = $"v{major}.{minor}.{build}";
+        //if (debug != 0)
+        //    result += $".{debug} Dev";
 
         return result;
     }
