@@ -59,7 +59,7 @@ public class ClientComponent : BaseComponent
     {
         if (Input.GetKeyDown(KeyCode.F8))
         {
-            if (SemiFunc.MenuLevel())
+            if (SemiFunc.MenuLevel() && MenuSettings.Shop.DebugWorld.Value)
             {
                 DebugWorld.Load();
             }

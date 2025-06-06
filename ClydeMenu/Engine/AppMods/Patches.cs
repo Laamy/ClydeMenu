@@ -502,6 +502,7 @@ internal static class Patches
     }
 
     [HarmonyPatch(typeof(MenuPageMain), "Start")]
+    [ClydeChange("Added Shop to unlock fun things", ClydeVersion.Release_v1_6_1)]
     public class Patches_MainMenuStart
     {
         public static void Postfix(MenuPageMain __instance)

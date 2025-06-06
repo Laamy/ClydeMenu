@@ -168,7 +168,11 @@ public class MainMenu : BaseMenu
             },
             () => {
                 DrawSettingLabel("Fun");
-                MenuSettings.VISUAL_RAINBOW.Value = DrawBoolean("Rainbow Skincolour", MenuSettings.VISUAL_RAINBOW.Value);
+
+                if (!MenuSettings.Shop.FunTabUnlocked.Value)
+                    DrawSettingLabel("You can buy fun(useless) crap from the shop on the main menu");
+                
+                if (MenuSettings.Shop.Rainbow.Value) MenuSettings.VISUAL_RAINBOW.Value = DrawBoolean("Rainbow Skincolour", MenuSettings.VISUAL_RAINBOW.Value);
                 //Storage.DEBUGBOX = DrawNumberField("DebugBox", Storage.DEBUGBOX);
             },
             // might expose this tab if localhost
@@ -622,7 +626,6 @@ public class MainMenu : BaseMenu
         return percent;
     }
 
-    private Dictionary<string, bool> buttonStates = new();
     bool DrawBoolean(string label, bool cur)
     {
         DrawSettingLabel(label);
@@ -751,6 +754,7 @@ Hot_reload.Components.HotReloadBehaviour.OnGUI () (at <268968d3c2a04898a0d180aac
         return expandBoxes[label];
     }
 
+    private Dictionary<string, bool> buttonStates = new();
     bool LabelPressed(string selectionKey, Rect buttonRect)
     {
         var curEvent = Event.current;

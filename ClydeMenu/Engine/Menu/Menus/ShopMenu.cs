@@ -13,16 +13,20 @@ public class ShopMenu : BaseMenu
     public override void OnPush() {}
     public override void OnUpdate() {}
 
-    private List<(string name, int cost)> shopItems = new()
+    private List<(string name, int cost, Setting<bool>, Setting<bool>)> shopItems = new()
     {
-        ("Basic Hat", 10),
-        ("Golden Hat", 500)
+        ("Debug world (F8)", 1, MenuSettings.Shop.DebugWorld, null),
+        ("Rainbow", 500, MenuSettings.Shop.Rainbow, MenuSettings.Shop.FunTabUnlocked),
     };
 
     private ThemeConfig StyleTheme = new();
 
+    CameraGlitch glitchCam;
+
     public ShopMenu()
     {
+        glitchCam = GameObject.FindObjectOfType<CameraGlitch>();
+
         if (Storage.InternalThemeStyle != null)
             StyleTheme = Storage.InternalThemeStyle;
         else
@@ -55,35 +59,72 @@ public class ShopMenu : BaseMenu
             MenuSceneComponent.Instance.PopMenu(this);
 
         var itemY = topLeft.y + titleSize.y + 10;
-        foreach (var (name, cost) in shopItems)
+        foreach (var (name, cost, setting, categoryTag) in shopItems)
         {
             var itemTopLeft = new Vector2(topLeft.x + 10, itemY);
             var itemSize = new Vector2(size.x - 20, 40);
-            RenderUtils.DrawRect(itemTopLeft, itemSize, StyleTheme.ContentBox);
+            RenderUtils.DrawRect(itemTopLeft, itemSize, setting.Value == true ? StyleTheme.Sidebar : StyleTheme.ContentBox);
 
             RenderUtils.DrawString(itemTopLeft + new Vector2(10, 10), name, StyleTheme.MenuText, 16);
-            RenderUtils.DrawString(itemTopLeft + new Vector2(itemSize.x - 70, 10), $"${cost}K", StyleTheme.MenuTextDark, 16);
+            var costLabel = $"Cost: {cost} gem(s)";
+            if (setting.Value)
+                costLabel = "Owned";
+
+            RenderUtils.DrawString(itemTopLeft + new Vector2(itemSize.x - 170, 10), costLabel, StyleTheme.MenuTextDark, 16);
+
+            if (LabelPressed(setting.GetName(), new Rect(itemTopLeft, itemSize)))
+            {
+                if (MenuSettings.Currency.Value >= cost)
+                {
+                    MenuSettings.Currency.Value -= (uint)cost;
+                    if (categoryTag != null)
+                        categoryTag.Value = true;
+                    setting.Value = true;
+                    glitchCam.PlayUpgrade();
+                }
+            }
 
             itemY += itemSize.y + 10;
         }
+    }
+
+    private Dictionary<string, bool> buttonStates = new();
+    bool LabelPressed(string selectionKey, Rect buttonRect)
+    {
+        var curEvent = Event.current;
+        Vector2 mousePos = curEvent.mousePosition;
+
+        if (!buttonStates.ContainsKey(selectionKey))
+            buttonStates[selectionKey] = false;
+
+        if (curEvent.type == EventType.MouseDown && buttonRect.Contains(mousePos))
+        {
+            if (!buttonStates[selectionKey])
+            {
+                buttonStates[selectionKey] = true;
+                return true;
+            }
+        }
+        else if (curEvent.type == EventType.MouseUp && buttonStates[selectionKey])
+        {
+            buttonStates[selectionKey] = false;
+        }
+
+        return false;
+    }
+
+    private bool IsHeld(string label)
+    {
+        if (!buttonStates.ContainsKey(label))
+            buttonStates[label] = false;
+
+        return buttonStates[label];
     }
 
     private bool DrawButton(Vector2 pos, Vector2 size, Color color)
     {
         RenderUtils.DrawRect(pos, size, color);
 
-        var e = Event.current;
-        if (e.type == EventType.MouseDown && e.button == 0)
-        {
-            Vector2 mouse = e.mousePosition;
-            if (mouse.x >= pos.x && mouse.x <= pos.x + size.x &&
-                mouse.y >= pos.y && mouse.y <= pos.y + size.y)
-            {
-                e.Use();
-                return true;
-            }
-        }
-
-        return false;
+        return LabelPressed("EscapeBtnShop", new Rect(pos, size));
     }
 }

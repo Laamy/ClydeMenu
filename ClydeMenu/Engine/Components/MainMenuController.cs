@@ -95,7 +95,7 @@ internal class MainMenuController
             }
         }
 
-        var currency = $"{MenuSettings.Currency.Value}K";
+        var currency = $"{MenuSettings.Currency.Value}";
         var pos = new Vector2(Screen.width - 110, 10);
         var size = new Vector2(100, 30);
 

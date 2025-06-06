@@ -1,5 +1,6 @@
 ﻿namespace ClydeMenu.Engine.Settings;
 
+using System;
 using System.Collections.Generic;
 using System.Timers;
 
@@ -34,6 +35,8 @@ public class Setting<T>
         if (!MenuSettings.SaveData.ContainsKey(_key))
             MenuSettings.SaveData[_key] = defaultValue;
     }
+
+    public string GetName() => _key;
 }
 
 [ES3Serializable]
@@ -66,6 +69,14 @@ internal class MenuSettings
     public static Setting<bool> OpenedShop { get; set; } = new("OpenedShop", false);
 
     internal static Setting<uint> Currency { get; set; } = new("FreeCurrency", 0);
+
+    public class Shop
+    {
+        public static Setting<bool> DebugWorld { get; set; } = new("DebugWorldOwned", false);
+
+        public static Setting<bool> FunTabUnlocked { get; set; } = new("FunTabOwned", false);
+        public static Setting<bool> Rainbow { get; set; } = new("RainbowOwned", false);
+    }
 
     public static Timer _saveTimer;
 
