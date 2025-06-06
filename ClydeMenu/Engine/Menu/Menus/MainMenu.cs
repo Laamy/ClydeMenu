@@ -612,7 +612,7 @@ public class MainMenu : BaseMenu
             cur.Use();
         }
 
-        string valueText = $"{Math.Round(percent * 100)}%";
+        var valueText = $"{Math.Round(percent * 100)}%";
         var valueSize = RenderUtils.StringSize(valueText);
         var valueX = sliderX + barWidth - valueSize.x - 4;
         var valueY = yCursor - 1;

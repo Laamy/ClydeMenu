@@ -40,9 +40,9 @@ public class ClientComponent : BaseComponent
         if (MenuSettings.ChangeLogVersion.Value != ClydeVersion.Current)
             MenuSceneComponent.Instance.PushOrPopMenuByType<ChangeLogMenu>();
 
-        var win = WindowManager.FindWindow(null, "R.E.P.O.");
-        if (win != null)
-            WindowManager.SetWindowText(WindowManager.FindWindow(null, "R.E.P.O."), $"R.E.P.O. {BuildManager.instance.version.title}    |    ClydeMenu {ClydeVersion.ToVersionString(ClydeVersion.Current)}");
+        //var win = WindowManager.FindWindow(null, "R.E.P.O.");
+        //if (win != null)
+        //    WindowManager.SetWindowText(WindowManager.FindWindow(null, "R.E.P.O."), $"R.E.P.O. {BuildManager.instance.version.title}    |    ClydeMenu {ClydeVersion.ToVersionString(ClydeVersion.Current)}");
 
         // refresh the button crap
         if (SemiFunc.IsMainMenu())

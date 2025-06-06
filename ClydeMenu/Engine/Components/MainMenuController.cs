@@ -24,7 +24,6 @@ internal class MainMenuController
     {
         buildName = GameObject.FindObjectOfType<BuildName>();
 
-        return;
         shop = GameObject.Instantiate(__instance.tutorialButton, __instance.tutorialButton.transform.parent);
         shop.buttonTextString = "Clyde Shop";
         shop.gameObject.SetActive(true);
@@ -74,7 +73,7 @@ internal class MainMenuController
         var obj = buildName?.GetComponent<TextMeshProUGUI>();
         if (obj != null && obj.text == BuildManager.instance.version.title)
             obj.text = $"{BuildManager.instance.version.title} - ClydeMenu {ClydeVersion.ToVersionString(ClydeVersion.Current)}";
-        return;
+
         if (shopButtonBlinkActive)
         {
             if (shopButtonTimer <= 0f)

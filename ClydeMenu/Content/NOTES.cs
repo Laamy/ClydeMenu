@@ -94,19 +94,21 @@ static class ClydeVersion
     public const uint Release_v1_3 = 0x01030000;
     public const uint Release_v1_4 = 0x01040000;
     public const uint Release_v1_5 = 0x01050000;//latest
-    public const uint Release_v1_6 = 0x01060100;
 
-    public const uint Current = Release_v1_6;
+    public const uint Release_v1_6_1 = 0x01060100;
+
+    public const uint Current = Release_v1_6_1;
 
     public static string ToVersionString(uint version)
     {
         var major = (byte)((version >> 24) & 0xFF);
         var minor = (byte)((version >> 16) & 0xFF);
         var build = (byte)((version >> 8) & 0xFF);
+        var debug = (byte)(version & 0xFF);
 
         var result = $"v{major}.{minor}.{build}";
-        //if (debug != 0)
-        //    result += $".{debug} Dev";
+        if (debug != 0)
+            result += $".{debug} Dev";
 
         return result;
     }
