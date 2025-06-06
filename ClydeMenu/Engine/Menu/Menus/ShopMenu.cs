@@ -13,6 +13,7 @@ public class ShopMenu : BaseMenu
     public override void OnPush() {}
     public override void OnUpdate() {}
 
+    // oh i could do smth like steam levels
     private List<(string name, int cost, Setting<bool>, Setting<bool>)> shopItems = new()
     {
         ("Debug world (F8)", 1, MenuSettings.Shop.DebugWorld, null),
