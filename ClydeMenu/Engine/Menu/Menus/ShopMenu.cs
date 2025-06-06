@@ -75,7 +75,7 @@ public class ShopMenu : BaseMenu
 
             if (LabelPressed(setting.GetName(), new Rect(itemTopLeft, itemSize)))
             {
-                if (MenuSettings.Currency.Value >= cost)
+                if (!setting.Value && MenuSettings.Currency.Value >= cost)
                 {
                     MenuSettings.Currency.Value -= (uint)cost;
                     if (categoryTag != null)

@@ -26,12 +26,31 @@
 // Helper - arrows on the side of the screen to indicate a player is nearby (or a cart)
 // Helper - this could also loop back around to subtitles for sounds ^
 // On hold - drawing a trajectory line for thrown items
-// not sure if this would even be useful
+// Battery / Flashlight Monitor - Show remaining battery percentage and estimated time left (basic QoL)
+// Teammate Tracker - Display alive teammates on dirt finder (You can find this by seeing the voice meeters in escape being active even if your not near them)
+// Weather/Time Display - Show in-game time and weather conditions (future idea but i do want a timer to express respawn timers easier)
+// Performance Monitor - FPS, frame time, and memory usage overlay
 
 // [Map Info]
 // display map info on the screen (for example shows how many people are still alive if you have the upgrade for it)
 /// Waypoints - placing waypoints on the map to mark important locations with colours & 4 letter tags
 //    - could put it on top of the screen on a bar similar to Rust's compass
+
+// [Utility Modules]
+// Crosshair Customization - Different crosshair styles and colors
+// FOV Adjuster - Fine-tune field of view settings
+// Chat Enhancer - Chat history, timestamps, and filtering options
+// Session Stats - Track your performance across multiple runs
+
+// these are meant to be goofy things that most people wont care about (hopefully) but you can just go into the settings file and give yourself everything (its just for goals)
+// also note It could be fun to put experimental features in shop and move them to release when im done
+// [Cosmetic Items(100-500 gems)]
+// Custom Crosshairs Pack - Unlock various crosshair designs (might scroll crosshair X for a bit)
+// Theme Bundle - Additional UI themes beyond the current ones (I could pack red green blue and purple into buyable themes for 50 each/I'll add a custom theme editor so people dont have to buy them)
+// Waypoint Icons Pack - Custom icons for different waypoint types (I was thinking about the rust waypoint icons in some kind of Rust Waypoints pack)
+// Sound Pack - Custom notification sounds (2012 sounds stuff like that could be funny)
+// Sound Alerts - Customizable audio cues for nearby teammates, etc. (ties into the noiselogger & other modules but as an extra setting for audio)
+// Quick Notes - In-game notepad for jotting down important information (I find myself writing down how much we've destroyed so far)
 
 // [Breadcrumbs]
 // On hold - drawing breadcrumb trails where players and carts go

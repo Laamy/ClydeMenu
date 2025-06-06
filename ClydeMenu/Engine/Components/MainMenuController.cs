@@ -70,6 +70,9 @@ internal class MainMenuController
 
     internal static void Render()
     {
+        if (buildName == null)
+            return;
+
         var obj = buildName?.GetComponent<TextMeshProUGUI>();
         if (obj != null && obj.text == BuildManager.instance.version.title)
             obj.text = $"{BuildManager.instance.version.title} - ClydeMenu {ClydeVersion.ToVersionString(ClydeVersion.Current)}";
