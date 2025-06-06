@@ -30,6 +30,7 @@
 // Teammate Tracker - Display alive teammates on dirt finder (You can find this by seeing the voice meeters in escape being active even if your not near them)
 // Weather/Time Display - Show in-game time and weather conditions (future idea but i do want a timer to express respawn timers easier)
 // Performance Monitor - FPS, frame time, and memory usage overlay
+// Voice Activity Indicator - Visual cues showing who's speaking in voice chat (like discord)
 
 // [Map Info]
 // display map info on the screen (for example shows how many people are still alive if you have the upgrade for it)
@@ -41,6 +42,13 @@
 // FOV Adjuster - Fine-tune field of view settings
 // Chat Enhancer - Chat history, timestamps, and filtering options
 // Session Stats - Track your performance across multiple runs
+// Ping System - Quick communication markers for teammates (clydemenu only users cuz duh)
+// Quick Action Shortcuts - Customizable hotkeys for common actions
+// Advanced Audio Filters - Customize which sounds appear in NoiseLogger
+// Custom HUD Layouts - Rearrange information display positions
+// Backup & Restore - Save/load different configuration profiles
+// Screenshot Gallery - Organized storage for captured moments
+// Session Replay - Record and review gameplay sessions (I really want to implement a replay mod)
 
 // these are meant to be goofy things that most people wont care about (hopefully) but you can just go into the settings file and give yourself everything (its just for goals)
 // also note It could be fun to put experimental features in shop and move them to release when im done
