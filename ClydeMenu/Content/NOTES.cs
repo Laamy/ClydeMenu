@@ -107,7 +107,6 @@ static class ClydeVersion
         var result = $"v{major}.{minor}";
         if (debug != 0)
             result += $".{debug} Dev";
-        else result += " Public";
 
         return result;
     }
