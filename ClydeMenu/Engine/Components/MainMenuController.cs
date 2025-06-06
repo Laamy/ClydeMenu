@@ -9,17 +9,21 @@ using static UnityEngine.UI.Image;
 using UnityEngine.UI;
 using ClydeMenu.Engine.Menu;
 using ClydeMenu.Engine.Menu.Menus;
+using TMPro;
 
 // TODO: adjust with screen pixelated setting
 //[ClydeChange("Experimental shop button (Edit money in settings file) dont take serious", ClydeVersion.Release_v1_5)]
 internal class MainMenuController
 {
     static MenuButton shop;
+    static BuildName buildName;
     static bool shopButtonBlinkActive = false;
     static bool shopButtonBlink;
     static float shopButtonTimer;
     internal static void Prepare(MenuPageMain __instance)
     {
+        buildName = GameObject.FindObjectOfType<BuildName>();
+
         return;
         shop = GameObject.Instantiate(__instance.tutorialButton, __instance.tutorialButton.transform.parent);
         shop.buttonTextString = "Clyde Shop";
@@ -67,6 +71,9 @@ internal class MainMenuController
 
     internal static void Render()
     {
+        var obj = buildName?.GetComponent<TextMeshProUGUI>();
+        if (obj != null && obj.text == BuildManager.instance.version.title)
+            obj.text = $"{BuildManager.instance.version.title} - ClydeMenu {ClydeVersion.ToVersionString(ClydeVersion.Current)}";
         return;
         if (shopButtonBlinkActive)
         {

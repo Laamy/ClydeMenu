@@ -8,6 +8,7 @@ using ClydeMenu.Engine.Menu;
 using ClydeMenu.Engine.Rendering;
 using ClydeMenu.Engine.Settings;
 using HarmonyLib;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
