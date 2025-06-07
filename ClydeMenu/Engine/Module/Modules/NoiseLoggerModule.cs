@@ -27,11 +27,11 @@ public class NoiseLoggerModule : BaseModule
             init = true;
         }
 
+        if (!MenuSettings.VISUAL_NOISELOGGER.Value)
+            return;
+
         using (RenderUtils.Window.Begin(MenuSceneComponent.IsMenuOpen(), ref noiseLoggerBounds, "NoiseLogger"))
         {
-            if (!MenuSettings.VISUAL_NOISELOGGER.Value)
-                return;
-
             if (Camera.main == null)
                 return;
 

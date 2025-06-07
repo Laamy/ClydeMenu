@@ -34,14 +34,14 @@ public class RichChatModule : BaseModule
         if (!MenuSettings.IsChatOpen.Value)
             return;
 
-        if (richChatMessages.Count == 0)
-            return;
-
         if (richChatMessages.Count >= 18)
             richChatMessages.RemoveAt(0);
 
         using (RenderUtils.Window.Begin(MenuSceneComponent.IsMenuOpen(), ref chatBounds, "RichChat"))
         {
+            if (richChatMessages.Count == 0)
+                return;
+
             var y = 0;
             foreach (var (msg, user) in richChatMessages)
             {
