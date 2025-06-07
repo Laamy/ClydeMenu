@@ -111,4 +111,6 @@ internal class MenuSceneComponent : BaseComponent
             GUI.DrawTexture(new Rect(mousePos.x - size, mousePos.y - size, size * 2, size * 2), Texture2D.whiteTexture);
         }
     }
+
+    internal static bool IsMenuOpen() => (Instance?.IsFocused()).Value;
 }

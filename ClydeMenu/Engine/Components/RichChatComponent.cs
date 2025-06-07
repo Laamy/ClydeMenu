@@ -2,12 +2,10 @@
 
 using UnityEngine;
 
-using ClydeMenu.Engine.Components;
 using System.Collections.Generic;
-using System.Security.Cryptography;
-using UnityEngine.Video;
+
+using ClydeMenu.Engine.Components;
 using ClydeMenu.Engine.Menu;
-using Unity.VisualScripting;
 
 public class RichChatComponent : BaseComponent
 {
@@ -18,16 +16,21 @@ public class RichChatComponent : BaseComponent
         instance = this;
 
         chatBounds.position = new Vector2(Screen.width - chatBounds.width - 10, Screen.height - chatBounds.height - 10);
+        PostSystemMessage("Welcome back!");
     }
 
     public List<(string msg, string user)> richChatMessages = new()
     {
         // Example messages, replace with actual message data
-        ("Hello, world!", "User1"),
-        ("This is a rich chat message.", "User2")
+        
     };
 
-    public Rect chatBounds = new Rect(100, 100, 300, 300);
+    public static void PostSystemMessage(string msg)
+    {
+        instance.richChatMessages.Add((msg, "ClydeMenu"));
+    }
+
+    public Rect chatBounds = new(100, 100, 300, 300);
     public int padding = 5;
 
     public override void OnGUI()
@@ -38,7 +41,7 @@ public class RichChatComponent : BaseComponent
         if (richChatMessages.Count >= 18)
             richChatMessages.RemoveAt(0);
 
-        RenderUtils.Window.Start((MenuSceneComponent.Instance?.IsFocused()).Value, ref chatBounds);
+        RenderUtils.Window.Start(MenuSceneComponent.IsMenuOpen(), ref chatBounds);
         {
             int y = 0;
             foreach (var (msg, user) in richChatMessages)
