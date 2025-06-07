@@ -37,6 +37,8 @@ public class ClientComponent : BaseComponent
 
     public ClientComponent()
     {
+        Entry.InitModule<MenuSceneComponent>("MenuScene");
+
         if (MenuSettings.ChangeLogVersion.Value != ClydeVersion.Current)
             MenuSceneComponent.Instance.PushOrPopMenuByType<ChangeLogMenu>();
 
@@ -59,7 +61,7 @@ public class ClientComponent : BaseComponent
     {
         if (Input.GetKeyDown(KeyCode.F8))
         {
-            if (SemiFunc.MenuLevel() && MenuSettings.Shop.DebugWorld.Value)
+            if (SemiFunc.MenuLevel()) //&& MenuSettings.Shop.DebugWorld.Value)
             {
                 DebugWorld.Load();
             }

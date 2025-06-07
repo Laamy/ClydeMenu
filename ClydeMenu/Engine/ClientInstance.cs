@@ -1,4 +1,4 @@
-﻿    namespace ClydeMenu.Engine;
+﻿namespace ClydeMenu.Engine;
 
 using System;
 using System.Reflection;
@@ -7,14 +7,9 @@ using UnityEngine;
 using Object = UnityEngine.Object;
 
 using Photon.Pun;
-using System.Media;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Diagnostics;
-using static PlayerHealth;
-using Unity.VisualScripting;
-using System.CodeDom;
 
 internal static class AssemblyReader
 {

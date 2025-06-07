@@ -7,6 +7,7 @@ using System.Linq;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
+[ClydeChange("Made several modules into draggable windows", ClydeVersion.Release_v1_6_1)]
 public class ModuleHandler
 {
     public static List<BaseModule> Modules = [];

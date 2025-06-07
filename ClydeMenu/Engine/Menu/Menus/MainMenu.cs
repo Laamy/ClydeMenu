@@ -169,10 +169,11 @@ public class MainMenu : BaseMenu
             () => {
                 DrawSettingLabel("Fun");
 
-                if (!MenuSettings.Shop.FunTabUnlocked.Value)
-                    DrawSettingLabel("You can buy fun(useless) crap from the shop on the main menu");
-                
-                if (MenuSettings.Shop.Rainbow.Value) MenuSettings.VISUAL_RAINBOW.Value = DrawBoolean("Rainbow Skincolour", MenuSettings.VISUAL_RAINBOW.Value);
+                //if (!MenuSettings.Shop.FunTabUnlocked.Value)
+                //    DrawSettingLabel("You can buy fun(useless) crap from the shop on the main menu");
+                //
+                //if (MenuSettings.Shop.Rainbow.Value)
+                MenuSettings.VISUAL_RAINBOW.Value = DrawBoolean("Rainbow Skincolour", MenuSettings.VISUAL_RAINBOW.Value);
                 //Storage.DEBUGBOX = DrawNumberField("DebugBox", Storage.DEBUGBOX);
             },
             // might expose this tab if localhost

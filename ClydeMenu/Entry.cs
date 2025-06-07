@@ -25,6 +25,7 @@ public class Entry
         else Debug.Log($"[ClydeMenu] {msg}", Storage.HotReloadListener);
     }
 
+    [ClydeChange("Made Menu's topmost", ClydeVersion.Release_v1_6_1)]
     public static void Load()
     {
         Storage.HotReloadListener = GameObject.Find("HotReloadListener");
@@ -49,7 +50,6 @@ public class Entry
         try
         {
             InitModule<ClientComponent>("ClydeMenu");
-            InitModule<MenuSceneComponent>("MenuScene");
         }
         catch (Exception e)
         {
