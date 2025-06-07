@@ -118,7 +118,7 @@ static class ClydeVersion
     public const uint Release_v1_4 = 0x01040000;
     public const uint Release_v1_5 = 0x01050000;
     public const uint Release_v1_6_1 = 0x01060100;
-    public const uint Release_v1_6_2 = 0x01070200;//latest
+    public const uint Release_v1_6_2 = 0x01060200;//latest
     public const uint Release_v1_7_1 = 0x01070100;
 
     public const uint Current = Release_v1_7_1;
