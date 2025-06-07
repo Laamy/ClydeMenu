@@ -1,0 +1,1 @@
+Fixed RichChat bug where long messages break the layout

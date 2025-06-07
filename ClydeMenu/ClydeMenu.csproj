@@ -455,6 +455,7 @@
     <Content Include="Content\v1.5\Hot-reload.dll" />
     <Content Include="Content\v1.6.1\ClydeMenu.dll" />
     <Content Include="Content\v1.6.1\Hot-reload.dll" />
+    <Content Include="Content\v1.6.2\Changelog.txt" />
     <Content Include="Content\v1.6.2\ClydeMenu.dll" />
     <Content Include="Content\v1.6.2\Hot-reload.dll" />
   </ItemGroup>
