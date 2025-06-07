@@ -20,24 +20,13 @@ public class ShopMenu : BaseMenu
         ("Rainbow", 500, MenuSettings.Shop.Rainbow, MenuSettings.Shop.FunTabUnlocked),
     };
 
-    private ThemeConfig StyleTheme = new();
-
     CameraGlitch glitchCam;
 
     public ShopMenu()
     {
         glitchCam = GameObject.FindObjectOfType<CameraGlitch>();
 
-        if (Storage.InternalThemeStyle != null)
-            StyleTheme = Storage.InternalThemeStyle;
-        else
-        {
-            if (MenuSettings.GameTheme != null)
-                StyleTheme = Storage.StyleThemes[MenuSettings.GameTheme.Value];
-            else
-                StyleTheme = Storage.StyleThemes["Dark"];
-        }
-        Storage.SETTINGS_Theme = Array.IndexOf(Storage.StyleThemes.Keys.ToArray(), MenuSettings.GameTheme.Value);
+        Storage.StyleTheme = ClientInstance.GetClientTheme();
     }
 
     public override void Render()
@@ -48,15 +37,15 @@ public class ShopMenu : BaseMenu
         Vector2 size = screenSize - (uiMargin * 2);
         Vector2 titleSize = new Vector2(size.x, 40);
 
-        RenderUtils.DrawRect(topLeft, size, StyleTheme.ContentBoxBackground);
+        RenderUtils.DrawRect(topLeft, size, Storage.StyleTheme.ContentBoxBackground);
 
         var titleTopLeft = topLeft;
-        RenderUtils.DrawRect(titleTopLeft, titleSize, StyleTheme.Titlebar);
-        RenderUtils.DrawString(titleTopLeft + new Vector2(10, 10), "Shop Menu", StyleTheme.TitlebarText, 18);
+        RenderUtils.DrawRect(titleTopLeft, titleSize, Storage.StyleTheme.Titlebar);
+        RenderUtils.DrawString(titleTopLeft + new Vector2(10, 10), "Shop Menu", Storage.StyleTheme.TitlebarText, 18);
 
         var closeButtonSize = new Vector2(30, 30);
         var closeButtonPos = new Vector2(topLeft.x + size.x - closeButtonSize.x - 5, topLeft.y + 5);
-        if (DrawButton(closeButtonPos, closeButtonSize, StyleTheme.TitlebarCloseButton))
+        if (DrawButton(closeButtonPos, closeButtonSize, Storage.StyleTheme.TitlebarCloseButton))
             MenuSceneComponent.Instance.PopMenu(this);
 
         var itemY = topLeft.y + titleSize.y + 10;
@@ -64,14 +53,14 @@ public class ShopMenu : BaseMenu
         {
             var itemTopLeft = new Vector2(topLeft.x + 10, itemY);
             var itemSize = new Vector2(size.x - 20, 40);
-            RenderUtils.DrawRect(itemTopLeft, itemSize, setting.Value == true ? StyleTheme.Sidebar : StyleTheme.ContentBox);
+            RenderUtils.DrawRect(itemTopLeft, itemSize, setting.Value == true ? Storage.StyleTheme.Sidebar : Storage.StyleTheme.ContentBox);
 
-            RenderUtils.DrawString(itemTopLeft + new Vector2(10, 10), name, StyleTheme.MenuText, 16);
+            RenderUtils.DrawString(itemTopLeft + new Vector2(10, 10), name, Storage.StyleTheme.MenuText, 16);
             var costLabel = $"Cost: {cost} gem(s)";
             if (setting.Value)
                 costLabel = "Owned";
 
-            RenderUtils.DrawString(itemTopLeft + new Vector2(itemSize.x - 170, 10), costLabel, StyleTheme.MenuTextDark, 16);
+            RenderUtils.DrawString(itemTopLeft + new Vector2(itemSize.x - 170, 10), costLabel, Storage.StyleTheme.MenuTextDark, 16);
 
             if (LabelPressed(setting.GetName(), new Rect(itemTopLeft, itemSize)))
             {

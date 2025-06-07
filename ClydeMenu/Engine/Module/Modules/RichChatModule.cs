@@ -13,12 +13,13 @@ public class RichChatModule : BaseModule
     public RichChatModule() : base("RichChat", "", "Visual") { }
 
     public static RichChatModule instance;
+    [ClydeChange("Fixed RichChat not being aligned to the bottom of the screen", ClydeVersion.Release_v1_7_1)]
     public override void Initialize()
     {
         IsEnabled = true;
         instance = this;
 
-        chatBounds.position = new Vector2(0, Screen.height - chatBounds.height - padding);
+        chatBounds.position = new Vector2(0, Screen.height - chatBounds.height);
         PostSystemMessage("Welcome back!");
     }
 

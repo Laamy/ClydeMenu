@@ -83,6 +83,7 @@ public class ThemeConfig
 [ClydeChange("New MapStealer (Aka map downloader) useful for when your friends fall asleep as host", ClydeVersion.Release_v1_0)]
 [ClydeChange("New waypoint macros & slightly improved visuals for waypoints", ClydeVersion.Release_v1_5)]
 [ClydeChange("New FastIntro to speed up the annoyingly slow intro (With speed slider)", ClydeVersion.Release_v1_5)]
+[ClydeChange("Moved clickgui to center of screen by default", ClydeVersion.Release_v1_7_1)]
 public class MainMenu : BaseMenu
 {
     public override void OnPop() { }
@@ -97,8 +98,6 @@ public class MainMenu : BaseMenu
     private Vector2 contentStart = Vector2.zero;
     private float yCursor = 0;
 
-    private ThemeConfig StyleTheme = new();
-
     private void DrawCategory()
     {
         if (MenuStorage.selectedCategory < 0 || MenuStorage.selectedCategory >= MenuStorage.renderActions.Length)
@@ -109,16 +108,9 @@ public class MainMenu : BaseMenu
 
     public MainMenu()
     {
-        if (Storage.InternalThemeStyle != null)
-            StyleTheme = Storage.InternalThemeStyle;
-        else
-        {
-            if (MenuSettings.GameTheme != null)
-                StyleTheme = Storage.StyleThemes[MenuSettings.GameTheme.Value];
-            else
-                StyleTheme = Storage.StyleThemes["Dark"];
-        }
-        Storage.SETTINGS_Theme = Array.IndexOf(Storage.StyleThemes.Keys.ToArray(), MenuSettings.GameTheme.Value);
+        Storage.StyleTheme = ClientInstance.GetClientTheme();
+
+        MenuStorage.menuPos = new Vector2(Screen.width / 2f - MenuStorage.menuSize.x / 2f, Screen.height / 2f - MenuStorage.menuSize.y / 2f);
 
         MenuStorage.renderNames =
         [
@@ -164,6 +156,7 @@ public class MainMenu : BaseMenu
                     }
                 }
                 MenuSettings.IsChatOpen.Value = DrawBoolean("RichChat", MenuSettings.IsChatOpen.Value);
+                MenuSettings.Keystrokes.Value = DrawBoolean("Keystrokes", MenuSettings.Keystrokes.Value);
                 //Storage.DEBUGBOX = DrawNumberField("DebugBox", Storage.DEBUGBOX);
             },
             () => {
@@ -448,13 +441,13 @@ public class MainMenu : BaseMenu
             () => {
                 DrawSettingLabel("Settings");
 
-                //StyleThemes.Keys.ToArray()
+                //Storage.StyleThemes.Keys.ToArray()
                 var newTheme = DrawEnum("Theme", Storage.StyleThemes.Keys.ToArray(), Storage.SETTINGS_Theme);
                 if (newTheme != Storage.SETTINGS_Theme)
                 {
                     Storage.SETTINGS_Theme = newTheme;
-                    StyleTheme = Storage.StyleThemes[Storage.StyleThemes.Keys.ToArray()[newTheme]];
-                    Storage.InternalThemeStyle = StyleTheme;
+                    Storage.StyleTheme = Storage.StyleThemes[Storage.StyleThemes.Keys.ToArray()[newTheme]];
+                    Storage.InternalThemeStyle = Storage.StyleTheme;
                     MenuSettings.GameTheme.Value = Storage.StyleThemes.Keys.ToArray()[newTheme];
                 }
             },
@@ -539,24 +532,24 @@ public class MainMenu : BaseMenu
     {
         HandleBorder();
         GUI.BeginClip(new Rect(MenuStorage.menuPos.x, MenuStorage.menuPos.y, MenuStorage.menuSize.x, MenuStorage.menuSize.y));
-        RenderUtils.DrawRect(new Vector2(0, 0), MenuStorage.menuSize, StyleTheme.ContentBoxBackground);
+        RenderUtils.DrawRect(new Vector2(0, 0), MenuStorage.menuSize, Storage.StyleTheme.ContentBoxBackground);
 
-        RenderUtils.DrawRect(new Vector2(0, 0), new Vector2(MenuStorage.menuSize.x, titleBarHeight), StyleTheme.Titlebar);
-        RenderUtils.DrawString(new Vector2(12, 6), $"ClydeMenu {ClydeVersion.ToVersionString(ClydeVersion.Current)}", StyleTheme.TitlebarText);
-        RenderUtils.DrawRect(new Vector2(MenuStorage.menuSize.x - 17, 6), new Vector2(12, 12), StyleTheme.TitlebarCloseButton);
+        RenderUtils.DrawRect(new Vector2(0, 0), new Vector2(MenuStorage.menuSize.x, titleBarHeight), Storage.StyleTheme.Titlebar);
+        RenderUtils.DrawString(new Vector2(12, 6), $"ClydeMenu {ClydeVersion.ToVersionString(ClydeVersion.Current)}", Storage.StyleTheme.TitlebarText);
+        RenderUtils.DrawRect(new Vector2(MenuStorage.menuSize.x - 17, 6), new Vector2(12, 12), Storage.StyleTheme.TitlebarCloseButton);
 
         if (LabelPressed("TitlebarCloseButton", new Rect(MenuStorage.menuSize.x - 17, 6, 12, 12)))
             MenuSceneComponent.Instance.PopMenu(this);
 
         var sidebarPos = new Vector2(0, titleBarHeight);
         var sidebarHeight = MenuStorage.menuSize.y - titleBarHeight;
-        RenderUtils.DrawRect(sidebarPos, new Vector2(sidebarWidth, sidebarHeight), StyleTheme.Sidebar);
+        RenderUtils.DrawRect(sidebarPos, new Vector2(sidebarWidth, sidebarHeight), Storage.StyleTheme.Sidebar);
 
         for (int i = 0; i < MenuStorage.renderNames.Length; i++)
         {
             var y = sidebarPos.y + padding + i * 27;
             var isSelected = i == MenuStorage.selectedCategory;
-            var bgCol = isSelected ? StyleTheme.SidebarButton : StyleTheme.SidebarButtonSelected;
+            var bgCol = isSelected ? Storage.StyleTheme.SidebarButton : Storage.StyleTheme.SidebarButtonSelected;
             RenderUtils.DrawRect(new Vector2(sidebarPos.x + 6, y), new Vector2(sidebarWidth - 12, 24), bgCol);
 
             if (LabelPressed(MenuStorage.renderNames[i], new Rect(sidebarPos.x + 6, y, sidebarWidth - 12, 24)))
@@ -565,7 +558,7 @@ public class MainMenu : BaseMenu
                 Event.current.Use();
             }
 
-            var textColor = isSelected ? StyleTheme.MenuText : StyleTheme.MenuTextSelected;
+            var textColor = isSelected ? Storage.StyleTheme.MenuText : Storage.StyleTheme.MenuTextSelected;
             RenderUtils.DrawString(new Vector2(sidebarPos.x + 16, y + 5), MenuStorage.renderNames[i], textColor);
         }
 
@@ -592,7 +585,7 @@ public class MainMenu : BaseMenu
 
     void DrawSettingLabel(string text)
     {
-        RenderUtils.DrawString(new Vector2(contentStart.x, yCursor), text, StyleTheme.MenuText);
+        RenderUtils.DrawString(new Vector2(contentStart.x, yCursor), text, Storage.StyleTheme.MenuText);
         yCursor += 20;
     }
 
@@ -604,9 +597,9 @@ public class MainMenu : BaseMenu
         var filledWidth = barWidth * percent;
         DrawSettingLabel(label);
 
-        RenderUtils.DrawRect(new Vector2(sliderX, yCursor), new Vector2(barWidth, barHeight), StyleTheme.SliderBackground);
-        RenderUtils.DrawRect(new Vector2(sliderX, yCursor), new Vector2(filledWidth, barHeight), StyleTheme.SliderFilled);
-        RenderUtils.DrawRect(new Vector2(sliderX + filledWidth - 2, yCursor - 2), new Vector2(4, barHeight + 4), StyleTheme.SliderHolder);
+        RenderUtils.DrawRect(new Vector2(sliderX, yCursor), new Vector2(barWidth, barHeight), Storage.StyleTheme.SliderBackground);
+        RenderUtils.DrawRect(new Vector2(sliderX, yCursor), new Vector2(filledWidth, barHeight), Storage.StyleTheme.SliderFilled);
+        RenderUtils.DrawRect(new Vector2(sliderX + filledWidth - 2, yCursor - 2), new Vector2(4, barHeight + 4), Storage.StyleTheme.SliderHolder);
 
         Rect sliderHolderRect = new Rect(sliderX, yCursor - 2, barWidth, barHeight + 4);
         var cur = Event.current;
@@ -621,7 +614,7 @@ public class MainMenu : BaseMenu
         var valueSize = RenderUtils.StringSize(valueText);
         var valueX = sliderX + barWidth - valueSize.x - 4;
         var valueY = yCursor - 1;
-        RenderUtils.DrawString(new Vector2(valueX, valueY), valueText, StyleTheme.MenuTextDark);
+        RenderUtils.DrawString(new Vector2(valueX, valueY), valueText, Storage.StyleTheme.MenuTextDark);
 
         yCursor += barHeight + padding;
         return percent;
@@ -630,7 +623,7 @@ public class MainMenu : BaseMenu
     bool DrawBoolean(string label, bool cur)
     {
         DrawSettingLabel(label);
-        RenderUtils.DrawRect(new Vector2(contentStart.x, yCursor), new Vector2(16, 16), cur == true ? StyleTheme.BooleanOn : StyleTheme.BooleanOff);
+        RenderUtils.DrawRect(new Vector2(contentStart.x, yCursor), new Vector2(16, 16), cur == true ? Storage.StyleTheme.BooleanOn : Storage.StyleTheme.BooleanOff);
         RenderUtils.DrawString(new Vector2(contentStart.x + 20, yCursor + 1), cur == true ? "[ ]" : "[x]", new Color(1, 1, 1));
 
         if (LabelPressed(label, new Rect(contentStart.x, yCursor, 16, 16)))
@@ -660,8 +653,8 @@ public class MainMenu : BaseMenu
         Rect labelRect = new Rect(contentStart.x, yCursor, boxWidth, labelHeight);
         if (enums.Length > 0)
         {
-            RenderUtils.DrawRect(labelRect.position, labelRect.size, StyleTheme.ContentBox);
-            RenderUtils.DrawString(labelRect.position + new Vector2(4, 2), enums[selection], StyleTheme.MenuText);
+            RenderUtils.DrawRect(labelRect.position, labelRect.size, Storage.StyleTheme.ContentBox);
+            RenderUtils.DrawString(labelRect.position + new Vector2(4, 2), enums[selection], Storage.StyleTheme.MenuText);
         }
 
         /*
@@ -692,7 +685,7 @@ Hot_reload.Components.HotReloadBehaviour.OnGUI () (at <268968d3c2a04898a0d180aac
         if (open)
         {
             Rect searchRect = new Rect(contentStart.x, yCursor, boxWidth, labelHeight);
-            RenderUtils.DrawRect(searchRect.position, searchRect.size, StyleTheme.ContentBoxBackground);
+            RenderUtils.DrawRect(searchRect.position, searchRect.size, Storage.StyleTheme.ContentBoxBackground);
 
             if (cur.type == EventType.KeyDown && !labelRect.Contains(mousePos))
             {
@@ -704,7 +697,7 @@ Hot_reload.Components.HotReloadBehaviour.OnGUI () (at <268968d3c2a04898a0d180aac
                 cur.Use();
             }
 
-            RenderUtils.DrawString(searchRect.position + new Vector2(4, 2), search.Length > 0 ? search : "Search...", StyleTheme.MenuTextDark);
+            RenderUtils.DrawString(searchRect.position + new Vector2(4, 2), search.Length > 0 ? search : "Search...", Storage.StyleTheme.MenuTextDark);
             yCursor += labelHeight + padding;
 
             var filteredEnums = enums
@@ -713,12 +706,12 @@ Hot_reload.Components.HotReloadBehaviour.OnGUI () (at <268968d3c2a04898a0d180aac
 
             var dropdownHeight = filteredEnums.Length * labelHeight;
             Rect dropdownRect = new Rect(contentStart.x, yCursor, boxWidth, dropdownHeight);
-            RenderUtils.DrawRect(dropdownRect.position, dropdownRect.size, StyleTheme.ContentBox);
+            RenderUtils.DrawRect(dropdownRect.position, dropdownRect.size, Storage.StyleTheme.ContentBox);
 
             for (int i = 0; i < filteredEnums.Length; i++)
             {
                 Rect itemRect = new Rect(contentStart.x, yCursor + i * labelHeight, boxWidth, labelHeight);
-                RenderUtils.DrawString(itemRect.position + new Vector2(4, 2), filteredEnums[i], StyleTheme.MenuText);
+                RenderUtils.DrawString(itemRect.position + new Vector2(4, 2), filteredEnums[i], Storage.StyleTheme.MenuText);
 
                 if (cur.type == EventType.MouseDown && itemRect.Contains(mousePos))
                 {
@@ -745,8 +738,8 @@ Hot_reload.Components.HotReloadBehaviour.OnGUI () (at <268968d3c2a04898a0d180aac
         var strSub = expandBoxes[label] == true ? "[x]" : "[ ]";
         var str = $"{strSub} {label}";
         var strMsur = RenderUtils.StringSize(str);
-        RenderUtils.DrawString(new Vector2(contentStart.x, yCursor), str, StyleTheme.MenuText);
-        RenderUtils.DrawRect(new Vector2(contentStart.x + strMsur.x + padding, yCursor + 7), new Vector2(MenuStorage.menuSize.x - (contentStart.x + strMsur.x + (padding * 2)), 3), StyleTheme.Titlebar);
+        RenderUtils.DrawString(new Vector2(contentStart.x, yCursor), str, Storage.StyleTheme.MenuText);
+        RenderUtils.DrawRect(new Vector2(contentStart.x + strMsur.x + padding, yCursor + 7), new Vector2(MenuStorage.menuSize.x - (contentStart.x + strMsur.x + (padding * 2)), 3), Storage.StyleTheme.Titlebar);
 
         if (LabelPressed(label, new Rect(contentStart.x, yCursor, MenuStorage.menuSize.x, 16)))// hhh
             expandBoxes[label] = !expandBoxes[label];
@@ -791,7 +784,7 @@ Hot_reload.Components.HotReloadBehaviour.OnGUI () (at <268968d3c2a04898a0d180aac
     int DrawPlayerSelect(string label, int selection)
     {
         DrawSettingLabel(label);
-        RenderUtils.DrawRect(new Vector2(contentStart.x, yCursor), new Vector2(MenuStorage.menuSize.x - sidebarWidth - (padding * 2), 6 * 20), StyleTheme.ContentBox);
+        RenderUtils.DrawRect(new Vector2(contentStart.x, yCursor), new Vector2(MenuStorage.menuSize.x - sidebarWidth - (padding * 2), 6 * 20), Storage.StyleTheme.ContentBox);
 
         var players = SemiFunc.PlayerGetList();
         if (selection < 0 || selection >= players.Count)
@@ -801,7 +794,7 @@ Hot_reload.Components.HotReloadBehaviour.OnGUI () (at <268968d3c2a04898a0d180aac
         foreach (var player in players)
         {
             var isSelected = i == selection;
-            RenderUtils.DrawRect(new Vector2(contentStart.x, yCursor), new Vector2(MenuStorage.menuSize.x - sidebarWidth - (padding * 2), 20), isSelected == true ? StyleTheme.SidebarButton : StyleTheme.Sidebar);
+            RenderUtils.DrawRect(new Vector2(contentStart.x, yCursor), new Vector2(MenuStorage.menuSize.x - sidebarWidth - (padding * 2), 20), isSelected == true ? Storage.StyleTheme.SidebarButton : Storage.StyleTheme.Sidebar);
 
             var curEvent = Event.current;
             Vector2 mousePos = curEvent.mousePosition;
@@ -827,7 +820,7 @@ Hot_reload.Components.HotReloadBehaviour.OnGUI () (at <268968d3c2a04898a0d180aac
             else plyrName += " [LOCAL]";
 
                 var strMsurs = RenderUtils.StringSize(plyrName);
-            RenderUtils.DrawString(new Vector2(contentStart.x + padding, yCursor + ((20 / 2) - strMsurs.y / 2)), plyrName, StyleTheme.MenuTextDark);
+            RenderUtils.DrawString(new Vector2(contentStart.x + padding, yCursor + ((20 / 2) - strMsurs.y / 2)), plyrName, Storage.StyleTheme.MenuTextDark);
             yCursor += 20;
             i++;
         }
@@ -844,9 +837,9 @@ Hot_reload.Components.HotReloadBehaviour.OnGUI () (at <268968d3c2a04898a0d180aac
         Vector2 mousePos = curEvent.mousePosition;
         Rect buttonRect = new Rect(contentStart.x, yCursor, strMsurs.x + (padding * 2), 25);
 
-        var style = IsHeld(label) ? StyleTheme.SidebarButton : StyleTheme.Sidebar;
+        var style = IsHeld(label) ? Storage.StyleTheme.SidebarButton : Storage.StyleTheme.Sidebar;
         RenderUtils.DrawRect(new Vector2(contentStart.x, yCursor), new Vector2(strMsurs.x + (padding * 2), 25), style);
-        RenderUtils.DrawString(new Vector2(contentStart.x + padding, yCursor + ((25 / 2f) - strMsurs.y / 2f)), label, StyleTheme.MenuText);
+        RenderUtils.DrawString(new Vector2(contentStart.x + padding, yCursor + ((25 / 2f) - strMsurs.y / 2f)), label, Storage.StyleTheme.MenuText);
 
         yCursor += 25 + padding;
         return LabelPressed(label, buttonRect);

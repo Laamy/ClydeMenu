@@ -73,6 +73,7 @@
     <Compile Include="Engine\Module\ModuleHandler.cs" />
     <Compile Include="Engine\Module\Modules\ClickGuiModule.cs" />
     <Compile Include="Engine\Module\Modules\HaulInfoModule.cs" />
+    <Compile Include="Engine\Module\Modules\KeystrokesModule.cs" />
     <Compile Include="Engine\Module\Modules\NamespoofModule.cs" />
     <Compile Include="Engine\AppMods\Patches.cs" />
     <Compile Include="Engine\Module\Modules\NetworkInfoModule.cs" />

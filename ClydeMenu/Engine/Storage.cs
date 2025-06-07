@@ -173,6 +173,11 @@ public class Storage
         get;
         internal set;
     } = "Waypoint 1";
+    public static ThemeConfig StyleTheme
+    {
+        get;
+        internal set;
+    }
 
     public static List<ClydeBehaviour> CompsStorage = new();
 

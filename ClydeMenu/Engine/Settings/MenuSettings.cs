@@ -68,6 +68,7 @@ internal class MenuSettings
     public static Setting<uint> ChangeLogVersion { get; set; } = new("ChangeLogVersion", 0);
     public static Setting<bool> OpenedShop { get; set; } = new("OpenedShop", false);
     public static Setting<bool> IsChatOpen { get; set; } = new("IsChatOpen", true);
+    public static Setting<bool> Keystrokes { get; set; } = new("Keystrokes", false);
 
     internal static Setting<uint> Currency { get; set; } = new("FreeCurrency", 0);
 

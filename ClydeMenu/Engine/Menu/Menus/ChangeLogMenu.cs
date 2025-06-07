@@ -9,22 +9,12 @@ using ClydeMenu.Engine.Settings;
 
 public class ChangeLogMenu : BaseMenu
 {
-    private ThemeConfig StyleTheme = new();
     private Vector2 scrollPos;
     private Rect windowRect;
 
     public ChangeLogMenu()
     {
-        if (Storage.InternalThemeStyle != null)
-            StyleTheme = Storage.InternalThemeStyle;
-        else
-        {
-            if (MenuSettings.GameTheme != null)
-                StyleTheme = Storage.StyleThemes[MenuSettings.GameTheme.Value];
-            else
-                StyleTheme = Storage.StyleThemes["Dark"];
-        }
-        Storage.SETTINGS_Theme = Array.IndexOf(Storage.StyleThemes.Keys.ToArray(), MenuSettings.GameTheme.Value);
+        Storage.StyleTheme = ClientInstance.GetClientTheme();
 
         int screenWidth = Screen.width, screenHeight = Screen.height;
         var windowWidth = 910;
@@ -49,11 +39,11 @@ public class ChangeLogMenu : BaseMenu
 
     private void DrawWindow(int windowID)
     {
-        var textColor = StyleTheme.MenuText;
-        var panelColor = StyleTheme.ContentBoxBackground;
+        var textColor = Storage.StyleTheme.MenuText;
+        var panelColor = Storage.StyleTheme.ContentBoxBackground;
 
-        RenderUtils.DrawRect(new Vector2(0, 0), new Vector2(windowRect.width, 30), StyleTheme.Titlebar);
-        RenderUtils.DrawString(new Vector2(10, 7), $"Changelog {ClydeVersion.ToVersionString(ClydeVersion.Current)}", StyleTheme.TitlebarText, 18);
+        RenderUtils.DrawRect(new Vector2(0, 0), new Vector2(windowRect.width, 30), Storage.StyleTheme.Titlebar);
+        RenderUtils.DrawString(new Vector2(10, 7), $"Changelog {ClydeVersion.ToVersionString(ClydeVersion.Current)}", Storage.StyleTheme.TitlebarText, 18);
 
         var closeBtnRect = new Rect(windowRect.width - 30, 5, 25, 25);
         if (GUI.Button(closeBtnRect, "X"))

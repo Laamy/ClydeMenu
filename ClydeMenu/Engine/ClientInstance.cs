@@ -10,6 +10,8 @@ using Photon.Pun;
 using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;
+using ClydeMenu.Engine.Menu;
+using ClydeMenu.Engine.Settings;
 
 internal static class AssemblyReader
 {
@@ -232,6 +234,22 @@ internal class ClientInstance
             return false;
 
         return true;
+    }
+
+    internal static ThemeConfig GetClientTheme()
+    {
+        ThemeConfig result;
+        if (Storage.InternalThemeStyle != null)
+            result = Storage.InternalThemeStyle;
+        else
+        {
+            if (MenuSettings.GameTheme != null)
+                result = Storage.StyleThemes[MenuSettings.GameTheme.Value];
+            else
+                result = Storage.StyleThemes["Dark"];
+        }
+        Storage.SETTINGS_Theme = Array.IndexOf(Storage.StyleThemes.Keys.ToArray(), MenuSettings.GameTheme.Value);
+        return result;
     }
 
     // new MasterAndOwnerOnlyRPC & MasterOnlyRPC func groomed these

@@ -32,20 +32,15 @@
 // Performance Monitor - FPS, frame time, and memory usage overlay
 // Voice Activity Indicator - Visual cues showing who's speaking in voice chat (like discord)
 
-// [Map Info]
-// display map info on the screen (for example shows how many people are still alive if you have the upgrade for it)
-/// Waypoints - placing waypoints on the map to mark important locations with colours & 4 letter tags
-//    - could put it on top of the screen on a bar similar to Rust's compass
-
 // [Utility Modules]
 // Crosshair Customization - Different crosshair styles and colors
 // FOV Adjuster - Fine-tune field of view settings
-// Chat Enhancer - Chat history, timestamps, and filtering options
+/// Chat Enhancer - Chat history, timestamps, and filtering options
 // Session Stats - Track your performance across multiple runs
 // Ping System - Quick communication markers for teammates (clydemenu only users cuz duh)
 // Quick Action Shortcuts - Customizable hotkeys for common actions
 // Advanced Audio Filters - Customize which sounds appear in NoiseLogger
-// Custom HUD Layouts - Rearrange information display positions
+/// Custom HUD Layouts - Rearrange information display positions
 // Backup & Restore - Save/load different configuration profiles
 // Screenshot Gallery - Organized storage for captured moments
 // Session Replay - Record and review gameplay sessions (I really want to implement a replay mod)
@@ -126,7 +121,7 @@ static class ClydeVersion
     public const uint Release_v1_6_2 = 0x01070200;//latest
     public const uint Release_v1_7_1 = 0x01070100;
 
-    public const uint Current = Release_v1_6_2;
+    public const uint Current = Release_v1_7_1;
 
     public static string ToVersionString(uint version)
     {
