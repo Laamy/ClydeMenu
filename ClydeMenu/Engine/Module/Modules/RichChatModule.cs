@@ -1,9 +1,8 @@
 ﻿using ClydeMenu.Engine.Menu;
 using ClydeMenu.Engine.Settings;
-using System;
+
 using System.Collections.Generic;
-using System.Data;
-using System.Runtime.Serialization.Json;
+
 using UnityEngine;
 
 namespace ClydeMenu.Engine.Commands;
@@ -29,13 +28,27 @@ public class RichChatModule : BaseModule
     public Rect chatBounds = new(100, 100, 300, 300);
     public int padding = 5;
 
+    [ClydeChange("Fixed RichChat bug where long messages break the layout", ClydeVersion.Release_v1_6_2)]
     public override void OnRender()
     {
         if (!MenuSettings.IsChatOpen.Value)
             return;
 
-        if (richChatMessages.Count >= 18)
+        var lineCount = 0;
+        foreach (var (msg, user) in richChatMessages)
+        {
+            var fullMsg = $"<{user}> {msg}";
+            var lines = WrapText(fullMsg, chatBounds.width - (padding * 2));
+            lineCount += lines.Length;
+        }
+
+        while (lineCount >= 16)
+        {
+            var firstMsg = richChatMessages[0];
+            var firstLines = WrapText($"<{firstMsg.user}> {firstMsg.msg}", chatBounds.width - (padding * 2));
+            lineCount -= firstLines.Length;
             richChatMessages.RemoveAt(0);
+        }
 
         using (RenderUtils.Window.Begin(MenuSceneComponent.IsMenuOpen(), ref chatBounds, "RichChat"))
         {

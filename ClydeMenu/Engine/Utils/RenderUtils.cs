@@ -49,12 +49,14 @@ public class RenderUtils
         return style.CalcSize(new GUIContent(text));
     }
 
-    public static void DrawString(Vector2 pos, string text, Color color, float size = 16)
+    public static void DrawString(Vector2 pos, string text, Color color, float size = 16, bool richText = false)
     {
         GUI.color = color;
         GUIStyle style = new GUIStyle();
         style.fontSize = (int)size;
         style.normal.textColor = color;
+        if (richText)
+            style.richText = true;
 
         GUI.Label(new Rect(pos.x, pos.y, 1000, 1000), text, style);
     }
