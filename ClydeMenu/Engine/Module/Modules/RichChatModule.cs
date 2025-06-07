@@ -1,6 +1,6 @@
 ﻿using ClydeMenu.Engine.Menu;
 using ClydeMenu.Engine.Settings;
-
+using Photon.Pun;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -54,6 +54,9 @@ public class RichChatModule : BaseModule
         using (RenderUtils.Window.Begin(MenuSceneComponent.IsMenuOpen(), ref chatBounds, "RichChat"))
         {
             if (richChatMessages.Count == 0)
+                return;
+
+            if (!PhotonNetwork.IsConnected || !PhotonNetwork.InRoom)
                 return;
 
             var y = 0;
