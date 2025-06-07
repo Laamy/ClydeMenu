@@ -67,6 +67,7 @@ internal class MenuSettings
     // cache stuff
     public static Setting<uint> ChangeLogVersion { get; set; } = new("ChangeLogVersion", 0);
     public static Setting<bool> OpenedShop { get; set; } = new("OpenedShop", false);
+    public static Setting<bool> IsChatOpen { get; set; } = new("IsChatOpen", true);
 
     internal static Setting<uint> Currency { get; set; } = new("FreeCurrency", 0);
 

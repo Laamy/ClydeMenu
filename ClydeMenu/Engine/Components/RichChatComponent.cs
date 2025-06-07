@@ -6,7 +6,9 @@ using System.Collections.Generic;
 
 using ClydeMenu.Engine.Components;
 using ClydeMenu.Engine.Menu;
+using ClydeMenu.Engine.Settings;
 
+[ClydeChange("New togglable RichChat that logs & displays chat messages", ClydeVersion.Release_v1_6_1)]
 public class RichChatComponent : BaseComponent
 {
     public static RichChatComponent instance;
@@ -19,22 +21,17 @@ public class RichChatComponent : BaseComponent
         PostSystemMessage("Welcome back!");
     }
 
-    public List<(string msg, string user)> richChatMessages = new()
-    {
-        // Example messages, replace with actual message data
-        
-    };
-
-    public static void PostSystemMessage(string msg)
-    {
-        instance.richChatMessages.Add((msg, "ClydeMenu"));
-    }
+    public List<(string msg, string user)> richChatMessages = new() {};
+    public static void PostSystemMessage(string msg) => instance.richChatMessages.Add((msg, "ClydeMenu"));
 
     public Rect chatBounds = new(100, 100, 300, 300);
     public int padding = 5;
 
     public override void OnGUI()
     {
+        if (!MenuSettings.IsChatOpen.Value)
+            return;
+
         if (richChatMessages.Count == 0)
             return;
 

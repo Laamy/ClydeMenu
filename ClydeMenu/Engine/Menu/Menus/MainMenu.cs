@@ -4,12 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-using ClydeMenu.Engine.Settings;
-
 using Photon.Pun;
-using Sirenix.Utilities;
+
 using UnityEngine;
-using static UnityEngine.Rendering.DebugUI;
+
+using ClydeMenu.Engine.Settings;
 
 class MenuStorage
 {
