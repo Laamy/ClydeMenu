@@ -2,6 +2,8 @@
 - This is not a cheat, it’s a legit client with quality-of-life changes
 - Any errors in console? Report them to **"yeemi"** on Discord or in the Issues tab
 
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/Laamy/ClydeMenu)
+
 # Suggestions/Requests  
 Go ahead and give me suggestions/requests in the issues(or dms) and I'll try my best to implement them
 
