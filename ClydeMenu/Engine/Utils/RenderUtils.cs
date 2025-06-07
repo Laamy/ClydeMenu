@@ -266,6 +266,7 @@ public class RenderUtils
             return dragPos;
         }
 
+        [ClydeChange("New draggable window scope for rendering", ClydeVersion.Release_v1_6_1)]
         public sealed class WindowScope : IDisposable
         {
             public WindowScope(bool draggable, ref Rect window, string id)

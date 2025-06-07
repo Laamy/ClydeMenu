@@ -8,11 +8,13 @@ using ClydeMenu.Engine.Settings;
 using Photon.Pun;
 
 using UnityEngine;
+using ClydeMenu.Engine.Menu;
 
 [ClydeChange("Added NetworkInfo module for ping & jitter alerts", ClydeVersion.Release_v1_3)]
 public class NetworkInfoModule : BaseModule
 {
     private List<Action> renderActions;
+    public int x = 0;
 
     public NetworkInfoModule() : base("NetworkInfo", "Displays current network latency (ping)", "Visual") { }
 
@@ -23,48 +25,47 @@ public class NetworkInfoModule : BaseModule
         renderActions = new List<Action>
         {
             RenderPing,
-            RenderPacketJitter,
-            RenderPacketLoss
+            RenderPacketJitter
         };
     }
 
     public static class NetConfig
     {
-        // ping wwwarnings
         public const int PING_Warning = 149;
         public const int PING_Critical = 225;
-
-        // jitter warnings
         public const int JITTER_Warning = 50;
         public const int JITTER_Critical = 100;
         public const int JITTER_MAXSAMPLE = 100;
-
-        // packet loss warnings
         public const int PACKETLOSS_Warning = 5;
         public const int PACKETLOSS_Critical = 10;
     }
+
+    public Rect networkInfoBounds;
+    public bool init = false;
+    public int padding = 5;
 
     public override void OnRender()
     {
         if (!MenuSettings.VISUAL_NETNFO.Value)
             return;
 
-        if (!PhotonNetwork.IsConnected)
-            return;
+        if (!init)
+        {
+            networkInfoBounds = new Rect(Screen.width - 120, 0, 120, 24);
+            init = true;
+        }
 
-        x = 0; // reset
-        foreach (var action in renderActions)
-            action();
+        using (RenderUtils.Window.Begin(MenuSceneComponent.IsMenuOpen(), ref networkInfoBounds, "NetworkInfo"))
+        {
+            if (!PhotonNetwork.IsConnected)
+                return;
+
+            x = 0;
+            foreach (var action in renderActions)
+                action();
+        }
     }
-
-    public int x = 0;
-    public const int padding = 5;
-
-    private void RenderPacketLoss()
-    {
-
-    }
-
+    
     private List<int> rttSamples = new();
     private void RenderPacketJitter()
     {
@@ -74,14 +75,12 @@ public class NetworkInfoModule : BaseModule
 
         var count = rttSamples.Count;
         if (count < 2)
-            return; // lack of samples
+            return;
 
         var sumDiff = 0f;
         for (int i = 1; i < count; i++)
             sumDiff += Mathf.Abs(rttSamples[i] - rttSamples[i - 1]);
         var jitter = sumDiff / (count - 1);
-
-        //Console.WriteLine($"Jitter: {jitter:F1}ms"); // debug log
 
         if (jitter < NetConfig.JITTER_Warning)
             return;
@@ -89,7 +88,7 @@ public class NetworkInfoModule : BaseModule
         var color = jitter > NetConfig.JITTER_Critical ? Color.red : Color.yellow;
         var text = $"JIT: {jitter:F1}ms";
         var size = RenderUtils.StringSize(text, 12);
-        RenderUtils.DrawString(new Vector2(Screen.width - size.x - x, 30), text, color, 12);
+        RenderUtils.DrawString(new Vector2(networkInfoBounds.width - size.x - x, padding + 20), text, color, 12);
         x += (int)size.x + padding;
     }
 
@@ -102,7 +101,7 @@ public class NetworkInfoModule : BaseModule
         var color = ping > NetConfig.PING_Critical ? Color.red : Color.yellow;
         var text = $"PING: {ping}ms";
         var size = RenderUtils.StringSize(text, 12);
-        RenderUtils.DrawString(new Vector2(Screen.width - size.x - x, 10), text, color, 12);
+        RenderUtils.DrawString(new Vector2(networkInfoBounds.width - size.x - x, padding), text, color, 12);
         x += (int)size.x + padding;
     }
 }

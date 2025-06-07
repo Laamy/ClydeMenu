@@ -48,9 +48,8 @@ public class Entry
 
         try
         {
-            InitModule<MenuSceneComponent>("MenuScene"); // menu stack stuff for other components to use
-
             InitModule<ClientComponent>("ClydeMenu");
+            InitModule<MenuSceneComponent>("MenuScene");
         }
         catch (Exception e)
         {
