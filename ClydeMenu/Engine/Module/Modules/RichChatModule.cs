@@ -1,33 +1,32 @@
-﻿namespace ClydeMenu.Engine;
-
+﻿using ClydeMenu.Engine.Menu;
+using ClydeMenu.Engine.Settings;
+using System.Collections.Generic;
 using UnityEngine;
 
-using System.Collections.Generic;
-
-using ClydeMenu.Engine.Components;
-using ClydeMenu.Engine.Menu;
-using ClydeMenu.Engine.Settings;
+namespace ClydeMenu.Engine.Commands;
 
 [ClydeChange("New togglable RichChat that logs & displays chat messages", ClydeVersion.Release_v1_6_1)]
-public class RichChatComponent : BaseComponent
+public class RichChatModule : BaseModule
 {
-    public static RichChatComponent instance;
+    public RichChatModule() : base("RichChat", "", "Visual") { }
 
-    public RichChatComponent()
+    public static RichChatModule instance;
+    public override void Initialize()
     {
+        IsEnabled = true;
         instance = this;
 
         chatBounds.position = new Vector2(Screen.width - chatBounds.width - 10, Screen.height - chatBounds.height - 10);
         PostSystemMessage("Welcome back!");
     }
 
-    public List<(string msg, string user)> richChatMessages = new() {};
+    public List<(string msg, string user)> richChatMessages = new() { };
     public static void PostSystemMessage(string msg) => instance.richChatMessages.Add((msg, "ClydeMenu"));
 
     public Rect chatBounds = new(100, 100, 300, 300);
     public int padding = 5;
 
-    public override void OnGUI()
+    public override void OnRender()
     {
         if (!MenuSettings.IsChatOpen.Value)
             return;
@@ -44,7 +43,7 @@ public class RichChatComponent : BaseComponent
             foreach (var (msg, user) in richChatMessages)
             {
                 var fullMsg = $"<{user}> {msg}";
-                var lines = WrapText(fullMsg, chatBounds.width - (padding*2));
+                var lines = WrapText(fullMsg, chatBounds.width - (padding * 2));
 
                 var msr = RenderUtils.StringSize(fullMsg);
                 foreach (var line in lines)

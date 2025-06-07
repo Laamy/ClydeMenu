@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.EnterpriseServices.Internal;
+using ClydeMenu.Engine.Commands;
 using ClydeMenu.Engine.Menu;
 using ClydeMenu.Engine.Rendering;
 using ClydeMenu.Engine.Settings;
@@ -521,7 +522,7 @@ internal static class Patches
     {
         public static bool Prefix(PlayerAvatar __instance, string _message, bool crouching)
         {
-            RichChatComponent.instance.richChatMessages.Add((_message, SemiFunc.PlayerGetName(__instance)));
+            RichChatModule.instance.richChatMessages.Add((_message, SemiFunc.PlayerGetName(__instance)));
 
             return true;
         }

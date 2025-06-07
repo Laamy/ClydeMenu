@@ -51,7 +51,6 @@ public class Entry
             InitModule<MenuSceneComponent>("MenuScene"); // menu stack stuff for other components to use
 
             InitModule<ClientComponent>("ClydeMenu");
-            InitModule<RichChatComponent>("RichChat");
         }
         catch (Exception e)
         {

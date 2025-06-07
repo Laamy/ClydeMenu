@@ -62,7 +62,6 @@
     <Compile Include="Engine\AppMods\Extensions.cs" />
     <Compile Include="DebugWorld.cs" />
     <Compile Include="Engine\Components\MainMenuController.cs" />
-    <Compile Include="Engine\Components\RichChatComponent.cs" />
     <Compile Include="Engine\GameEvents.cs" />
     <Compile Include="Engine\Menu\BaseMenu.cs" />
     <Compile Include="Engine\Components\MenuSceneComponent.cs" />
@@ -81,6 +80,7 @@
     <Compile Include="Engine\Module\Modules\RainbowPlayerModule.cs" />
     <Compile Include="Engine\Module\Modules\WaypointModule.cs" />
     <Compile Include="Content\NOTES.cs" />
+    <Compile Include="Engine\Module\Modules\RichChatModule.cs" />
     <Compile Include="Engine\Rendering\ClydeBehaviour.cs" />
     <Compile Include="Engine\Rendering\WallCharmHighlight.cs" />
     <Compile Include="Engine\Settings\MenuSettings.cs" />
