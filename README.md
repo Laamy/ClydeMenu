@@ -7,6 +7,10 @@
 # Suggestions/Requests  
 Go ahead and give me suggestions/requests in the issues(or dms) and I'll try my best to implement them
 
+# Screenshots
+![image](https://github.com/user-attachments/assets/73544bec-869b-4107-bb5f-9bb998b15b2e)
+![image](https://github.com/user-attachments/assets/81a9bd5c-9af4-4078-89fe-0caabb275413)
+
 # Features
 this list wont be updated actively so i'd recommend checking the releases instead
 - MapInfo - see the current level, min haul & max haul on your screen at all time (this is estimated using maths and doesnt touch anything in the scene)
