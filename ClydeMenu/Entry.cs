@@ -21,7 +21,7 @@ public class Entry
     public static void Log(string msg)
     {
         if (!Storage.IsBepinExLoaded)
-            Console.WriteLine(msg);
+            Console.WriteLine($"[ClydeMenu] {msg}");
         else Debug.Log($"[ClydeMenu] {msg}", Storage.HotReloadListener);
     }
 
@@ -54,16 +54,16 @@ public class Entry
         }
         catch (Exception e)
         {
-            Entry.Log($"Error loading comps: {e}");
+            Log($"Error loading comps: {e}");
             return;
         }
 
-        Entry.Log("ClydeMenu injected successfully");
+        Log("ClydeMenu injected successfully");
     }
 
     public static void InitModule<T>(string modName) where T : BaseComponent
     {
-        Entry.Log($"Creating {modName} component");
+        Log($"Creating {modName} component");
 
         var type = typeof(T);
         var instance = (T)Activator.CreateInstance(type);

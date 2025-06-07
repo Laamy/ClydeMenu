@@ -3,6 +3,7 @@
 using UnityEngine;
 
 using ClydeMenu.Engine.Settings;
+using ClydeMenu.Engine.Menu;
 
 [ClydeChange("New NoiseLogger module that allows you to use minecraft subtitles in R.E.P.O", ClydeVersion.Release_v1_0)]
 public class NoiseLoggerModule : BaseModule

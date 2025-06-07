@@ -64,8 +64,6 @@ internal class MainMenuController
             shop.colorClick = new Color(1f, 0.55f, 0f);
         }
         else ResetShopColours();
-
-        Console.WriteLine("Clyde Menu button created in main menu");
     }
 
     internal static void Render()

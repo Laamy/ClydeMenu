@@ -1,6 +1,9 @@
 ﻿using ClydeMenu.Engine.Menu;
 using ClydeMenu.Engine.Settings;
+using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Runtime.Serialization.Json;
 using UnityEngine;
 
 namespace ClydeMenu.Engine.Commands;
@@ -16,7 +19,7 @@ public class RichChatModule : BaseModule
         IsEnabled = true;
         instance = this;
 
-        chatBounds.position = new Vector2(Screen.width - chatBounds.width - 10, Screen.height - chatBounds.height - 10);
+        chatBounds.position = new Vector2(0, Screen.height - chatBounds.height - padding);
         PostSystemMessage("Welcome back!");
     }
 
@@ -37,9 +40,9 @@ public class RichChatModule : BaseModule
         if (richChatMessages.Count >= 18)
             richChatMessages.RemoveAt(0);
 
-        RenderUtils.Window.Start(MenuSceneComponent.IsMenuOpen(), ref chatBounds);
+        using (RenderUtils.Window.Begin(MenuSceneComponent.IsMenuOpen(), ref chatBounds, "RichChat"))
         {
-            int y = 0;
+            var y = 0;
             foreach (var (msg, user) in richChatMessages)
             {
                 var fullMsg = $"<{user}> {msg}";
@@ -53,7 +56,6 @@ public class RichChatModule : BaseModule
                 }
             }
         }
-        RenderUtils.Window.End();
     }
 
     string[] WrapText(string text, float maxWidth, float textSize = 16)

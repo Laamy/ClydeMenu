@@ -62,18 +62,7 @@ public class NetworkInfoModule : BaseModule
 
     private void RenderPacketLoss()
     {
-        // PacketLossByCrcCheck
-        //var packetLossCount = PhotonNetwork.PacketLossByCrcCheck; // photon netwwwork doesnt provide anythhing for actual packet loss bruhh
-        //if (packetLossCount < NetConfig.PACKETLOSS_Warning)
-        //    return;
 
-        //Console.WriteLine($"Packet Loss: {packetLossCount}%"); // debug log
-
-        //var color = packetLossCount > NetConfig.PACKETLOSS_Critical ? Color.red : Color.yellow;
-        //var text = $"PL: {packetLossCount}%";
-        //var size = RenderUtils.StringSize(text, 12);
-        //RenderUtils.DrawString(new Vector2(Screen.width - size.x - 10, 50), text, color, 12);
-        //x += (int)size.x + padding;
     }
 
     private List<int> rttSamples = new();

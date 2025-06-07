@@ -225,71 +225,75 @@ public class RenderUtils
 
     public static class Window
     {
-        private static Vector2 oldMouse;
-        private static bool isDragging = false;
-        private static Vector2 HandleBorder(Rect dragBounds)
+        private static Dictionary<string, (Vector2 oldMouse, bool isDragging)> borderStates = new();
+        private static Vector2 HandleBorder(Rect dragBounds, string id)
         {
             var curEvent = Event.current;
             Vector2 mousePos = curEvent.mousePosition;
             
             Vector2 dragPos = dragBounds.position;
 
+            if (!borderStates.ContainsKey(id))
+                borderStates[id] = (Vector2.zero, false);
+
+            var borderState = borderStates[id];
+
             switch (curEvent.type)
             {
                 case EventType.MouseDown:
                     if (dragBounds.Contains(mousePos))
                     {
-                        isDragging = true;
-                        oldMouse = mousePos;
+                        borderState.isDragging = true;
+                        borderState.oldMouse = mousePos;
                     }
                     break;
                 case EventType.MouseDrag:
-                    if (isDragging)
+                    if (borderState.isDragging)
                     {
-                        Vector2 delta = mousePos - oldMouse;
+                        Vector2 delta = mousePos - borderStates[id].oldMouse;
                         dragPos += delta;
-                        oldMouse = mousePos;
+                        borderState.oldMouse = mousePos;
                     }
                     break;
                 case EventType.MouseUp:
-                    if (isDragging)
+                    if (borderStates[id].isDragging)
                     {
-                        isDragging = false;
+                        borderState.isDragging = false;
                     }
                     break;
             }
+            borderStates[id] = borderState;
             return dragPos;
         }
 
-        private static bool isInWindow = false;
-
-        /// <summary>
-        /// Creates a clipping bounds with a visual draggable component for HUD editors
-        /// </summary>
-        /// <returns>Position the window ends up at (if draggable is specified)</returns>
-        public static void Start(bool draggable, ref Rect window)
+        public sealed class WindowScope : IDisposable
         {
-            if (isInWindow)
-                throw new Exception("Already drawing a window");
-            isInWindow = true;
-
-            if (draggable)
-                window.position = HandleBorder(window);
-
-            GUI.BeginClip(window);
-
-            if (draggable)
+            public WindowScope(bool draggable, ref Rect window, string id)
             {
-                // draw simple bounds
-                DrawRect(Vector2.zero, window.size, new Color(0.2f, 0.2f, 0.2f, 0.5f));
-                DrawRectBorder(Vector2.zero, window.size, new Color(0.5f, 0.5f, 0.5f, 0.5f), 2);
+                if (draggable)
+                    window.position = HandleBorder(window, id);
+
+                GUI.BeginGroup(window);
+
+                if (draggable)
+                {
+                    DrawRect(Vector2.zero, window.size, new Color(0.2f, 0.2f, 0.2f, 0.5f));
+                    DrawRectBorder(Vector2.zero, window.size, new Color(0.5f, 0.5f, 0.5f, 0.5f), 2);
+
+                    var strMsr = StringSize(id, 16);
+                    DrawString(new Vector2((window.width - strMsr.x) / 2, (window.height - strMsr.y) / 2), id, Color.white, 16);
+                }
+            }
+
+            public void Dispose()
+            {
+                GUI.EndClip();
             }
         }
 
-        public static void End()
+        public static WindowScope Begin(bool draggable, ref Rect window, string id)
         {
-            GUI.EndClip();
-            isInWindow = false;
+            return new WindowScope(draggable, ref window, id);
         }
     }
 }
