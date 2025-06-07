@@ -7,6 +7,9 @@
 # Suggestions/Requests  
 Go ahead and give me suggestions/requests in the issues(or dms) and I'll try my best to implement them
 
+# Screenshots
+![image](https://github.com/user-attachments/assets/73544bec-869b-4107-bb5f-9bb998b15b2e)
+
 # Features
 this list wont be updated actively so i'd recommend checking the releases instead
 - MapInfo - see the current level, min haul & max haul on your screen at all time (this is estimated using maths and doesnt touch anything in the scene)
@@ -17,6 +20,8 @@ this list wont be updated actively so i'd recommend checking the releases instea
 - Steal/Download map - ever had that one friend who hosts then falls asleep? now you can download the map from them and host it
 - Waypoints - complex waypoints that fade in/out that you can place manually (resets every level change)
 - Waypoint macros - lets you create a pre-defined template for a waypoint that you can just click to place
+- Draggable windows - everything in the new UI can be repositioned or removed completely
+- RichChat - a chat window that displays peoples chat messages
 - Clyde themes - not related to repo but its worth noting
 
 some misc things that might be removed
