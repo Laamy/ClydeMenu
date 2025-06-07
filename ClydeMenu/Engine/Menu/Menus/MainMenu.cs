@@ -163,6 +163,7 @@ public class MainMenu : BaseMenu
                         //mgiht dosmth here idk yet
                     }
                 }
+                MenuSettings.IsChatOpen.Value = DrawBoolean("RichChat", MenuSettings.IsChatOpen.Value);
                 //Storage.DEBUGBOX = DrawNumberField("DebugBox", Storage.DEBUGBOX);
             },
             () => {
