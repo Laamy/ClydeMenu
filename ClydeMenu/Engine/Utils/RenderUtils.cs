@@ -6,6 +6,7 @@ using UnityEngine;
 
 using ClydeMenu.Engine.Utils;
 using System.Collections.Generic;
+using ClydeMenu.Engine.Menu;
 
 public class RenderUtils
 {
@@ -224,29 +225,71 @@ public class RenderUtils
 
     public static class Window
     {
+        private static Vector2 oldMouse;
+        private static bool isDragging = false;
+        private static Vector2 HandleBorder(Rect dragBounds)
+        {
+            var curEvent = Event.current;
+            Vector2 mousePos = curEvent.mousePosition;
+            
+            Vector2 dragPos = dragBounds.position;
+
+            switch (curEvent.type)
+            {
+                case EventType.MouseDown:
+                    if (dragBounds.Contains(mousePos))
+                    {
+                        isDragging = true;
+                        oldMouse = mousePos;
+                    }
+                    break;
+                case EventType.MouseDrag:
+                    if (isDragging)
+                    {
+                        Vector2 delta = mousePos - oldMouse;
+                        dragPos += delta;
+                        oldMouse = mousePos;
+                    }
+                    break;
+                case EventType.MouseUp:
+                    if (isDragging)
+                    {
+                        isDragging = false;
+                    }
+                    break;
+            }
+            return dragPos;
+        }
+
+        private static bool isInWindow = false;
+
         /// <summary>
         /// Creates a clipping bounds with a visual draggable component for HUD editors
         /// </summary>
         /// <returns>Position the window ends up at (if draggable is specified)</returns>
-        public static Vector2 Start(bool draggable, Rect window)
+        public static void Start(bool draggable, ref Rect window)
         {
+            if (isInWindow)
+                throw new Exception("Already drawing a window");
+            isInWindow = true;
+
+            if (draggable)
+                window.position = HandleBorder(window);
+
             GUI.BeginClip(window);
 
             if (draggable)
             {
                 // draw simple bounds
-                DrawRect(window.position, window.size, new Color(0.2f, 0.2f, 0.2f, 0.5f));
-                DrawRectBorder(window.position, window.size, new Color(0.5f, 0.5f, 0.5f, 0.5f), 2);
-
-                return window.position; // placeholder for dragging code
+                DrawRect(Vector2.zero, window.size, new Color(0.2f, 0.2f, 0.2f, 0.5f));
+                DrawRectBorder(Vector2.zero, window.size, new Color(0.5f, 0.5f, 0.5f, 0.5f), 2);
             }
-
-            return window.position;
         }
 
         public static void End()
         {
             GUI.EndClip();
+            isInWindow = false;
         }
     }
 }

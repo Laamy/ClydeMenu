@@ -17,6 +17,8 @@ internal static class Patches
 {
     public static class Patches_MenuSceneCrap
     {
+        public static bool CancelInputs = false;
+
         [HarmonyPatch(typeof(PhysGrabber), "RayCheck")]
         public class Patches_RayCheck
         {
@@ -24,7 +26,7 @@ internal static class Patches
             {
                 if (isInFreelook)
                     return false;
-                return MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.IsFocused();
+                return MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.IsFocused() || CancelInputs;
             }
         }
 
@@ -32,7 +34,7 @@ internal static class Patches
         public static class Patches_PlayerSwitch
         {
             public static bool Prefix(bool _next)
-                => MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.IsFocused();
+                => MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.IsFocused() || CancelInputs;
         }
 
         // bro...
@@ -40,63 +42,63 @@ internal static class Patches
         public static class Patches_MenuButtonUpdate
         {
             public static bool Prefix()
-                => MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.IsFocused();
+                => MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.IsFocused() || CancelInputs;
         }
 
         [HarmonyPatch(typeof(MenuElementServer), "Update")]
         public static class Patches_MenuElementServerUpdate
         {
             public static bool Prefix()
-                => MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.IsFocused();
+                => MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.IsFocused() || CancelInputs;
         }
 
         [HarmonyPatch(typeof(MenuElementSaveFile), "Update")]
         public static class Patches_MenuElementSaveFileUpdate
         {
             public static bool Prefix()
-                => MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.IsFocused();
+                => MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.IsFocused() || CancelInputs;
         }
 
         [HarmonyPatch(typeof(MenuElementRegion), "Update")]
         public static class Patches_MenuElementRegionUpdate
         {
             public static bool Prefix()
-                => MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.IsFocused();
+                => MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.IsFocused() || CancelInputs;
         }
 
         [HarmonyPatch(typeof(MenuSlider), "Update")]
         public static class Patches_MenuSliderUpdate
         {
             public static bool Prefix()
-                => MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.IsFocused();
+                => MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.IsFocused() || CancelInputs;
         }
 
         [HarmonyPatch(typeof(MenuScrollBox), "Update")]
         public static class Patches_MenuScrollBoxUpdate
         {
             public static bool Prefix()
-                => MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.IsFocused();
+                => MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.IsFocused() || CancelInputs;
         }
 
         [HarmonyPatch(typeof(MenuManager), "Update")]
         public static class Patches_MenuManagerUpdate
         {
             public static bool Prefix()
-                => MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.IsFocused();
+                => MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.IsFocused() || CancelInputs;
         }
 
         [HarmonyPatch(typeof(MenuButtonArrow), "Update")]
         public static class Patches_MenuButtonArrowUpdate
         {
             public static bool Prefix()
-                => MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.IsFocused();
+                => MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.IsFocused() || CancelInputs;
         }
 
         [HarmonyPatch(typeof(MenuElementHover), "Update")]
         public static class Patches_MenuElementHoverUpdate
         {
             public static bool Prefix()
-                => MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.IsFocused();
+                => MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.IsFocused() || CancelInputs;
         }
 
         // block the chat keybind stuff
@@ -104,11 +106,9 @@ internal static class Patches
         public static class Patches_StateInactive
         {
             public static bool Prefix()
-                => MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.IsFocused();
+                => MenuSceneComponent.Instance == null || !MenuSceneComponent.Instance.IsFocused() || CancelInputs;
         }
 
-        // BRO THIS IS DRIIVINGH ME INSANE WTF DID IB REAK
-        // annoying cursor crap
         [HarmonyPatch(typeof(CursorManager), "Update")]
         public static class Patches_CursorManager
         {
@@ -513,6 +513,17 @@ internal static class Patches
             }
 
             MainMenuController.Prepare(__instance);
+        }
+    }
+
+    [HarmonyPatch(typeof(PlayerAvatar), "ChatMessageSpeak")]
+    public class Patches_PlayerAvatarMessage
+    {
+        public static bool Prefix(PlayerAvatar __instance, string _message, bool crouching)
+        {
+            RichChatComponent.instance.richChatMessages.Add((_message, SemiFunc.PlayerGetName(__instance)));
+
+            return true;
         }
     }
 

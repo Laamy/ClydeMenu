@@ -62,6 +62,7 @@
     <Compile Include="Engine\AppMods\Extensions.cs" />
     <Compile Include="DebugWorld.cs" />
     <Compile Include="Engine\Components\MainMenuController.cs" />
+    <Compile Include="Engine\Components\RichChatComponent.cs" />
     <Compile Include="Engine\GameEvents.cs" />
     <Compile Include="Engine\Menu\BaseMenu.cs" />
     <Compile Include="Engine\Components\MenuSceneComponent.cs" />
