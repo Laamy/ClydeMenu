@@ -59,12 +59,6 @@
 // On hold - drawing breadcrumb trails where players and carts go
 // might be to much
 
-// [Keystrokes]
-// Everyone loves a good old keystrokes module
-// this gives me an excuse to add a new kind of draggable window that only shows a background & draggable functionality when in the clients main menu/hud
-// probably gonna write a new renderutil window based on the other one i never ended up using
-// its also probably best if i make noise subtitles & haul info one of these draggable windows
-
 /// [Freelook]
 /// Hold alt to freeze the camera direction and rotate it freely without effecting the movement vectors
 // make a disableTimer for freelook so i can set the disable timer up by .1 when a peeper has touched u!

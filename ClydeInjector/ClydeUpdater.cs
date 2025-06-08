@@ -104,7 +104,10 @@ internal class ClydeUpdater
     {
         var request = (HttpWebRequest)WebRequest.Create(url);
         request.Method = "GET";
+        request.KeepAlive = false;
         request.CachePolicy = new System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.NoCacheNoStore);
+        request.Headers.Add("Cache-Control", "no-cache");
+        request.Headers.Add("Pragma", "no-cache");
 
         using var response = (HttpWebResponse)request.GetResponse();
         using var stream = response.GetResponseStream();
@@ -116,7 +119,10 @@ internal class ClydeUpdater
     {
         var request = (HttpWebRequest)WebRequest.Create(url);
         request.Method = "GET";
+        request.KeepAlive = false;
         request.CachePolicy = new System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.NoCacheNoStore);
+        request.Headers.Add("Cache-Control", "no-cache");
+        request.Headers.Add("Pragma", "no-cache");
 
         using var response = (HttpWebResponse)request.GetResponse();
         using var stream = response.GetResponseStream();

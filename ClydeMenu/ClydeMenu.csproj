@@ -71,6 +71,7 @@
     <Compile Include="Engine\Menu\Menus\ShopMenu.cs" />
     <Compile Include="Engine\Module\BaseModule.cs" />
     <Compile Include="Engine\Module\ModuleHandler.cs" />
+    <Compile Include="Engine\Module\Modules\BatteryInfoModule.cs" />
     <Compile Include="Engine\Module\Modules\ClickGuiModule.cs" />
     <Compile Include="Engine\Module\Modules\HaulInfoModule.cs" />
     <Compile Include="Engine\Module\Modules\KeystrokesModule.cs" />

@@ -19,7 +19,7 @@ public class RichChatModule : BaseModule
         IsEnabled = true;
         instance = this;
 
-        chatBounds.position = new Vector2(0, Screen.height - chatBounds.height);
+        chatBounds.position = new Vector2(0, (Screen.height/2) - (chatBounds.height/2));
         PostSystemMessage("Welcome back!");
     }
 

@@ -12,6 +12,7 @@ using System.Linq;
 using System.Diagnostics;
 using ClydeMenu.Engine.Menu;
 using ClydeMenu.Engine.Settings;
+using Unity.VisualScripting;
 
 internal static class AssemblyReader
 {
@@ -250,6 +251,14 @@ internal class ClientInstance
         }
         Storage.SETTINGS_Theme = Array.IndexOf(Storage.StyleThemes.Keys.ToArray(), MenuSettings.GameTheme.Value);
         return result;
+    }
+
+    internal static PhysGrabObject GetHeldObject()
+    {
+        var lp = GetLocalAvatar();
+        if (lp.physGrabber.grabbed)
+            return FetchFieldValue<PhysGrabObject, PhysGrabber>("grabbedPhysGrabObject", lp.physGrabber);
+        return null;
     }
 
     // new MasterAndOwnerOnlyRPC & MasterOnlyRPC func groomed these
