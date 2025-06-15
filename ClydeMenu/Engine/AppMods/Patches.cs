@@ -186,7 +186,7 @@ internal static class Patches
             playerPingTimer -= Time.deltaTime;
             if (playerPingTimer <= 0f)
             {
-                playerPing = new System.Random().Next(20, 22);//20,22
+                playerPing = -69;
                 playerPingTimer = 6f;
             }
 
@@ -524,6 +524,25 @@ internal static class Patches
             RichChatModule.instance.richChatMessages.Add((_message, SemiFunc.PlayerGetName(__instance)));
 
             return true;
+        }
+    }
+
+    // todo: make hand visible cuz game becomes several times more satisifying 
+    [HarmonyPatch(typeof(PlayerAvatarRightArm), "Start")]
+    public class Patches_RightArmStart
+    {
+        public static bool Prefix(PlayerAvatarRightArm __instance)
+        {
+            ClientInstance.SetFieldValue("playerAvatarVisuals", __instance, __instance.GetComponent<PlayerAvatarVisuals>());
+            ClientInstance.SetFieldValue("grabberLightIntensity", __instance, __instance.grabberLight.intensity);
+            if (!GameManager.Multiplayer() || (__instance.playerAvatar && __instance.playerAvatar.photonView.IsMine))
+            {
+                //__instance.grabberTransform.gameObject.SetActive(false);
+                //__instance.enabled = false;
+                Entry.Log("ClydeMenu - PlayerAvatarRightArm::Start(void) -> Disabled grabber transform and component for local player.");
+            }
+
+            return false;
         }
     }
 

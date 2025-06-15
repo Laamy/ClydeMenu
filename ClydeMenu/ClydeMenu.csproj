@@ -460,6 +460,9 @@
     <Content Include="Content\v1.6.2\Changelog.txt" />
     <Content Include="Content\v1.6.2\ClydeMenu.dll" />
     <Content Include="Content\v1.6.2\Hot-reload.dll" />
+    <Content Include="Content\v1.7.1\Changelog.txt" />
+    <Content Include="Content\v1.7.1\ClydeMenu.dll" />
+    <Content Include="Content\v1.7.1\Hot-reload.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

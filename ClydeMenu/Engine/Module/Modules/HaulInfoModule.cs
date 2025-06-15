@@ -36,6 +36,7 @@ public class HaulInfoModule : BaseModule
     public bool init = false;
     public int padding = 5;
 
+    [ClydeChange("Expanded the size of HaulInfo to match higher then 100k min hauls", ClydeVersion.Release_v1_7_1)]
     public override void OnRender()
     {
         if (!MenuSettings.VISUAL_MAPINFO.Value)
@@ -44,7 +45,7 @@ public class HaulInfoModule : BaseModule
         if (!init)
         {
             init = true;
-            var tmpStr = $"Min:99999 | Max:999999";
+            var tmpStr = $"Min:999999 | Max:999999";
             var strMsr = RenderUtils.StringSize(tmpStr, 20);
             haulBounds = new Rect(0, 0, strMsr.x + (padding * 2), (strMsr.y * 2) + (padding * 5));
         }

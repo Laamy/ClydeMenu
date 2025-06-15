@@ -1,0 +1,3 @@
+Updated for R.E.P.O v0.1.2.47_beta
+New Keystrokes module that displays WASD + Space keys in a clean layout
+Expanded the size of HaulInfo to match higher then 100k min hauls

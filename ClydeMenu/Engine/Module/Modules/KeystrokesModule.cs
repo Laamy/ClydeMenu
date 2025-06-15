@@ -6,12 +6,12 @@ using ClydeMenu.Engine.Menu;
 using ClydeMenu.Engine.Settings;
 using Unity.VisualScripting;
 
-[ClydeChange("Clean layout for WASD + Space keystrokes", ClydeVersion.Release_v1_7_1)]
+//[ClydeChange("Clean layout for WASD + Space keystrokes", ClydeVersion.Release_v1_7_1)]
 public class KeystrokesModule : BaseModule
 {
     public KeystrokesModule() : base("Keystrokes", "Displays WASD + Space keys in layout", "Visual") { }
 
-    private Rect keyBounds = new(300, Screen.height-200, 160, 200);
+    private Rect keyBounds = new(400, Screen.height-200, 160, 200);
     private readonly int padding = 5;
     private readonly int fontSize = 22;
     private readonly float keySize = 45;
