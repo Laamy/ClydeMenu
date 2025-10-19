@@ -57,6 +57,7 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="DebugTHing.cs" />
     <Compile Include="Engine\AppMods\Clocks.cs" />
     <Compile Include="Engine\Components\BaseComponent.cs" />
     <Compile Include="Engine\AppMods\Extensions.cs" />
