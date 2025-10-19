@@ -118,7 +118,7 @@ static class ClydeVersion
     public const uint Release_v1_7_1 = 0x01070100;
     public const uint Release_v1_7_2 = 0x01070200;//latest
 
-    public const uint Current = Release_v1_7_1;
+    public const uint Current = Release_v1_7_2;
 
     public static string ToVersionString(uint version)
     {
