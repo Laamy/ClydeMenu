@@ -103,6 +103,7 @@ class ClydeChangeEntry
 [ClydeChange("Updated for R.E.P.O v0.1.2.42_beta", Release_v1_6_1)]
 [ClydeChange("Updated for R.E.P.O v0.1.2.47_beta", Release_v1_7_1)]
 [ClydeChange("Updated for R.E.P.O v0.2.2", Release_v1_7_2)]
+[ClydeChange("Updated for R.E.P.O v0.3.0", Release_v1_7_3)]
 static class ClydeVersion
 {
     public static readonly bool IsDebug = false;
@@ -116,7 +117,8 @@ static class ClydeVersion
     public const uint Release_v1_6_1 = 0x01060100;
     public const uint Release_v1_6_2 = 0x01060200;
     public const uint Release_v1_7_1 = 0x01070100;
-    public const uint Release_v1_7_2 = 0x01070200;//latest
+    public const uint Release_v1_7_2 = 0x01070200;
+    public const uint Release_v1_7_3 = 0x01070300;//latest
 
     public const uint Current = Release_v1_7_2;
 

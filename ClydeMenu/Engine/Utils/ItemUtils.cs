@@ -16,7 +16,7 @@ internal class ItemUtils : MonoBehaviourPunCallbacks
         List<Item> items = new List<Item>();
         foreach (var item in StatsManager.instance.itemDictionary.Values)
         {
-            if (item.prefab.name.Contains(contains))
+            if (item.prefab.PrefabName.Contains(contains))
                 items.Add(item);
         }
         return items;
